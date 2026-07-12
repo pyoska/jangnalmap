@@ -44,9 +44,22 @@ export default function Home() {
   const [selectedRegion, setSelectedRegion] = useState('전체');
   const [selectedCycle, setSelectedCycle] = useState('전체');
   const [searchQuery, setSearchQuery] = useState('');
+  const [searchInput, setSearchInput] = useState('');
+
+  // Debounce search input to prevent main-thread block (typing Input Delay)
+  useEffect(() => {
+    const delayDebounce = setTimeout(() => {
+      setSearchQuery(searchInput);
+    }, 180);
+    return () => clearTimeout(delayDebounce);
+  }, [searchInput]);
+
   const [activeMarket, setActiveMarket] = useState(null);
   const [viewMode, setViewMode] = useState('list'); // 'list' or 'map' on mobile
   const [expandedFaq, setExpandedFaq] = useState(null);
+
+  // Performance: Lazy list rendering state (virtual scroll)
+  const [visibleCount, setVisibleCount] = useState(20);
 
   // Retention: Favorites state
   const [favorites, setFavorites] = useState([]);
@@ -55,6 +68,11 @@ export default function Home() {
   const [userLocation, setUserLocation] = useState(null);
   const [gpsSorting, setGpsSorting] = useState(false);
   const [gpsLoading, setGpsLoading] = useState(false);
+
+  // Reset visible count when search filter variables change
+  useEffect(() => {
+    setVisibleCount(20);
+  }, [selectedRegion, selectedCycle, searchQuery, gpsSorting]);
 
   // Fetch market data and read favorites on mount
   useEffect(() => {
@@ -278,14 +296,14 @@ export default function Home() {
                 <input
                   type="text"
                   placeholder="시장명, 특산물, 주소 검색..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
+                  value={searchInput}
+                  onChange={(e) => setSearchInput(e.target.value)}
                   className="w-full bg-transparent border-none text-[#1A1A1A] placeholder-gray-400 font-semibold px-3 focus:outline-none text-sm sm:text-base"
                 />
                 <div className="flex items-center gap-3 shrink-0">
-                  {searchQuery && (
+                  {searchInput && (
                     <button 
-                      onClick={() => setSearchQuery('')}
+                      onClick={() => { setSearchInput(''); setSearchQuery(''); }}
                       className="text-gray-400 hover:text-gray-600 text-xs sm:text-sm font-semibold cursor-pointer"
                     >
                       지우기
@@ -421,7 +439,15 @@ export default function Home() {
             </div>
 
             {/* Scrollable Market Cards List */}
-            <div className="flex-1 overflow-y-auto p-4 space-y-4 lg:max-h-[720px]">
+            <div 
+              onScroll={(e) => {
+                const { scrollTop, scrollHeight, clientHeight } = e.currentTarget;
+                if (scrollHeight - scrollTop - clientHeight < 150) {
+                  setVisibleCount((prev) => Math.min(prev + 20, filteredMarkets.length));
+                }
+              }}
+              className="flex-1 overflow-y-auto p-4 space-y-4 lg:max-h-[720px]"
+            >
               {loading ? (
                 <div className="space-y-3">
                   {[...Array(6)].map((_, i) => (
@@ -434,7 +460,7 @@ export default function Home() {
                   <p className="text-xs text-gray-500 mt-1">상단의 필터를 다시 세팅해보세요.</p>
                 </div>
               ) : (
-                filteredMarkets.map((market) => (
+                filteredMarkets.slice(0, visibleCount).map((market) => (
                   <div
                     key={market.id}
                     className={`bg-white p-5 rounded-2xl border transition-all duration-300 shadow-sm hover:shadow-md ${

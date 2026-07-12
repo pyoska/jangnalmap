@@ -250,16 +250,15 @@ export async function generateMetadata({ params }) {
   }
 
   const regionName = market.address.split(' ')[0] || '전국';
-  const today = new Date();
-  const formattedToday = `${today.getFullYear()}년 ${today.getMonth() + 1}월 ${today.getDate()}일`;
+  const parkingText = market.parking_yn === 'Y' ? '공영 주차장 완비' : '대중교통 이용 권장';
 
-  const title = `${market.market_name} 오일장 날짜, 주차장 꿀팁, 가는 법 총정리 — 장날맵`;
-  const description = `${formattedToday} 기준 ${market.market_name}의 개설 주기(${market.opening_cycle}), 주차 정보, 현지 에디터가 추천하는 먹거리 정보를 확인하세요.`;
+  const title = `${market.market_name} 오일장 날짜 (${market.opening_cycle}), ${parkingText} 및 인근 명소 총정리 — 장날맵`;
+  const description = `${market.market_name} 오일장 개장 주기(${market.opening_cycle}), 상세 주소(${market.address}), ${parkingText} 여부와 현지 에디터가 강력 추천하는 주변 카페 및 관광지 코스를 실시간 가이드로 확인해보세요.`;
 
   return {
     title,
     description,
-    keywords: `${market.market_name}, ${market.market_name} 오일장, ${regionName} 오일장, ${market.market_name} 장날, ${market.market_name} 주차, 전통시장 지도`,
+    keywords: `${market.market_name}, ${market.market_name} 오일장, ${regionName} 오일장, ${market.market_name} 장날, ${market.market_name} 주차, 전통시장 지도, ${parkingText}`,
     alternates: {
       canonical: `https://jangnalmap.com/market/${resolvedParams.id}`,
     },
@@ -344,8 +343,35 @@ export default async function MarketDetailPage({ params }) {
     `#7월제철먹거리`
   ];
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    "name": `${market.market_name} 오일장`,
+    "description": `${market.market_name} 오일장 개장 주기(${market.opening_cycle}), 주소(${market.address}), 주차장 및 주변 코스 정보 안내.`,
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": market.address,
+      "addressLocality": getDistrict(market.address),
+      "addressRegion": market.address.split(' ')[0],
+      "addressCountry": "KR"
+    },
+    "geo": {
+      "@type": "GeoCoordinates",
+      "latitude": market.latitude,
+      "longitude": market.longitude
+    },
+    "url": `https://jangnalmap.com/market/${market.id}`,
+    "telephone": market.phone_num || "N/A"
+  };
+
   return (
     <div className="min-h-screen bg-white text-[#1A1A1A] flex flex-col antialiased">
+      {/* JSON-LD Structured Data for LocalBusiness */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+
       {/* Navbar */}
       <header className="sticky top-0 z-50 w-full border-b border-gray-100 bg-white/90 backdrop-blur-xl">
         <div className="max-w-4xl mx-auto px-4 h-16 flex items-center justify-between">

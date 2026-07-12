@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo, useCallback } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
@@ -18,13 +18,48 @@ function ChangeView({ center, zoom }) {
   return null;
 }
 
+// State tracker component to listen to map movements/zooming
+function MapStateTracker({ onZoomChange, onBoundsChange }) {
+  const map = useMap();
+
+  useEffect(() => {
+    // Collect initial view state
+    onZoomChange(map.getZoom());
+    onBoundsChange(map.getBounds());
+
+    const handleMapChange = () => {
+      onZoomChange(map.getZoom());
+      onBoundsChange(map.getBounds());
+    };
+
+    map.on('zoomend', handleMapChange);
+    map.on('moveend', handleMapChange);
+
+    return () => {
+      map.off('zoomend', handleMapChange);
+      map.off('moveend', handleMapChange);
+    };
+  }, [map, onZoomChange, onBoundsChange]);
+
+  return null;
+}
+
 export default function Map({ markets, activeMarket, onSelectMarket }) {
   const [isMounted, setIsMounted] = useState(false);
   const [mapCenter, setMapCenter] = useState([36.5, 127.8]); // Default center of South Korea
   const [mapZoom, setMapZoom] = useState(7);
 
+  // Dynamic zoom & bounds tracking state
+  const [currentZoom, setCurrentZoom] = useState(7);
+  const [mapBounds, setMapBounds] = useState(null);
+  const [markersLoaded, setMarkersLoaded] = useState(false);
+
   useEffect(() => {
     setIsMounted(true);
+    const timer = setTimeout(() => {
+      setMarkersLoaded(true);
+    }, 120);
+    return () => clearTimeout(timer);
   }, []);
 
   // Update map center when active market changes
@@ -32,8 +67,58 @@ export default function Map({ markets, activeMarket, onSelectMarket }) {
     if (activeMarket && activeMarket.latitude && activeMarket.longitude) {
       setMapCenter([activeMarket.latitude, activeMarket.longitude]);
       setMapZoom(14);
+      setCurrentZoom(14);
     }
   }, [activeMarket]);
+
+  const handleZoomChange = useCallback((zoom) => {
+    setCurrentZoom(zoom);
+  }, []);
+
+  const handleBoundsChange = useCallback((bounds) => {
+    setMapBounds(bounds);
+  }, []);
+
+  // Compute province clusters for zoomed-out view (zoom < 9)
+  const provinceClusters = useMemo(() => {
+    const provinces = {};
+    markets.forEach((m) => {
+      if (!m.latitude || !m.longitude) return;
+      const prov = m.address.split(' ')[0] || '기타';
+      if (!provinces[prov]) {
+        provinces[prov] = {
+          name: prov,
+          latSum: 0,
+          lngSum: 0,
+          count: 0,
+          todayCount: 0
+        };
+      }
+      provinces[prov].latSum += Number(m.latitude);
+      provinces[prov].lngSum += Number(m.longitude);
+      provinces[prov].count += 1;
+      if (isOpenToday(m.opening_cycle)) {
+        provinces[prov].todayCount += 1;
+      }
+    });
+
+    return Object.values(provinces).map((p) => ({
+      name: p.name,
+      lat: p.latSum / p.count,
+      lng: p.lngSum / p.count,
+      count: p.count,
+      todayCount: p.todayCount
+    }));
+  }, [markets]);
+
+  // Filter visible markets when zoomed-in (zoom >= 9) to eliminate DOM overhead
+  const visibleMarkets = useMemo(() => {
+    return markets.filter((m) => {
+      if (!m.latitude || !m.longitude) return false;
+      if (!mapBounds) return true;
+      return mapBounds.contains([m.latitude, m.longitude]);
+    });
+  }, [markets, mapBounds]);
 
   if (!isMounted) {
     return (
@@ -74,6 +159,29 @@ export default function Map({ markets, activeMarket, onSelectMarket }) {
     });
   };
 
+  // Create cluster icon displaying province name and total count
+  const createClusterIcon = (name, count, todayCount) => {
+    if (typeof window === 'undefined') return null;
+    const isTodayActive = todayCount > 0;
+    return L.divIcon({
+      html: `
+        <div class="relative flex items-center justify-center w-11 h-11 rounded-full border-2 border-white text-white font-extrabold text-[11px] shadow-lg transition-transform duration-200 hover:scale-110 ${
+          isTodayActive 
+            ? 'bg-[#FF5A1F] shadow-[0_0_12px_rgba(255,90,31,0.5)] animate-pulse' 
+            : 'bg-[#10B981] shadow-[0_0_10px_rgba(16,185,129,0.4)]'
+        }">
+          <div class="flex flex-col items-center justify-center leading-none">
+            <span class="text-[8px] font-bold tracking-tight opacity-90">${name}</span>
+            <span class="text-xs mt-0.5 font-black">${count}</span>
+          </div>
+        </div>
+      `,
+      className: 'custom-cluster-icon',
+      iconSize: [44, 44],
+      iconAnchor: [22, 22]
+    });
+  };
+
   return (
     <div className="w-full h-full relative rounded-2xl overflow-hidden border border-gray-200/80 shadow-lg">
       <MapContainer
@@ -83,15 +191,35 @@ export default function Map({ markets, activeMarket, onSelectMarket }) {
         className="w-full h-full"
       >
         <ChangeView center={mapCenter} zoom={mapZoom} />
+        <MapStateTracker onZoomChange={handleZoomChange} onBoundsChange={handleBoundsChange} />
+        
         {/* CartoDB Voyager Light tiles */}
         <TileLayer
           url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
           maxZoom={18}
         />
-        {markets
-          .filter((m) => m.latitude && m.longitude)
-          .map((market) => {
+
+        {/* Zoom Level < 9: Render Province Clusters for best performance */}
+        {markersLoaded && currentZoom < 9 &&
+          provinceClusters.map((cluster) => (
+            <Marker
+              key={cluster.name}
+              position={[cluster.lat, cluster.lng]}
+              icon={createClusterIcon(cluster.name, cluster.count, cluster.todayCount)}
+              eventHandlers={{
+                click: () => {
+                  setMapCenter([cluster.lat, cluster.lng]);
+                  setMapZoom(10);
+                  setCurrentZoom(10);
+                }
+              }}
+            />
+          ))}
+
+        {/* Zoom Level >= 9: Render individual markers filtered by map bounding box */}
+        {markersLoaded && currentZoom >= 9 &&
+          visibleMarkets.map((market) => {
             const todayOpen = isOpenToday(market.opening_cycle);
 
             return (
@@ -102,7 +230,7 @@ export default function Map({ markets, activeMarket, onSelectMarket }) {
                 eventHandlers={{
                   click: () => {
                     onSelectMarket(market);
-                  },
+                  }
                 }}
               >
                 <Popup className="custom-popup">
@@ -110,7 +238,7 @@ export default function Map({ markets, activeMarket, onSelectMarket }) {
                     <div className="flex items-center gap-1.5 mb-1.5">
                       <span className="font-bold text-sm text-gray-900">{market.market_name}</span>
                       {todayOpen ? (
-                        <span className="bg-[#FF5A1F]/10 text-[#FF5A1F] border border-[#FF5A1F]/20 text-[10px] px-1.5 py-0.5 rounded font-semibold animate-pulse">
+                        <span className="bg-[#FF5A1F]/10 text-[#FF5A1F] border border-[#FF5A1F]/20 text-[10px] px-1.5 py-0.5 rounded font-semibold">
                           오늘 개장
                         </span>
                       ) : (

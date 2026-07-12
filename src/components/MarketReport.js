@@ -1,8 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, memo } from 'react';
 
-export default function MarketReport() {
+const MarketReport = memo(function MarketReport() {
   const [reported, setReported] = useState(false);
   const [reportText, setReportText] = useState('');
 
@@ -46,4 +46,6 @@ export default function MarketReport() {
       </div>
     </div>
   );
-}
+});
+
+export default MarketReport;
