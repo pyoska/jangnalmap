@@ -252,8 +252,11 @@ export async function generateMetadata({ params }) {
   const regionName = market.address.split(' ')[0] || '전국';
   const parkingText = market.parking_yn === 'Y' ? '공영 주차장 완비' : '대중교통 이용 권장';
 
-  const title = `${market.market_name} 오일장 날짜 (${market.opening_cycle}), ${parkingText} 및 인근 명소 총정리 — 장날맵`;
-  const description = `${market.market_name} 오일장 개장 주기(${market.opening_cycle}), 상세 주소(${market.address}), ${parkingText} 여부와 현지 에디터가 강력 추천하는 주변 카페 및 관광지 코스를 실시간 가이드로 확인해보세요.`;
+  const title = market.opening_cycle
+    ? `${market.market_name} (${market.opening_cycle}) 장날 일정표·날짜표·주차 정보 | 오일장지도 : 장날맵`
+    : `${market.market_name} 오일장 날짜표·일정표·주차 정보 | 오일장지도 : 장날맵`;
+
+  const description = `대한민국 1등 오일장지도 : 장날맵에서 제공하는 ${market.market_name}의 정확한 장날 날짜표와 일정표입니다. 무료 주차 팁과 주변 명소 가이드까지 지금 확인하세요.`;
 
   return {
     title,
