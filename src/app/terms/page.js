@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Footer from '@/components/Footer';
 
 export const metadata = {
   title: '이용약관 | 장날맵',
@@ -58,10 +59,7 @@ export default function TermsPage() {
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-gray-150 bg-gray-50 py-8 text-center text-xs text-gray-500">
-        <p className="font-bold text-gray-600 mb-2">장날맵.com — 전국 전통 오일장 지도</p>
-        <p>© 2026 jangnalmap.com. All rights reserved.</p>
-      </footer>
+      <Footer />
     </div>
   );
 }

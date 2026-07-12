@@ -3,6 +3,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
+import Footer from '@/components/Footer';
 import { 
   isOpenToday, 
   getDaysUntilOpening, 
@@ -642,34 +643,8 @@ export default function Home() {
 
       </main>
 
-      {/* Professional Footer (Bg: #F9FAFB, Text: #4B5563, Legal links Privacy/Terms/etc) */}
-      <footer className="border-t border-gray-200 bg-[#F9FAFB] py-12 mt-16 text-center text-xs text-[#4B5563]">
-        <div className="max-w-7xl mx-auto px-4 space-y-4">
-          
-          {/* Legal Links Menu */}
-          <div className="flex flex-wrap justify-center gap-x-6 gap-y-2.5 mb-5 text-[11px] sm:text-xs font-semibold text-gray-400">
-            <Link href="/privacy" className="hover:text-[#10B981] transition-colors">개인정보처리방침</Link>
-            <span className="text-gray-200 select-none">|</span>
-            <Link href="/terms" className="hover:text-[#10B981] transition-colors">이용약관</Link>
-            <span className="text-gray-200 select-none">|</span>
-            <Link href="/disclaimer" className="hover:text-[#10B981] transition-colors">오일장 가이드</Link>
-          </div>
-
-          <p className="font-bold text-gray-800 text-sm">전국 전통 오일장 날짜 지도 — 장날맵.com</p>
-          
-          {/* Data source statement */}
-          <p className="text-xs">
-            데이터 출처: 공공데이터포털(data.go.kr) 전국전통시장표준데이터 (기준일: 2025-11-10)
-          </p>
-
-          {/* Legal Disclaimer statement */}
-          <p className="text-[11px] text-gray-400 max-w-2xl mx-auto leading-relaxed pt-2 border-t border-gray-200/50">
-            면책사항: 본 서비스의 정보는 실시간 현지 사정에 따라 실제 개장 여부와 다를 수 있으므로 방문 전 유관 기관 확인이 필요하며, 장날맵은 서비스 이용 결과에 대해 법적인 책임을 지지 않습니다.
-          </p>
-          
-          <p className="text-[10px] text-gray-400 pt-2">© 2026 jangnalmap.com. All rights reserved.</p>
-        </div>
-      </footer>
+      {/* Professional Footer */}
+      <Footer />
     </div>
   );
 }

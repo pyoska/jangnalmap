@@ -23,6 +23,8 @@ def generate():
     # Base and Static URLs
     base_urls = [
         {"loc": "https://jangnalmap.com/", "priority": "1.0", "changefreq": "daily"},
+        {"loc": "https://jangnalmap.com/about", "priority": "0.7", "changefreq": "monthly"},
+        {"loc": "https://jangnalmap.com/guide", "priority": "0.7", "changefreq": "monthly"},
         {"loc": "https://jangnalmap.com/privacy", "priority": "0.3", "changefreq": "monthly"},
         {"loc": "https://jangnalmap.com/terms", "priority": "0.3", "changefreq": "monthly"},
         {"loc": "https://jangnalmap.com/disclaimer", "priority": "0.3", "changefreq": "monthly"},
