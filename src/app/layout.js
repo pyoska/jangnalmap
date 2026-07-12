@@ -1,4 +1,5 @@
 import "./globals.css";
+import Script from 'next/script';
 
 export const metadata = {
   title: "장날맵.com | 대한민국 전국 오일장 지도 - 오늘 개장 정보 & 주차 꿀팁",
@@ -9,6 +10,7 @@ export const metadata = {
     canonical: "https://jangnalmap.com/",
   },
   verification: {
+    google: "fT2emzV4r4ASbRJZXiA21iwBfm5XjOokGoQg5UJ-4_k",
     other: {
       "naver-site-verification": "56f00ee05a771d2a8d5d35c4f0d9ba206ecfd7ab",
     }
@@ -23,6 +25,15 @@ export const viewport = {
 export default function RootLayout({ children }) {
   return (
     <html lang="ko" className="h-full antialiased scroll-smooth">
+      <head>
+        {/* Google AdSense Script */}
+        <Script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3887993426553204"
+          crossOrigin="anonymous"
+          strategy="afterInteractive"
+        />
+      </head>
       <body className="min-h-full flex flex-col bg-[#060913] text-[#F3F4F6]">
         {/* Daum Webmaster Tool Verification Comment */}
         <div dangerouslySetInnerHTML={{ __html: '<!-- DaumWebMasterTool:394769148186ce6294f0a5a1018a133f03fb744ada8cf8123edc09ff98ed0034:NLkqp3sqCgF0b7m1VxgDAA== -->' }} />
