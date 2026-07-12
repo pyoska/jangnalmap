@@ -63,20 +63,20 @@ export default function PrivacyPage() {
 
           <h2 className="text-lg font-bold text-gray-900 pt-4">6. 쿠키(Cookie) 및 구글 애드센스(Google AdSense) 광고 게재 안내 (필독)</h2>
           <p>
-            본 서비스는 사이트의 안정적이고 지속적인 무료 정보 공급 및 운영을 위해 제3자 광고 파트너인 **Google(구글)**을 통해 광고를 게재하고 있습니다. 이와 관련하여 이용자분들은 아래 사항을 참고해 주시기 바랍니다.
+            본 서비스는 사이트의 안정적이고 지속적인 무료 정보 공급 및 운영을 위해 제3자 광고 파트너인 Google(구글)을 통해 광고를 게재하고 있습니다. 이와 관련하여 이용자분들은 아래 사항을 참고해 주시기 바랍니다.
           </p>
           <div className="bg-gray-50 border border-gray-200 rounded-2xl p-5 space-y-3 shadow-sm text-xs sm:text-sm text-gray-700 leading-relaxed font-semibold">
             <p>
-              ① 구글을 포함한 제3자 제공업체는 사용자의 이전 웹사이트 방문 내역을 기반으로 맞춤형 광고를 제공하기 위해 **쿠키(Cookie)**를 활용합니다.
+              ① 구글을 포함한 제3자 제공업체는 사용자의 이전 웹사이트 방문 내역을 기반으로 맞춤형 광고를 제공하기 위해 쿠키(Cookie)를 활용합니다.
             </p>
             <p>
               ② 구글의 광고 쿠키 사용을 통해 구글 및 파트너사는 장날맵을 포함하여 사용자가 방문한 인터넷 사이트들의 행동 정보를 분석하고, 가장 연관성 높고 유익한 광고를 사용자에게 타겟팅해 송출할 수 있습니다.
             </p>
             <p>
-              ③ 사용자는 원치 않는 경우 언제든지 구글의 **개인 맞춤광고 설정 페이지(https://www.google.com/settings/ads)**를 방문하여 맞춤형 광고 수집을 중단하거나 개인화 옵션을 해제할 수 있습니다.
+              ③ 사용자는 원치 않는 경우 언제든지 구글의 개인 맞춤광고 설정 페이지(https://www.google.com/settings/ads)를 방문하여 맞춤형 광고 수집을 중단하거나 개인화 옵션을 해제할 수 있습니다.
             </p>
             <p>
-              ④ 또한, 제3자 제공업체의 쿠키 사용을 원하지 않는 경우 **Network Advertising Initiative의 쿠키 선택 해제 페이지(http://www.networkadvertising.org/choices/)** 또는 **AboutAds의 맞춤 광고 차단 가이드(http://www.aboutads.info/choices/)**를 방문하여 맞춤 쿠키 수집 설정을 손쉽게 거부할 수 있습니다.
+              ④ 또한, 제3자 제공업체의 쿠키 사용을 원하지 않는 경우 Network Advertising Initiative의 쿠키 선택 해제 페이지(http://www.networkadvertising.org/choices/) 또는 AboutAds의 맞춤 광고 차단 가이드(http://www.aboutads.info/choices/)를 방문하여 맞춤 쿠키 수집 설정을 손쉽게 거부할 수 있습니다.
             </p>
           </div>
           <p>

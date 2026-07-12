@@ -54,7 +54,7 @@ export default function Footer() {
           <h4 className="font-extrabold text-gray-800 text-sm">🛡️ 데이터 저작권</h4>
           <div className="space-y-2 leading-relaxed text-slate-500 font-medium">
             <p>
-              본 서비스의 기본 시장 위치 정보는 **소상공인시장진흥공단 전국전통시장표준데이터** 공공 데이터를 기반으로 가공 및 정밀 매핑되었습니다.
+              본 서비스의 기본 시장 위치 정보는 소상공인시장진흥공단 전국전통시장표준데이터 공공 데이터를 기반으로 가공 및 정밀 매핑되었습니다.
             </p>
             <p className="pt-1.5 border-t border-gray-200/60">
               © 2026 jangnalmap.com. All rights reserved.

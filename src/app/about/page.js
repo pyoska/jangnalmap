@@ -40,7 +40,7 @@ export default function AboutPage() {
           <div className="bg-emerald-50 border border-emerald-100 rounded-2xl p-5 space-y-3 shadow-sm">
             <h3 className="font-bold text-[#10B981] text-base">📊 대한민국 최대 수준의 1,300+ 전통 오일장 데이터베이스</h3>
             <p className="text-xs sm:text-sm text-gray-700 leading-relaxed font-semibold">
-              장날맵은 공공데이터포털(data.go.kr)의 전국전통시장표준데이터를 원천 소스로 확보하고, 여기에 현지 에디터들이 직접 밟아 수집한 지역 주차 팁과 대중교통 이용법, 주변 뉴트로 카페 및 세계문화유산 등 연계 관광 코스 정보까지 하나하나 검수하여 매핑한 **전통시장 전문 아카이브 포털**입니다.
+              장날맵은 공공데이터포털(data.go.kr)의 전국전통시장표준데이터를 원천 소스로 확보하고, 여기에 현지 에디터들이 직접 밟아 수집한 지역 주차 팁과 대중교통 이용법, 주변 뉴트로 카페 및 세계문화유산 등 연계 관광 코스 정보까지 하나하나 검수하여 매핑한 전통시장 전문 아카이브 포털입니다.
             </p>
           </div>
 
