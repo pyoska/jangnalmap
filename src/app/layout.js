@@ -1,5 +1,20 @@
 import "./globals.css";
 import Script from 'next/script';
+import { Outfit, Noto_Sans_KR } from 'next/font/google';
+
+const outfit = Outfit({
+  subsets: ['latin'],
+  weight: ['300', '400', '500', '600', '700'],
+  variable: '--font-outfit',
+  display: 'swap',
+});
+
+const notoSansKr = Noto_Sans_KR({
+  subsets: ['latin'],
+  weight: ['300', '400', '500', '700'],
+  variable: '--font-noto-sans-kr',
+  display: 'swap',
+});
 
 export const metadata = {
   title: "장날맵.com | 대한민국 전국 오일장 지도 - 오늘 개장 정보 & 주차 꿀팁",
@@ -27,7 +42,7 @@ export const viewport = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="ko" className="h-full antialiased scroll-smooth">
+    <html lang="ko" className={`${outfit.variable} ${notoSansKr.variable} h-full antialiased scroll-smooth`}>
       <head>
         {/* Google AdSense Script */}
         <Script
