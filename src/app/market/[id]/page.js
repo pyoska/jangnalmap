@@ -1,5 +1,3 @@
-import fs from 'fs/promises';
-import path from 'path';
 import Link from 'next/link';
 import { isOpenToday, getRegionGroup } from '@/utils/dateUtils';
 import { getAttractionsByRegion } from '@/components/InfoSections';
@@ -7,8 +5,7 @@ import FeedbackLoop from '@/components/FeedbackLoop';
 import YoutubeFeedback from '@/components/YoutubeFeedback';
 import MarketReport from '@/components/MarketReport';
 import ShoppingChecklist from '@/components/ShoppingChecklist';
-
-
+import marketsData from '../../../../public/data/markets.json';
 
 // Helper to extract Si/Gun/Gu from address (e.g. "제주시" or "성남시" or "정선군")
 function getDistrict(address) {
@@ -19,85 +16,59 @@ function getDistrict(address) {
 
 // Fetch market data helper
 async function getMarketData(id) {
-  try {
-    const filePath = path.join(process.cwd(), 'public', 'data', 'markets.json');
-    const fileContent = await fs.readFile(filePath, 'utf8');
-    const markets = JSON.parse(fileContent);
-    return markets.find(m => m.id === id);
-  } catch (error) {
-    console.error("Error reading markets database", error);
-    return null;
-  }
+  return marketsData.find(m => m.id === id) || null;
 }
 
 // Fetch up to 3 LIVE nearby markets in the same province that are open today (fallback to any in same province)
 async function getLiveNearbyMarkets(currentMarket) {
-  try {
-    const filePath = path.join(process.cwd(), 'public', 'data', 'markets.json');
-    const fileContent = await fs.readFile(filePath, 'utf8');
-    const allMarkets = JSON.parse(fileContent);
-    
-    const currentProvince = currentMarket.address.split(' ')[0] || '';
-    
-    // Filter other markets in the same province that are open today (using mock date base July 12, 2026)
-    const baseDate = new Date(2026, 6, 12);
-    let list = allMarkets.filter(
+  const currentProvince = currentMarket.address.split(' ')[0] || '';
+  
+  // Filter other markets in the same province that are open today (using mock date base July 12, 2026)
+  const baseDate = new Date(2026, 6, 12);
+  let list = marketsData.filter(
+    m => m.id !== currentMarket.id && 
+         m.address.split(' ')[0] === currentProvince &&
+         isOpenToday(m.opening_cycle, baseDate)
+  );
+  
+  // Fallback to general same-province markets if fewer than 3 open markets
+  if (list.length < 3) {
+    const fallbackList = marketsData.filter(
       m => m.id !== currentMarket.id && 
            m.address.split(' ')[0] === currentProvince &&
-           isOpenToday(m.opening_cycle, baseDate)
+           !list.some(added => added.id === m.id)
     );
-    
-    // Fallback to general same-province markets if fewer than 3 open markets
-    if (list.length < 3) {
-      const fallbackList = allMarkets.filter(
-        m => m.id !== currentMarket.id && 
-             m.address.split(' ')[0] === currentProvince &&
-             !list.some(added => added.id === m.id)
-      );
-      list = [...list, ...fallbackList];
-    }
-    
-    return list.slice(0, 3); // Suggest 3 markets
-  } catch (error) {
-    console.error("Error reading live nearby markets", error);
-    return [];
+    list = [...list, ...fallbackList];
   }
+  
+  return list.slice(0, 3); // Suggest 3 markets
 }
 
 // Fetch up to 3 markets in the same province opening tomorrow or next weekend
 async function getWeekendNearbyMarkets(currentMarket) {
-  try {
-    const filePath = path.join(process.cwd(), 'public', 'data', 'markets.json');
-    const fileContent = await fs.readFile(filePath, 'utf8');
-    const allMarkets = JSON.parse(fileContent);
-    
-    const currentProvince = currentMarket.address.split(' ')[0] || '';
-    const tomorrow = new Date(2026, 6, 13);
-    const saturday = new Date(2026, 6, 18);
-    const sunday = new Date(2026, 6, 19);
-    
-    let list = allMarkets.filter(
+  const currentProvince = currentMarket.address.split(' ')[0] || '';
+  const tomorrow = new Date(2026, 6, 13);
+  const saturday = new Date(2026, 6, 18);
+  const sunday = new Date(2026, 6, 19);
+  
+  let list = marketsData.filter(
+    m => m.id !== currentMarket.id && 
+         m.address.split(' ')[0] === currentProvince &&
+         (isOpenToday(m.opening_cycle, tomorrow) || 
+          isOpenToday(m.opening_cycle, saturday) || 
+          isOpenToday(m.opening_cycle, sunday))
+  );
+  
+  if (list.length < 3) {
+    const fallbackList = marketsData.filter(
       m => m.id !== currentMarket.id && 
            m.address.split(' ')[0] === currentProvince &&
-           (isOpenToday(m.opening_cycle, tomorrow) || 
-            isOpenToday(m.opening_cycle, saturday) || 
-            isOpenToday(m.opening_cycle, sunday))
+           !list.some(added => added.id === m.id)
     );
-    
-    if (list.length < 3) {
-      const fallbackList = allMarkets.filter(
-        m => m.id !== currentMarket.id && 
-             m.address.split(' ')[0] === currentProvince &&
-             !list.some(added => added.id === m.id)
-      );
-      list = [...list, ...fallbackList];
-    }
-    
-    return list.slice(0, 3);
-  } catch (error) {
-    console.error("Error reading weekend nearby markets", error);
-    return [];
+    list = [...list, ...fallbackList];
   }
+  
+  return list.slice(0, 3);
 }
 
 // Dynamic curation sentence generator for weekend markets
