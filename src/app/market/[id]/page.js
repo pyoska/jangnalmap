@@ -5,6 +5,7 @@ import FeedbackLoop from '@/components/FeedbackLoop';
 import YoutubeFeedback from '@/components/YoutubeFeedback';
 import MarketReport from '@/components/MarketReport';
 import ShoppingChecklist from '@/components/ShoppingChecklist';
+import Footer from '@/components/Footer';
 import marketsData from '../../../../public/data/markets.json';
 
 // Helper to extract Si/Gun/Gu from address (e.g. "제주시" or "성남시" or "정선군")
