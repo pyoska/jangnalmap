@@ -54,7 +54,7 @@ export default function RootLayout({ children }) {
       </head>
       <body className="min-h-full flex flex-col bg-[#060913] text-[#F3F4F6]">
         {/* Daum Webmaster Tool Verification Comment */}
-        <div dangerouslySetInnerHTML={{ __html: '<!-- DaumWebMasterTool:394769148186ce6294f0a5a1018a133f03fb744ada8cf8123edc09ff98ed0034:NLkqp3sqCgF0b7m1VxgDAA== -->' }} />
+        <div dangerouslySetInnerHTML={{ __html: '<!-- DaumWebMasterTool:31e1c1e9a77ec5eaba225de70a3afe1eb1ed94099e0576c16c85bb140568ac89:NSllVgtQeByhwmkxZnNyHA== -->' }} />
         {children}
       </body>
     </html>
