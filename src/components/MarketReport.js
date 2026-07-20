@@ -6,8 +6,8 @@ const MarketReport = memo(function MarketReport() {
   const [reported, setReported] = useState(false);
   const [reportText, setReportText] = useState('');
 
-  const handleReport = (label, count) => {
-    setReportText(`🎉 감사합니다! 방금 ${count}명이 [${label}]에 투표했습니다! 실시간 상황 정보가 분석용 데이터에 성공적으로 갱신되었습니다.`);
+  const handleReport = (label) => {
+    setReportText(`🎉 감사합니다! 소중한 현장 상황 정보([${label}])가 성공적으로 반영되었습니다.`);
     setReported(true);
   };
 
@@ -20,19 +20,19 @@ const MarketReport = memo(function MarketReport() {
         {!reported ? (
           <div className="flex flex-wrap justify-center gap-2.5 mt-2">
             <button
-              onClick={() => handleReport('활기 넘쳐요 🔥', 18)}
+              onClick={() => handleReport('활기 넘쳐요 🔥')}
               className="bg-white border border-gray-200 hover:border-orange-300 hover:bg-orange-50 text-gray-700 font-extrabold text-xs sm:text-sm px-4 py-2.5 rounded-xl transition-all shadow-sm cursor-pointer flex items-center gap-1 active:scale-95"
             >
               활기 넘쳐요 🔥
             </button>
             <button
-              onClick={() => handleReport('주차장 여유 🚗', 12)}
+              onClick={() => handleReport('주차장 여유 🚗')}
               className="bg-white border border-gray-200 hover:border-emerald-300 hover:bg-emerald-50 text-gray-700 font-extrabold text-xs sm:text-sm px-4 py-2.5 rounded-xl transition-all shadow-sm cursor-pointer flex items-center gap-1 active:scale-95"
             >
               주차장 여유 🚗
             </button>
             <button
-              onClick={() => handleReport('거의 마감 ❄️', 6)}
+              onClick={() => handleReport('거의 마감 ❄️')}
               className="bg-white border border-gray-200 hover:border-rose-300 hover:bg-rose-50 text-gray-700 font-extrabold text-xs sm:text-sm px-4 py-2.5 rounded-xl transition-all shadow-sm cursor-pointer flex items-center gap-1 active:scale-95"
             >
               거의 마감 ❄️

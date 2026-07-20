@@ -46,6 +46,8 @@ export default function Home() {
   const [selectedCycle, setSelectedCycle] = useState('전체');
   const [searchQuery, setSearchQuery] = useState('');
   const [searchInput, setSearchInput] = useState('');
+  const [onlyToday, setOnlyToday] = useState(false);
+  const [onlyParking, setOnlyParking] = useState(false);
 
   // Debounce search input to prevent main-thread block (typing Input Delay)
   useEffect(() => {
@@ -205,6 +207,14 @@ export default function Home() {
       );
     }
 
+    // Filter by Quick Chips (Today only & Parking available)
+    if (onlyToday) {
+      result = result.filter(m => m.isToday);
+    }
+    if (onlyParking) {
+      result = result.filter(m => m.parking_yn === 'Y');
+    }
+
     // GPS sorting priority
     if (gpsSorting && userLocation) {
       result = result.map(m => ({
@@ -237,7 +247,7 @@ export default function Home() {
 
       return a.market_name.localeCompare(b.market_name, 'ko');
     });
-  }, [marketsWithDDay, selectedRegion, selectedCycle, searchQuery, gpsSorting, userLocation]);
+  }, [marketsWithDDay, selectedRegion, selectedCycle, searchQuery, gpsSorting, userLocation, onlyToday, onlyParking]);
 
   const handleSelectMarket = (market) => {
     setActiveMarket(market);
@@ -262,7 +272,7 @@ export default function Home() {
               장날맵.com
             </span>
             <span className="text-[10px] px-2 py-0.5 bg-[#10B981]/10 border border-[#10B981]/25 text-[#10B981] rounded-full font-bold">
-              정보 검증판
+              전국 5일장 지도
             </span>
           </Link>
           <div className="hidden sm:flex items-center gap-6 text-sm text-gray-500 font-medium">
@@ -333,6 +343,59 @@ export default function Home() {
               </svg>
               {gpsLoading ? 'GPS 위치 수신 중...' : '📍 내 주변 오일장 찾기'}
             </button>
+          </div>
+
+          {/* 1-Touch Quick Filter Chips */}
+          <div className="flex flex-wrap items-center gap-2 pt-1">
+            <span className="text-xs font-bold text-gray-400 mr-1">⚡ 1초 퀵 검색:</span>
+            <button
+              onClick={() => setOnlyToday(!onlyToday)}
+              className={`text-xs px-3.5 py-2 rounded-xl font-bold transition-all cursor-pointer flex items-center gap-1 active:scale-95 ${
+                onlyToday 
+                  ? 'bg-[#FF5A1F] text-white shadow-sm ring-2 ring-[#FF5A1F]/30'
+                  : 'bg-white border border-gray-200 text-gray-700 hover:border-orange-300 hover:bg-orange-50/50'
+              }`}
+            >
+              🔥 오늘 열리는 장터만
+            </button>
+            <button
+              onClick={() => setOnlyParking(!onlyParking)}
+              className={`text-xs px-3.5 py-2 rounded-xl font-bold transition-all cursor-pointer flex items-center gap-1 active:scale-95 ${
+                onlyParking 
+                  ? 'bg-[#10B981] text-white shadow-sm ring-2 ring-[#10B981]/30'
+                  : 'bg-white border border-gray-200 text-gray-700 hover:border-emerald-300 hover:bg-emerald-50/50'
+              }`}
+            >
+              🚗 무료/공영 주차장 완비
+            </button>
+            <button
+              onClick={() => setSearchInput('모란시장')}
+              className="text-xs px-3.5 py-2 rounded-xl font-bold bg-white border border-gray-200 text-gray-700 hover:border-emerald-300 hover:bg-emerald-50/50 transition-all cursor-pointer flex items-center gap-1 active:scale-95"
+            >
+              ⭐ 성남 모란장
+            </button>
+            <button
+              onClick={() => setSearchInput('정선아리랑')}
+              className="text-xs px-3.5 py-2 rounded-xl font-bold bg-white border border-gray-200 text-gray-700 hover:border-emerald-300 hover:bg-emerald-50/50 transition-all cursor-pointer flex items-center gap-1 active:scale-95"
+            >
+              ⭐ 정선 5일장
+            </button>
+            {(onlyToday || onlyParking || searchQuery || selectedRegion !== '전체' || selectedCycle !== '전체') && (
+              <button
+                onClick={() => {
+                  setOnlyToday(false);
+                  setOnlyParking(false);
+                  setSearchInput('');
+                  setSearchQuery('');
+                  setSelectedRegion('전체');
+                  setSelectedCycle('전체');
+                  if (gpsSorting) clearGpsSearch();
+                }}
+                className="text-xs px-2.5 py-1.5 text-gray-400 hover:text-gray-600 underline font-semibold cursor-pointer ml-auto"
+              >
+                필터 초기화 ↺
+              </button>
+            )}
           </div>
 
           {gpsSorting && (

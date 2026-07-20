@@ -6,6 +6,7 @@ import YoutubeFeedback from '@/components/YoutubeFeedback';
 import MarketReport from '@/components/MarketReport';
 import ShoppingChecklist from '@/components/ShoppingChecklist';
 import Footer from '@/components/Footer';
+import ShareButton from '@/components/ShareButton';
 import marketsData from '../../../../public/data/markets.json';
 
 // Helper to extract Si/Gun/Gu from address (e.g. "제주시" or "성남시" or "정선군")
@@ -433,11 +434,9 @@ export default async function MarketDetailPage({ params }) {
             {market.market_name} 오일장 장날 주기, 대체 주차장 꿀팁, 대중교통 정보!
           </h1>
           <div className="flex flex-wrap items-center gap-2">
-            <div className="w-8 h-8 rounded-full bg-emerald-100 text-[#10B981] flex items-center justify-center font-bold text-xs">
-              ED
-            </div>
+            <div className="w-8 h-8 rounded-full bg-emerald-100 text-[#10B981] flex items-center justify-center font-bold text-xs">🗺️</div>
             <div className="text-xs text-gray-400">
-              <span className="font-bold text-gray-600">추천 여행 에디터</span> | 정보 수시 확인 및 검증 완료
+              <span className="font-bold text-gray-600">장날맵 가이드</span> | 전국 오일장 이용 상세 안내
             </div>
             {todayOpen ? (
               <span className="relative flex h-fit w-fit shrink-0">
@@ -570,6 +569,9 @@ export default async function MarketDetailPage({ params }) {
           </a>
         </section>
 
+        {/* 카카오톡 / 지인 1-클릭 바이럴 공유 버튼 */}
+        <ShareButton marketName={market.market_name} />
+
         {/* 유튜브 외부 연결 단독 버튼 */}
         <a
           href={`https://www.youtube.com/results?search_query=${encodeURIComponent(market.market_name + ' 오일장')}`}
@@ -691,11 +693,11 @@ export default async function MarketDetailPage({ params }) {
         <section className="bg-white border border-gray-200/80 rounded-2xl p-6 sm:p-8 flex flex-col gap-6 shadow-sm">
           <div className="flex items-center gap-3 pb-4 border-b border-gray-100">
             <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-[#10B981] to-emerald-400 flex items-center justify-center font-bold text-white text-sm shadow-sm">
-              ED
+              💡
             </div>
             <div>
-              <h3 className="text-sm sm:text-base font-extrabold text-gray-900">에디터의 추천 팁 (현장 검증 완료)</h3>
-              <p className="text-[11px] font-semibold text-[#10B981]">직접 발로 뛰고 정리한 꿀 정보 모음</p>
+              <h3 className="text-sm sm:text-base font-extrabold text-gray-900">오일장 방문 필독 가이드 팁</h3>
+              <p className="text-[11px] font-semibold text-[#10B981]">교통·주차·먹거리 종합 가이드</p>
             </div>
           </div>
 
