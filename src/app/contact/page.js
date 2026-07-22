@@ -40,6 +40,16 @@ export default function ContactPage() {
           서비스 개선 제안, 시장 정보 정정 요청(장날 변경, 주차장 정보 보완 등) 또는 일반 문의 사항이 있으시다면 아래 폼을 통해 편하게 메시지를 보내주세요. 에디터가 확인 후 빠르게 반영하겠습니다.
         </p>
 
+        <div className="bg-gray-50 border border-gray-150 rounded-2xl p-4.5 flex items-center justify-between gap-3 text-xs sm:text-sm text-gray-700 leading-relaxed font-semibold">
+          <div>
+            <span className="block font-bold text-gray-900 text-sm">📧 공식 이메일 접수</span>
+            <span className="text-gray-500 font-medium">support@jangnalmap.com (24시간 접수 가능)</span>
+          </div>
+          <a href="mailto:support@jangnalmap.com" className="bg-[#10B981] hover:bg-[#059669] text-white text-xs px-3.5 py-2 rounded-xl transition-all font-bold">
+            이메일 보내기
+          </a>
+        </div>
+
         {submitted ? (
           <div className="bg-emerald-50 border border-emerald-100 rounded-2xl p-6 text-center text-emerald-800 font-bold shadow-sm space-y-2 mt-4">
             <p>✓ 피드백이 성공적으로 접수되었습니다!</p>
@@ -84,6 +94,12 @@ export default function ContactPage() {
                 className="w-full bg-gray-50 border border-gray-200/80 rounded-xl px-4 py-3 text-sm text-[#1A1A1A] placeholder-gray-400 focus:outline-none focus:border-[#10B981] focus:ring-1 focus:ring-[#10B981] transition-colors"
                 required
               ></textarea>
+            </div>
+            <div className="py-1">
+              <label className="flex items-start gap-2.5 text-xs text-gray-500 cursor-pointer select-none">
+                <input type="checkbox" required className="w-4 h-4 rounded border-gray-300 text-[#10B981] focus:ring-[#10B981] mt-0.5" />
+                <span>(필수) 피드백 답변 및 처리 결과를 받기 위해 입력한 이메일 주소를 수집 및 활용하는 데 동의합니다.</span>
+              </label>
             </div>
             <button
               type="submit"
