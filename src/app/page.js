@@ -534,7 +534,7 @@ export default function Home() {
                 filteredMarkets.slice(0, visibleCount).map((market, index) => (
                   <Fragment key={market.id}>
                     {index > 0 && index % 8 === 0 && (
-                      <div className="bg-white/50 border border-dashed border-gray-200 rounded-2xl p-4.5 flex flex-col items-center justify-center min-h-[120px] text-center shadow-sm">
+                      <div className="adsense-container bg-white/50 border border-dashed border-gray-200 rounded-2xl p-4.5 flex flex-col items-center justify-center min-h-[120px] text-center shadow-sm">
                         <ins className="adsbygoogle"
                              style={{ display: 'block', width: '100%' }}
                              data-ad-format="fluid"

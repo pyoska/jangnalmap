@@ -552,7 +552,7 @@ export default async function MarketDetailPage({ params }) {
         </section>
 
         {/* Google AdSense Contextual High-CPC Ad Slot (Targeting Onnuri/Insurance context) */}
-        <div className="w-full bg-white border border-gray-200/80 rounded-2xl p-4.5 flex flex-col items-center justify-center min-h-[140px] text-center shadow-sm">
+        <div className="adsense-container w-full bg-white border border-gray-200/80 rounded-2xl p-4.5 flex flex-col items-center justify-center min-h-[140px] text-center shadow-sm">
           <ins className="adsbygoogle"
                style={{ display: 'block', width: '100%' }}
                data-ad-client="ca-pub-3887993426553204"

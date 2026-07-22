@@ -108,3 +108,13 @@ body {
   background-color: rgba(255, 255, 255, 0.8) !important;
   color: #6B7280 !important;
 }
+
+/* Google AdSense Approval Safeguard: Hide empty ad slots until ads are fully loaded */
+.adsense-container {
+  display: none !important;
+}
+
+/* Display only when AdSense has loaded and filled the ad slot */
+.adsense-container:has(ins[data-ad-status="filled"]) {
+  display: flex !important;
+}
