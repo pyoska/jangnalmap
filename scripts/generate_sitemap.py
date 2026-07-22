@@ -28,7 +28,16 @@ def generate():
         {"loc": "https://jangnalmap.com/privacy", "priority": "0.3", "changefreq": "monthly"},
         {"loc": "https://jangnalmap.com/terms", "priority": "0.3", "changefreq": "monthly"},
         {"loc": "https://jangnalmap.com/disclaimer", "priority": "0.3", "changefreq": "monthly"},
-        {"loc": "https://jangnalmap.com/contact", "priority": "0.5", "changefreq": "monthly"}
+        {"loc": "https://jangnalmap.com/contact", "priority": "0.5", "changefreq": "monthly"},
+        {"loc": "https://jangnalmap.com/region/gyeonggi", "priority": "0.9", "changefreq": "weekly"},
+        {"loc": "https://jangnalmap.com/region/gangwon", "priority": "0.9", "changefreq": "weekly"},
+        {"loc": "https://jangnalmap.com/region/chungbuk", "priority": "0.9", "changefreq": "weekly"},
+        {"loc": "https://jangnalmap.com/region/chungnam", "priority": "0.9", "changefreq": "weekly"},
+        {"loc": "https://jangnalmap.com/region/jeonbuk", "priority": "0.9", "changefreq": "weekly"},
+        {"loc": "https://jangnalmap.com/region/jeonnam", "priority": "0.9", "changefreq": "weekly"},
+        {"loc": "https://jangnalmap.com/region/gyeongbuk", "priority": "0.9", "changefreq": "weekly"},
+        {"loc": "https://jangnalmap.com/region/gyeongnam", "priority": "0.9", "changefreq": "weekly"},
+        {"loc": "https://jangnalmap.com/region/jeju", "priority": "0.9", "changefreq": "weekly"}
     ]
 
     for item in base_urls:
