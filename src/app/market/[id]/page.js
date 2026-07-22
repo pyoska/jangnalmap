@@ -8,6 +8,7 @@ import ShoppingChecklist from '@/components/ShoppingChecklist';
 import Footer from '@/components/Footer';
 import ShareButton from '@/components/ShareButton';
 import GuideTabs from '@/components/GuideTabs';
+import CalendarDownload from '@/components/CalendarDownload';
 import marketsData from '../../../../public/data/markets.json';
 
 // Helper to extract Si/Gun/Gu from address (e.g. "제주시" or "성남시" or "정선군")
@@ -649,6 +650,11 @@ export default async function MarketDetailPage({ params }) {
                   </div>
                 );
               })}
+            </div>
+
+            {/* 📷 이번 달 스마트폰 오일장 달력 다운로드 빌더 */}
+            <div className="mt-5 pt-5 border-t border-gray-100">
+              <CalendarDownload marketName={market.market_name} openingCycle={market.opening_cycle} />
             </div>
           </div>
         </section>

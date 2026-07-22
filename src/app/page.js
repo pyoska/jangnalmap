@@ -483,11 +483,18 @@ export default function Home() {
                     <button
                       key={m.id}
                       onClick={() => handleSelectMarket(m)}
-                      className={`text-xs px-2.5 py-1.5 rounded-xl border font-bold transition-all flex items-center gap-1 cursor-pointer bg-white border-amber-200 text-amber-850 hover:bg-amber-50 ${
+                      className={`text-xs px-2.5 py-1.5 rounded-xl border font-bold transition-all flex items-center gap-1.5 cursor-pointer bg-white border-amber-200 text-amber-850 hover:bg-amber-50 ${
                         activeMarket && activeMarket.id === m.id ? 'ring-2 ring-amber-400 border-amber-400' : ''
                       }`}
                     >
                       <span>{m.market_name}</span>
+                      <span className={`text-[9px] px-1.5 py-0.5 rounded-md font-extrabold ${
+                        m.isToday 
+                          ? 'bg-orange-500 text-white animate-pulse' 
+                          : 'bg-amber-100 text-amber-800'
+                      }`}>
+                        {m.isToday ? '오늘!' : `D-${m.daysUntil}`}
+                      </span>
                     </button>
                   ))}
                 </div>
