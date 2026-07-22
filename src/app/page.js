@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, Fragment } from 'react';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import Footer from '@/components/Footer';
@@ -531,15 +531,27 @@ export default function Home() {
                   <p className="text-xs text-gray-500 mt-1">상단의 필터를 다시 세팅해보세요.</p>
                 </div>
               ) : (
-                filteredMarkets.slice(0, visibleCount).map((market) => (
-                  <div
-                    key={market.id}
-                    className={`bg-white p-5 rounded-2xl border transition-all duration-300 shadow-sm hover:shadow-md ${
-                      activeMarket && activeMarket.id === market.id
-                        ? 'border-[#10B981] ring-2 ring-[#10B981]/15 shadow-md'
-                        : 'border-gray-200/80 hover:border-gray-300'
-                    }`}
-                  >
+                filteredMarkets.slice(0, visibleCount).map((market, index) => (
+                  <Fragment key={market.id}>
+                    {index > 0 && index % 8 === 0 && (
+                      <div className="bg-white/50 border border-dashed border-gray-200 rounded-2xl p-4.5 flex flex-col items-center justify-center min-h-[120px] text-center shadow-sm">
+                        <ins className="adsbygoogle"
+                             style={{ display: 'block', width: '100%' }}
+                             data-ad-format="fluid"
+                             data-ad-layout-key="-fb+5w+4e-db+86"
+                             data-ad-client="ca-pub-3887993426553204"
+                             data-ad-slot="9847192803" />
+                        <span className="text-[9px] text-gray-300 font-bold uppercase tracking-wider mt-1.5 block">Sponsored Advertisement</span>
+                      </div>
+                    )}
+                    
+                    <div
+                      className={`bg-white p-5 rounded-2xl border transition-all duration-300 shadow-sm hover:shadow-md ${
+                        activeMarket && activeMarket.id === market.id
+                          ? 'border-[#10B981] ring-2 ring-[#10B981]/15 shadow-md'
+                          : 'border-gray-200/80 hover:border-gray-300'
+                      }`}
+                    >
                     {/* Header: Market Name with Heart Button and D-Day Badge */}
                     <div className="flex justify-between items-start gap-2 mb-2">
                       <div className="flex items-center gap-1.5">
@@ -647,7 +659,8 @@ export default function Home() {
                       </div>
                     </div>
                   </div>
-                ))
+                </Fragment>
+              ))
               )}
             </div>
           </div>

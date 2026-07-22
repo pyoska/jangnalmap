@@ -551,6 +551,17 @@ export default async function MarketDetailPage({ params }) {
           </div>
         </section>
 
+        {/* Google AdSense Contextual High-CPC Ad Slot (Targeting Onnuri/Insurance context) */}
+        <div className="w-full bg-white border border-gray-200/80 rounded-2xl p-4.5 flex flex-col items-center justify-center min-h-[140px] text-center shadow-sm">
+          <ins className="adsbygoogle"
+               style={{ display: 'block', width: '100%' }}
+               data-ad-client="ca-pub-3887993426553204"
+               data-ad-slot="4782019385"
+               data-ad-format="auto"
+               data-full-width-responsive="true" />
+          <span className="text-[10px] text-gray-300 font-bold uppercase tracking-wider mt-1.5 block">Sponsored Advertisement</span>
+        </div>
+
         {/* Brand Map Buttons */}
         <section className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
           <a
