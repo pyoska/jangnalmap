@@ -43,7 +43,7 @@ export const viewport = {
 export default function RootLayout({ children }) {
   return (
     <html lang="ko" className={`${outfit.variable} ${notoSansKr.variable} h-full antialiased scroll-smooth`}>
-      <head>
+      <body className="min-h-full flex flex-col bg-[#060913] text-[#F3F4F6]">
         {/* Google AdSense Script */}
         <Script
           async
@@ -51,8 +51,6 @@ export default function RootLayout({ children }) {
           crossOrigin="anonymous"
           strategy="afterInteractive"
         />
-      </head>
-      <body className="min-h-full flex flex-col bg-[#060913] text-[#F3F4F6]">
         {/* Daum Webmaster Tool Verification Comment */}
         <div dangerouslySetInnerHTML={{ __html: '<!-- DaumWebMasterTool:31e1c1e9a77ec5eaba225de70a3afe1eb1ed94099e0576c16c85bb140568ac89:NSllVgtQeByhwmkxZnNyHA== -->' }} />
         {children}
