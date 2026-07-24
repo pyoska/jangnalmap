@@ -113,24 +113,35 @@ def generate():
 
     print(f"Sitemap successfully generated at {sitemap_file} with {len(markets) + len(base_urls)} links.")
 
-    # 3. Build robots.txt
-    robots_content = [
-        "#DaumWebMasterTool:31e1c1e9a77ec5eaba225de70a3afe1eb1ed94099e0576c16c85bb140568ac89:JbtVqj5ycYCrCKnoguOyqw==",
-        "",
-        "User-agent: *",
-        "Allow: /",
-        "",
-        "User-agent: Daumoa",
-        "Allow: /",
-        "",
-        "Sitemap: https://jangnalmap.com/sitemap.xml",
-        "Sitemap: https://www.jangnalmap.com/sitemap.xml"
-    ]
+    # 3. Build robots.txt Route Handler
+    robots_route_file = 'src/app/robots.txt/route.js'
+    route_js_code = f"""export async function GET() {{
+  const content = `#DaumWebMasterTool:31e1c1e9a77ec5eaba225de70a3afe1eb1ed94099e0576c16c85bb140568ac89:JbtVqj5ycYCrCKnoguOyqw==
 
-    with open(robots_file, 'w', encoding='utf-8', newline='\n') as f:
-        f.write('\n'.join(robots_content) + '\n')
+User-agent: *
+Allow: /
 
-    print(f"robots.txt successfully generated at {robots_file}")
+User-agent: Daumoa
+Allow: /
+
+Sitemap: https://jangnalmap.com/sitemap.xml
+Sitemap: https://www.jangnalmap.com/sitemap.xml
+`;
+
+  return new Response(content, {{
+    status: 200,
+    headers: {{
+      'Content-Type': 'text/plain; charset=utf-8',
+      'Cache-Control': 'no-store, max-age=0, must-revalidate',
+    }},
+  }});
+}}
+"""
+    os.makedirs(os.path.dirname(robots_route_file), exist_ok=True)
+    with open(robots_route_file, 'w', encoding='utf-8') as f:
+        f.write(route_js_code)
+
+    print(f"robots.txt route handler successfully generated at {robots_route_file}")
 
 if __name__ == '__main__':
     generate()
