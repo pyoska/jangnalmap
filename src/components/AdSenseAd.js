@@ -14,7 +14,7 @@ export default function AdSenseAd({ client = 'ca-pub-3887993426553204', slot, fo
           hasLoaded.current = true;
         }
       } catch (err) {
-        console.error('AdSense push error:', err);
+        // Silently swallow push errors from rapid re-renders
       }
     }
   }, []);

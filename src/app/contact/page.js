@@ -49,7 +49,7 @@ export default function ContactPage() {
             <span className="text-gray-400 text-sm font-medium">support@jangnalmap.com</span>
           </div>
 
-          <p className="text-xs text-gray-500 max-w-sm leading-relaxed">
+          <p className="text-xs text-gray-400 max-w-sm leading-relaxed">
             문의 및 제보해 주신 내용은 에디터가 현장 확인 및 지자체 조회를 거쳐 영업일 기준 1~2일 내로 지도상에 정확하게 반영해 드립니다.
           </p>
 

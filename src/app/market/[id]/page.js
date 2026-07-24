@@ -328,7 +328,7 @@ export default async function MarketDetailPage({ params }) {
       "longitude": market.longitude
     },
     "url": `https://jangnalmap.com/market/${market.id}`,
-    "telephone": market.phone_num || "N/A"
+    ...(market.phone_num && market.phone_num !== 'N/A' ? { "telephone": market.phone_num } : {})
   };
 
   const breadcrumbJsonLd = {

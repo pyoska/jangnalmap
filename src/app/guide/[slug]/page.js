@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import Footer from '@/components/Footer';
+import AdSenseAd from '@/components/AdSenseAd';
 
 const ARTICLES = {
   'onnuri': {
@@ -190,7 +191,7 @@ export default async function ArticleDetailPage({ params }) {
         "url": "https://jangnalmap.com/favicon.ico"
       }
     },
-    "datePublished": article.date,
+    "datePublished": article.date ? article.date.replace(/\./g, '-') : "2026-07-24",
     "mainEntityOfPage": `https://jangnalmap.com/guide/${slug}`
   };
 
@@ -265,18 +266,10 @@ export default async function ArticleDetailPage({ params }) {
             </div>
           </div>
 
-          {/* Banner Ad Area (Policy Compliant Clean Card) */}
-          <div className="border border-dashed border-gray-200 bg-gray-50/50 rounded-2xl p-6.5 flex flex-col items-center justify-center min-h-[100px] text-center my-6">
-            <span className="text-[10px] text-gray-400 font-bold uppercase tracking-wider mb-2">ADVERTISEMENT</span>
-            {/* Standard Adsense Ad Unit */}
-            <div className="w-full text-center">
-              <ins className="adsbygoogle"
-                   style={{ display: 'block', textAlign: 'center' }}
-                   data-ad-layout="in-article"
-                   data-ad-format="fluid"
-                   data-ad-client="ca-pub-3887993426553204"
-                   data-ad-slot="9847192803"></ins>
-            </div>
+          {/* Clean AdSense Ad Slot */}
+          <div className="adsense-container w-full bg-transparent p-2 flex flex-col items-center justify-center min-h-[120px] text-center my-6">
+            <AdSenseAd slot="9847192803" format="fluid" layoutKey="-in-article" />
+            <span className="text-[10px] text-gray-400 font-medium uppercase tracking-wider mt-1 block">Sponsored</span>
           </div>
 
           {/* Article HTML Content */}
