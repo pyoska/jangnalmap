@@ -56,9 +56,9 @@ export default function GuideTabs({ transportTip, parkingTip, foodTip, tags }) {
             <p className="text-xs sm:text-sm text-gray-600 leading-relaxed font-semibold">{parkingTip}</p>
             
             <div className="bg-emerald-50/50 border border-emerald-100 rounded-xl p-4 space-y-2">
-              <h4 className="font-extrabold text-[#10B981] text-xs sm:text-sm">📝 대안/대체 주차 팁</h4>
+              <h4 className="font-extrabold text-[#10B981] text-xs sm:text-sm">📝 주차장 이용 및 교통 안내</h4>
               <p className="text-xs text-gray-600 leading-relaxed font-semibold">
-                시장 내 전용 주차장이 만차이거나 혼잡할 경우에는 억지로 진입하시지 말고, 시장에서 약 300m 떨어진 인근 천변 공영주차장이나 주말에는 무료 개방되는 인근 공공복지센터 혹은 관공서 운동장 구역을 대체 주차장으로 정해 이용하시는 편이 마음 편하더라고요!
+                장날 당일에는 전통시장 주변 및 공영주차장이 만차될 수 있으므로, 입구 주변 안내 표지판을 참조하시거나 가급적 대중교통 이용을 권장해 드립니다.
               </p>
             </div>
           </div>
@@ -73,13 +73,6 @@ export default function GuideTabs({ transportTip, parkingTip, foodTip, tags }) {
               ))}
             </div>
             <p className="text-xs sm:text-sm text-gray-600 leading-relaxed font-semibold">{foodTip}</p>
-
-            <div className="bg-emerald-50/50 border border-emerald-100 rounded-xl p-4 space-y-1.5">
-              <h4 className="font-extrabold text-[#10B981] text-xs sm:text-sm">⭐ 우수/인기 메뉴 추천</h4>
-              <p className="text-xs text-gray-600 leading-relaxed font-semibold">
-                시장 내 노점 골목의 가마솥 가래떡 즉석 떡볶이와 바삭한 수제 도넛, 갓 튀긴 핫바, 그리고 계절에 맞춘 7월 시원한 살얼음 미숫가루와 식혜는 필수 코스로 추천해 드려요.
-              </p>
-            </div>
 
             <div className="bg-blue-50/40 border border-blue-100 rounded-xl p-4 space-y-1.5">
               <h4 className="font-extrabold text-blue-500 text-xs sm:text-sm">⏰ 시장 방문객 추천 시기/시간대</h4>

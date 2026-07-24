@@ -217,9 +217,9 @@ export default function HomeClient({ initialMarkets = [] }) {
     if (searchQuery.trim() !== '') {
       const query = searchQuery.toLowerCase();
       result = result.filter(m => 
-        m.market_name.toLowerCase().includes(query) || 
-        m.address.toLowerCase().includes(query) ||
-        m.food_recommend.toLowerCase().includes(query)
+        (m.market_name || '').toLowerCase().includes(query) || 
+        (m.address || '').toLowerCase().includes(query) ||
+        (m.food_recommend || '').toLowerCase().includes(query)
       );
     }
 
@@ -352,15 +352,6 @@ export default function HomeClient({ initialMarkets = [] }) {
                       지우기
                     </button>
                   )}
-                  <button 
-                    title="음성 검색 준비 중"
-                    onClick={() => alert("음성 검색 기능은 향후 업데이트될 예정입니다!")}
-                    className="text-gray-400 hover:text-[#10B981] p-1.5 rounded-full hover:bg-gray-100 transition-all duration-200 cursor-pointer"
-                  >
-                    <svg className="w-5 sm:w-6 h-5 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
-                    </svg>
-                  </button>
                 </div>
               </div>
             </div>
@@ -583,9 +574,9 @@ export default function HomeClient({ initialMarkets = [] }) {
                 filteredMarkets.slice(0, visibleCount).map((market, index) => (
                   <Fragment key={market.id}>
                     {index > 0 && index % 8 === 0 && (
-                      <div className="adsense-container bg-white/50 border border-dashed border-gray-200 rounded-2xl p-4.5 flex flex-col items-center justify-center min-h-[120px] text-center shadow-sm">
+                      <div className="adsense-container bg-transparent p-2 flex flex-col items-center justify-center min-h-[120px] text-center">
                         <AdSenseAd slot="9847192803" format="fluid" layoutKey="-fb+5w+4e-db+86" />
-                        <span className="text-[9px] text-gray-300 font-bold uppercase tracking-wider mt-1.5 block">Sponsored Advertisement</span>
+                        <span className="text-[9px] text-gray-400 font-medium uppercase tracking-wider mt-1 block">Sponsored</span>
                       </div>
                     )}
                     

@@ -172,8 +172,64 @@ export default async function ArticleDetailPage({ params }) {
     );
   }
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": article.title,
+    "description": article.description,
+    "image": "https://jangnalmap.com/favicon.ico",
+    "author": {
+      "@type": "Organization",
+      "name": "장날맵 가이드 편집국"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "장날맵.com",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://jangnalmap.com/favicon.ico"
+      }
+    },
+    "datePublished": article.date,
+    "mainEntityOfPage": `https://jangnalmap.com/guide/${slug}`
+  };
+
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "전국 오일장 지도",
+        "item": "https://jangnalmap.com"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "오일장 가이드",
+        "item": "https://jangnalmap.com/guide"
+      },
+      {
+        "@type": "ListItem",
+        "position": 3,
+        "name": article.title,
+        "item": `https://jangnalmap.com/guide/${slug}`
+      }
+    ]
+  };
+
   return (
     <div className="min-h-screen bg-white text-[#1A1A1A] flex flex-col antialiased">
+      {/* JSON-LD Schema Scripts */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
       {/* Navbar */}
       <header className="sticky top-0 z-50 w-full border-b border-gray-100 bg-white/90 backdrop-blur-xl">
         <div className="max-w-4xl mx-auto px-4 h-16 flex items-center justify-between">

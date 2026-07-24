@@ -144,12 +144,35 @@ export default async function RegionPage({ params }) {
     }))
   };
 
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "전국 오일장 지도",
+        "item": "https://jangnalmap.com"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": `${region.name} 오일장`,
+        "item": `https://jangnalmap.com/region/${province}`
+      }
+    ]
+  };
+
   return (
     <div className="min-h-screen bg-white text-[#1A1A1A] flex flex-col antialiased">
-      {/* JSON-LD Schema Script */}
+      {/* JSON-LD Schema Scripts */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
 
       {/* Navbar */}

@@ -25,6 +25,9 @@ export const metadata = {
   metadataBase: new URL("https://jangnalmap.com"),
   alternates: {
     canonical: "/",
+    types: {
+      'application/rss+xml': '/rss.xml',
+    },
   },
   verification: {
     google: "fT2emzV4r4ASbRJZXiA21iwBfm5XjOokGoQg5UJ-4_k",

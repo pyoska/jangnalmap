@@ -24,22 +24,22 @@ async function getMarketData(id) {
 
 // Fetch up to 3 LIVE nearby markets in the same province that are open today (fallback to any in same province)
 async function getLiveNearbyMarkets(currentMarket) {
-  const currentProvince = currentMarket.address.split(' ')[0] || '';
+  const currentProvince = (currentMarket.address || '').split(' ')[0] || '';
   const markets = await getMarkets();
   
-  // Filter other markets in the same province that are open today (using mock date base July 12, 2026)
-  const baseDate = new Date(2026, 6, 12);
+  // Filter other markets in the same province that are open today
+  const today = new Date();
   let list = markets.filter(
     m => m.id !== currentMarket.id && 
-         m.address.split(' ')[0] === currentProvince &&
-         isOpenToday(m.opening_cycle, baseDate)
+         (m.address || '').split(' ')[0] === currentProvince &&
+         isOpenToday(m.opening_cycle, today)
   );
   
   // Fallback to general same-province markets if fewer than 3 open markets
   if (list.length < 3) {
     const fallbackList = markets.filter(
       m => m.id !== currentMarket.id && 
-           m.address.split(' ')[0] === currentProvince &&
+           (m.address || '').split(' ')[0] === currentProvince &&
            !list.some(added => added.id === m.id)
     );
     list = [...list, ...fallbackList];
@@ -50,15 +50,22 @@ async function getLiveNearbyMarkets(currentMarket) {
 
 // Fetch up to 3 markets in the same province opening tomorrow or next weekend
 async function getWeekendNearbyMarkets(currentMarket) {
-  const currentProvince = currentMarket.address.split(' ')[0] || '';
+  const currentProvince = (currentMarket.address || '').split(' ')[0] || '';
   const markets = await getMarkets();
-  const tomorrow = new Date(2026, 6, 13);
-  const saturday = new Date(2026, 6, 18);
-  const sunday = new Date(2026, 6, 19);
+  
+  const now = new Date();
+  const tomorrow = new Date(now);
+  tomorrow.setDate(now.getDate() + 1);
+
+  // Calculate upcoming Saturday and Sunday
+  const saturday = new Date(now);
+  saturday.setDate(now.getDate() + ((6 - now.getDay() + 7) % 7));
+  const sunday = new Date(now);
+  sunday.setDate(now.getDate() + ((7 - now.getDay() + 7) % 7));
   
   let list = markets.filter(
     m => m.id !== currentMarket.id && 
-         m.address.split(' ')[0] === currentProvince &&
+         (m.address || '').split(' ')[0] === currentProvince &&
          (isOpenToday(m.opening_cycle, tomorrow) || 
           isOpenToday(m.opening_cycle, saturday) || 
           isOpenToday(m.opening_cycle, sunday))
@@ -124,7 +131,8 @@ async function getWeatherTip(lat, lng, address) {
 
   try {
     const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lng}&current_weather=true`, {
-      next: { revalidate: 1800 }
+      next: { revalidate: 1800 },
+      signal: AbortSignal.timeout(3000)
     });
     if (!res.ok) return fallback;
     const data = await res.json();
@@ -311,7 +319,7 @@ export default async function MarketDetailPage({ params }) {
       "@type": "PostalAddress",
       "streetAddress": market.address,
       "addressLocality": getDistrict(market.address),
-      "addressRegion": market.address.split(' ')[0],
+      "addressRegion": (market.address || '').split(' ')[0],
       "addressCountry": "KR"
     },
     "geo": {
@@ -321,6 +329,31 @@ export default async function MarketDetailPage({ params }) {
     },
     "url": `https://jangnalmap.com/market/${market.id}`,
     "telephone": market.phone_num || "N/A"
+  };
+
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "전국 오일장 지도",
+        "item": "https://jangnalmap.com"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": `${market.address.split(' ')[0]} 오일장`,
+        "item": `https://jangnalmap.com/region/${regionSlugs[getRegionGroup(market.address)] || 'gyeonggi'}`
+      },
+      {
+        "@type": "ListItem",
+        "position": 3,
+        "name": market.market_name,
+        "item": `https://jangnalmap.com/market/${market.id}`
+      }
+    ]
   };
 
   const regionGroup = getRegionGroup(market.address);
@@ -339,10 +372,14 @@ export default async function MarketDetailPage({ params }) {
 
   return (
     <div className="min-h-screen bg-white text-[#1A1A1A] flex flex-col antialiased">
-      {/* JSON-LD Structured Data for LocalBusiness */}
+      {/* JSON-LD Structured Data for LocalBusiness and BreadcrumbList */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
 
       {/* Navbar */}
@@ -516,10 +553,10 @@ export default async function MarketDetailPage({ params }) {
 
         {/* Boilerplate financial sections removed to prevent duplicate content flags */}
 
-        {/* Google AdSense Contextual High-CPC Ad Slot (Targeting Onnuri/Insurance context) */}
-        <div className="adsense-container w-full bg-white border border-gray-200/80 rounded-2xl p-4.5 flex flex-col items-center justify-center min-h-[140px] text-center shadow-sm">
+        {/* Google AdSense Contextual Ad Slot */}
+        <div className="adsense-container w-full bg-transparent p-2 flex flex-col items-center justify-center min-h-[120px] text-center">
           <AdSenseAd slot="4782019385" format="auto" responsive="true" />
-          <span className="text-[10px] text-gray-300 font-bold uppercase tracking-wider mt-1.5 block">Sponsored Advertisement</span>
+          <span className="text-[10px] text-gray-400 font-medium uppercase tracking-wider mt-1 block">Sponsored</span>
         </div>
 
         {/* Brand Map Buttons */}
