@@ -74,7 +74,7 @@ async function getWeekendNearbyMarkets(currentMarket) {
   if (list.length < 3) {
     const fallbackList = markets.filter(
       m => m.id !== currentMarket.id && 
-           m.address.split(' ')[0] === currentProvince &&
+           (m.address || '').split(' ')[0] === currentProvince &&
            !list.some(added => added.id === m.id)
     );
     list = [...list, ...fallbackList];
@@ -200,7 +200,7 @@ export async function generateMetadata({ params }) {
     };
   }
 
-  const regionName = market.address.split(' ')[0] || '전국';
+  const regionName = (market.address || '').split(' ')[0] || '전국';
   const parkingText = market.parking_yn === 'Y' ? '공영 주차장 완비' : '대중교통 이용 권장';
 
   const title = market.opening_cycle
