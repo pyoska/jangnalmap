@@ -4,6 +4,9 @@ import Footer from '@/components/Footer';
 export const metadata = {
   title: '면책조항 | 장날맵',
   description: '장날맵 서비스의 법적 책임 한계 및 면책 고지 안내 페이지입니다.',
+  alternates: {
+    canonical: 'https://jangnalmap.com/disclaimer',
+  },
 };
 
 export default function DisclaimerPage() {

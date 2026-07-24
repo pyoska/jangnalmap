@@ -474,7 +474,8 @@ export default function Home() {
                   <Link
                     key={region}
                     href={href}
-                    className={`text-base sm:text-lg px-4 py-2 sm:px-5 sm:py-2.5 rounded-xl border transition-all duration-200 cursor-pointer ${
+                    aria-current={selectedRegion === region ? "page" : undefined}
+                    className={`text-base sm:text-lg px-4 py-3 min-h-[44px] sm:px-5 sm:py-3 rounded-xl border transition-all duration-200 cursor-pointer flex items-center justify-center ${
                       selectedRegion === region
                         ? 'bg-[#10B981] border-[#10B981] text-white shadow-[0_4px_14px_rgba(16,185,129,0.3)] font-bold'
                         : 'bg-gray-50 border-gray-100 text-gray-600 hover:text-[#10B981] hover:bg-emerald-50 font-semibold'
@@ -495,7 +496,8 @@ export default function Home() {
                 <button
                   key={cycle.value}
                   onClick={() => setSelectedCycle(cycle.value)}
-                  className={`text-base sm:text-lg px-4 py-2 sm:px-5 sm:py-2.5 rounded-xl border transition-all duration-200 cursor-pointer ${
+                  aria-pressed={selectedCycle === cycle.value}
+                  className={`text-base sm:text-lg px-4 py-3 min-h-[44px] sm:px-5 sm:py-3 rounded-xl border transition-all duration-200 cursor-pointer ${
                     selectedCycle === cycle.value
                       ? 'bg-[#10B981] border-[#10B981] text-white shadow-[0_4px_14px_rgba(16,185,129,0.3)] font-bold'
                       : 'bg-gray-50 border-gray-100 text-gray-600 hover:text-[#10B981] hover:bg-emerald-50 font-semibold'
@@ -604,7 +606,7 @@ export default function Home() {
                       <div className="flex items-center gap-1.5">
                         <button
                           onClick={() => toggleFavorite(market.id)}
-                          className="text-rose-500 hover:scale-115 active:scale-90 transition-transform cursor-pointer p-0.5 shrink-0"
+                          className="text-rose-500 hover:scale-115 active:scale-90 transition-transform cursor-pointer p-2 shrink-0"
                           title={favorites.includes(market.id) ? "단골 해제" : "단골 시장 찜하기"}
                           aria-label={favorites.includes(market.id) ? "단골 해제" : "단골 시장 찜하기"}
                         >

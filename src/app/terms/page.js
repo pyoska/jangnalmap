@@ -4,6 +4,9 @@ import Footer from '@/components/Footer';
 export const metadata = {
   title: '이용약관 | 장날맵',
   description: '장날맵 서비스의 이용약관 안내 페이지입니다.',
+  alternates: {
+    canonical: 'https://jangnalmap.com/terms',
+  },
 };
 
 export default function TermsPage() {

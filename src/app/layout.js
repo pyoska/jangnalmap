@@ -21,8 +21,9 @@ export const metadata = {
   description: "대한민국 전국 1,300여 개 전통 오일장(5일장)의 날짜 주기, 오늘 개장 여부, 위치 지도, 주차 정보 및 여행 블로거가 추천하는 먹거리 정보를 확인하세요.",
   keywords: "오일장, 5일장, 전통시장, 장날, 모란시장, 정선아리랑시장, 전국 오일장 날짜, 전국 오일장 지도",
   authors: [{ name: "장날맵" }],
+  metadataBase: new URL("https://jangnalmap.com"),
   alternates: {
-    canonical: "https://jangnalmap.com/",
+    canonical: "/",
   },
   verification: {
     google: "fT2emzV4r4ASbRJZXiA21iwBfm5XjOokGoQg5UJ-4_k",

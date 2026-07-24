@@ -4,6 +4,9 @@ import Footer from '@/components/Footer';
 export const metadata = {
   title: '오일장 이용 가이드 | 장날맵',
   description: '전통 5일장의 날짜 주기 계산법, 주차 요령 및 장날 쇼핑 시 필수 꿀팁을 전수하는 백서 가이드 페이지입니다.',
+  alternates: {
+    canonical: 'https://jangnalmap.com/guide',
+  },
 };
 
 export default function GuidePage() {

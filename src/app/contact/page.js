@@ -1,6 +1,12 @@
-'use client';
-
 import Link from 'next/link';
+
+export const metadata = {
+  title: '문의 및 제보 | 장날맵',
+  description: '장날맵 서비스 정보 정정 제보 및 이메일 제휴 문의 안내 페이지입니다.',
+  alternates: {
+    canonical: 'https://jangnalmap.com/contact',
+  },
+};
 
 export default function ContactPage() {
   return (

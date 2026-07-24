@@ -4,6 +4,9 @@ import Footer from '@/components/Footer';
 export const metadata = {
   title: '서비스 소개 | 장날맵',
   description: '대한민국 1,300여 개 전통 오일장 지도를 발로 뛰며 검증하는 전문 아카이브 포털, 장날맵의 이야기입니다.',
+  alternates: {
+    canonical: 'https://jangnalmap.com/about',
+  },
 };
 
 export default function AboutPage() {
