@@ -2,4 +2,9 @@
 
 User-agent: *
 Allow: /
+
+User-agent: Daumoa
+Allow: /
+
 Sitemap: https://jangnalmap.com/sitemap.xml
+Sitemap: https://www.jangnalmap.com/sitemap.xml

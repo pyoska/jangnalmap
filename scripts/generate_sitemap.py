@@ -119,7 +119,12 @@ def generate():
         "",
         "User-agent: *",
         "Allow: /",
-        "Sitemap: https://jangnalmap.com/sitemap.xml"
+        "",
+        "User-agent: Daumoa",
+        "Allow: /",
+        "",
+        "Sitemap: https://jangnalmap.com/sitemap.xml",
+        "Sitemap: https://www.jangnalmap.com/sitemap.xml"
     ]
 
     with open(robots_file, 'w', encoding='utf-8', newline='\n') as f:
