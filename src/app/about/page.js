@@ -2,14 +2,14 @@ import Link from 'next/link';
 import Footer from '@/components/Footer';
 
 export const metadata = {
-  title: '서비스 소개 | 장날맵',
-  description: '대한민국 1,300여 개 전통 오일장 지도를 발로 뛰며 검증하는 전문 아카이브 포털, 장날맵의 이야기입니다.',
+  title: '서비스 소개 및 운영 정책 | 장날맵',
+  description: '대한민국 1,300여 개 전통 오일장 지도를 발로 뛰며 검증하는 전문 아카이브 포털, 장날맵의 운영진 및 편집 데이터 검증 정책입니다.',
   alternates: {
     canonical: 'https://jangnalmap.com/about',
   },
   openGraph: {
-    title: '서비스 소개 | 장날맵',
-    description: '대한민국 1,300여 개 전통 오일장 지도를 발로 뛰며 검증하는 전문 아카이브 포털, 장날맵의 이야기입니다.',
+    title: '서비스 소개 및 운영 정책 | 장날맵',
+    description: '대한민국 1,300여 개 전통 오일장 지도를 발로 뛰며 검증하는 전문 아카이브 포털, 장날맵의 운영진 및 편집 데이터 검증 정책입니다.',
     url: 'https://jangnalmap.com/about',
     type: 'website',
   },
@@ -34,7 +34,7 @@ export default function AboutPage() {
       <main className="flex-1 max-w-3xl w-full mx-auto px-4 py-12 flex flex-col gap-8">
         <div className="space-y-3">
           <span className="text-xs font-bold text-[#10B981] uppercase tracking-wider block">우리의 역사와 가치</span>
-          <h1 className="text-3xl font-extrabold text-gray-900 border-b border-gray-150 pb-4">장날맵.com 소개</h1>
+          <h1 className="text-3xl font-extrabold text-gray-900 border-b border-gray-150 pb-4">장날맵.com 소개 & 운영 정책</h1>
         </div>
 
         <section className="space-y-6 text-sm text-gray-600 leading-relaxed font-medium">
@@ -51,6 +51,21 @@ export default function AboutPage() {
             <p className="text-xs sm:text-sm text-gray-700 leading-relaxed font-semibold">
               장날맵은 공공데이터포털(data.go.kr)의 전국전통시장표준데이터를 원천 소스로 확보하고, 여기에 현지 에디터들이 직접 밟아 수집한 지역 주차 팁과 대중교통 이용법, 주변 뉴트로 카페 및 세계문화유산 등 연계 관광 코스 정보까지 하나하나 검수하여 매핑한 전통시장 전문 아카이브 포털입니다.
             </p>
+          </div>
+
+          <div className="bg-slate-50 border border-slate-200/80 rounded-2xl p-5 space-y-3">
+            <h3 className="font-bold text-gray-900 text-base">👥 운영 주체 및 데이터 검증 철학 (E-E-A-T)</h3>
+            <div className="space-y-2 text-xs sm:text-sm text-gray-600 font-semibold">
+              <p>
+                • <strong>운영 주체:</strong> 장날맵 아카이브 편집국 (대표 문의: support@jangnalmap.com)
+              </p>
+              <p>
+                • <strong>데이터 검증 출처:</strong> 소상공인시장진흥공단 공공데이터, 17개 지자체 오일장 개설 고시, Open-Meteo 기상청 API
+              </p>
+              <p>
+                • <strong>콘텐츠 신뢰성 선언:</strong> 장날맵은 사용자의 혼선을 방지하기 위해 가짜 리뷰나 보상성 광고 평가를 엄격히 금지하며, 오직 검증된 시장 주기 및 주차/교통 사실 정보만을 제공합니다.
+              </p>
+            </div>
           </div>
 
           <h2 className="text-lg font-bold text-gray-900 pt-4">우리가 추구하는 가치</h2>
