@@ -1,7 +1,9 @@
 import Link from 'next/link';
 import { isOpenToday, getDaysUntilOpening, getDDayText, getRegionGroup } from '@/utils/dateUtils';
 import Footer from '@/components/Footer';
-import marketsData from '../../../../public/data/markets.json';
+import { getMarkets } from '@/lib/db';
+
+export const revalidate = 600; // Revalidate cache every 10 minutes
 
 const REGION_MAP = {
   'gyeonggi': { 
@@ -108,7 +110,8 @@ export default async function RegionPage({ params }) {
   }
 
   // Filter and decorate markets belonging to this region
-  const regionMarkets = marketsData
+  const markets = await getMarkets();
+  const regionMarkets = markets
     .filter(m => getRegionGroup(m.address) === region.group)
     .map(market => {
       const isToday = isOpenToday(market.opening_cycle);

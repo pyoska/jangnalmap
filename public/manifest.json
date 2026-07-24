@@ -1,0 +1,18 @@
+{
+  "name": "장날맵 - 전국 오일장 지도",
+  "short_name": "장날맵",
+  "description": "대한민국 전국 1,300여 개 전통 오일장 지도 및 주차 정보",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#060913",
+  "theme_color": "#10B981",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "512x512",
+      "type": "image/x-icon",
+      "purpose": "any maskable"
+    }
+  ]
+}

@@ -1,19 +1,60 @@
 import json
 import os
 import sys
+import urllib.request
+import csv
+import io
+
+def get_markets():
+    sheets_url = os.environ.get('GOOGLE_SHEETS_URL')
+    if not sheets_url:
+        markets_file = 'public/data/markets.json'
+        if os.path.exists(markets_file):
+            with open(markets_file, 'r', encoding='utf-8') as f:
+                return json.load(f)
+        return []
+    
+    try:
+        req = urllib.request.Request(
+            sheets_url, 
+            headers={'User-Agent': 'Mozilla/5.0'}
+        )
+        with urllib.request.urlopen(req) as response:
+            csv_data = response.read().decode('utf-8')
+            
+        f = io.StringIO(csv_data)
+        reader = csv.DictReader(f)
+        markets = []
+        for row in reader:
+            item = {}
+            for k, v in row.items():
+                if not k:
+                    continue
+                k_clean = k.strip()
+                v_clean = v.strip() if v else ""
+                if k_clean in ['latitude', 'longitude']:
+                    try:
+                        item[k_clean] = float(v_clean)
+                    except ValueError:
+                        item[k_clean] = 0.0
+                else:
+                    item[k_clean] = v_clean
+            if item.get('id') and item.get('market_name'):
+                markets.append(item)
+        return markets
+    except Exception as e:
+        print(f"Error fetching Google Sheets, falling back to local JSON: {e}")
+        markets_file = 'public/data/markets.json'
+        if os.path.exists(markets_file):
+            with open(markets_file, 'r', encoding='utf-8') as f:
+                return json.load(f)
+        return []
 
 def generate():
-    markets_file = 'public/data/markets.json'
     sitemap_file = 'public/sitemap.xml'
     robots_file = 'public/robots.txt'
 
-    if not os.path.exists(markets_file):
-        print(f"Error: {markets_file} does not exist. Run convert_data.py first.")
-        sys.exit(1)
-
-    # 1. Load markets data
-    with open(markets_file, 'r', encoding='utf-8') as f:
-        markets = json.load(f)
+    markets = get_markets()
 
     # 2. Build sitemap.xml
     xml = []
@@ -25,6 +66,9 @@ def generate():
         {"loc": "https://jangnalmap.com/", "priority": "1.0", "changefreq": "daily"},
         {"loc": "https://jangnalmap.com/about", "priority": "0.7", "changefreq": "monthly"},
         {"loc": "https://jangnalmap.com/guide", "priority": "0.7", "changefreq": "monthly"},
+        {"loc": "https://jangnalmap.com/guide/onnuri", "priority": "0.8", "changefreq": "monthly"},
+        {"loc": "https://jangnalmap.com/guide/parking", "priority": "0.8", "changefreq": "monthly"},
+        {"loc": "https://jangnalmap.com/guide/recommend", "priority": "0.8", "changefreq": "monthly"},
         {"loc": "https://jangnalmap.com/privacy", "priority": "0.3", "changefreq": "monthly"},
         {"loc": "https://jangnalmap.com/terms", "priority": "0.3", "changefreq": "monthly"},
         {"loc": "https://jangnalmap.com/disclaimer", "priority": "0.3", "changefreq": "monthly"},

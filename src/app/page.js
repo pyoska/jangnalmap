@@ -95,7 +95,7 @@ export default function Home() {
   useEffect(() => {
     async function loadMarkets() {
       try {
-        const res = await fetch('/data/markets.json');
+        const res = await fetch('/api/markets');
         if (!res.ok) throw new Error('Failed to fetch markets data');
         const data = await res.json();
         setMarkets(data);

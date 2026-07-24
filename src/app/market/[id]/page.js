@@ -6,7 +6,9 @@ import ShareButton from '@/components/ShareButton';
 import GuideTabs from '@/components/GuideTabs';
 import CalendarDownload from '@/components/CalendarDownload';
 import AdSenseAd from '@/components/AdSenseAd';
-import marketsData from '../../../../public/data/markets.json';
+import { getMarketById, getMarkets } from '@/lib/db';
+
+export const revalidate = 600; // Revalidate cache every 10 minutes
 
 // Helper to extract Si/Gun/Gu from address (e.g. "제주시" or "성남시" or "정선군")
 function getDistrict(address) {
@@ -17,16 +19,17 @@ function getDistrict(address) {
 
 // Fetch market data helper
 async function getMarketData(id) {
-  return marketsData.find(m => m.id === id) || null;
+  return await getMarketById(id);
 }
 
 // Fetch up to 3 LIVE nearby markets in the same province that are open today (fallback to any in same province)
 async function getLiveNearbyMarkets(currentMarket) {
   const currentProvince = currentMarket.address.split(' ')[0] || '';
+  const markets = await getMarkets();
   
   // Filter other markets in the same province that are open today (using mock date base July 12, 2026)
   const baseDate = new Date(2026, 6, 12);
-  let list = marketsData.filter(
+  let list = markets.filter(
     m => m.id !== currentMarket.id && 
          m.address.split(' ')[0] === currentProvince &&
          isOpenToday(m.opening_cycle, baseDate)
@@ -34,7 +37,7 @@ async function getLiveNearbyMarkets(currentMarket) {
   
   // Fallback to general same-province markets if fewer than 3 open markets
   if (list.length < 3) {
-    const fallbackList = marketsData.filter(
+    const fallbackList = markets.filter(
       m => m.id !== currentMarket.id && 
            m.address.split(' ')[0] === currentProvince &&
            !list.some(added => added.id === m.id)
@@ -48,11 +51,12 @@ async function getLiveNearbyMarkets(currentMarket) {
 // Fetch up to 3 markets in the same province opening tomorrow or next weekend
 async function getWeekendNearbyMarkets(currentMarket) {
   const currentProvince = currentMarket.address.split(' ')[0] || '';
+  const markets = await getMarkets();
   const tomorrow = new Date(2026, 6, 13);
   const saturday = new Date(2026, 6, 18);
   const sunday = new Date(2026, 6, 19);
   
-  let list = marketsData.filter(
+  let list = markets.filter(
     m => m.id !== currentMarket.id && 
          m.address.split(' ')[0] === currentProvince &&
          (isOpenToday(m.opening_cycle, tomorrow) || 
@@ -61,7 +65,7 @@ async function getWeekendNearbyMarkets(currentMarket) {
   );
   
   if (list.length < 3) {
-    const fallbackList = marketsData.filter(
+    const fallbackList = markets.filter(
       m => m.id !== currentMarket.id && 
            m.address.split(' ')[0] === currentProvince &&
            !list.some(added => added.id === m.id)

@@ -23,4 +23,10 @@
 - [x] 21단계: 메인 스레드 지연 최소화: 검색어 입력 지연(Input Delay) 해결을 위한 180ms 디바운스(Debounce) 훅 및 지도 렌더링 120ms 타이밍 지연(MarkersLoaded) 비동기 처리 적용 완료
 - [x] 22단계: SEO 최종 마감: 시장명, 날짜 주기, 주차 조건이 결합된 generateMetadata dynamic tag 및 LocalBusiness JSON-LD schema 완성
 - [x] 23단계: Sitemap & Robots: scripts/generate_sitemap.py 재동기화 및 static public/ sitemap.xml (1,383개 링크) & robots.txt 빌드 완성
-- [x] 24단계: 단골 시장 찜하기, 내 주변 시장 찾기 GPS 기능, 제보하기 소통창구 (리텐션 강화)
+- [x] 24단계: PWA (Progressive Web App) 모바일 홈 설치 기능 개발
+- [x] 25단계: public/manifest.json 메니페스트 작성
+- [x] 26단계: public/sw.js 서비스 워커 파일 작성
+- [x] 27단계: src/app/layout.js 서비스 워커 자동 등록 로직 구현
+- [x] 28단계: src/components/PwaInstallBanner.js 설치 모달 배너 컴포넌트 개발
+- [x] 29단계: 메인 화면 하단에 PwaInstallBanner 이식 및 디자인 다듬기
+- [x] 30단계: 단골 시장 찜하기, 내 주변 시장 찾기 GPS 기능, 제보하기 소통창구 (리텐션 강화)

@@ -1,6 +1,7 @@
 import "./globals.css";
 import Script from 'next/script';
 import { Outfit, Noto_Sans_KR } from 'next/font/google';
+import PwaInstallBanner from '@/components/PwaInstallBanner';
 
 const outfit = Outfit({
   subsets: ['latin'],
@@ -53,6 +54,7 @@ export const metadata = {
     description: "대한민국 전국 1,300여 개 전통 오일장(5일장)의 날짜 주기, 오늘 개장 여부, 위치 지도 및 주차 정보",
     images: ["/favicon.ico"],
   },
+  manifest: "/manifest.json",
   other: {
     "google-adsense-account": "ca-pub-3887993426553204"
   }
@@ -75,7 +77,23 @@ export default function RootLayout({ children }) {
           strategy="afterInteractive"
         />
 
+        {/* PWA Service Worker Registration */}
+        <Script id="register-sw" strategy="afterInteractive">
+          {`
+            if ('serviceWorker' in navigator) {
+              window.addEventListener('load', function() {
+                navigator.serviceWorker.register('/sw.js').then(function(registration) {
+                  console.log('PWA ServiceWorker registered successfully:', registration.scope);
+                }).catch(function(err) {
+                  console.log('PWA ServiceWorker registration failed:', err);
+                });
+              });
+            }
+          `}
+        </Script>
+
         {children}
+        <PwaInstallBanner />
       </body>
     </html>
   );

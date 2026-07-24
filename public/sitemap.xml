@@ -16,6 +16,21 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://jangnalmap.com/guide/onnuri</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://jangnalmap.com/guide/parking</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://jangnalmap.com/guide/recommend</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://jangnalmap.com/privacy</loc>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
