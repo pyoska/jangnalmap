@@ -118,8 +118,8 @@ def generate():
         "#DaumWebMasterTool:31e1c1e9a77ec5eaba225de70a3afe1eb1ed94099e0576c16c85bb140568ac89:JbtVqj5ycYCrCKnoguOyqw=="
     ]
 
-    with open(robots_file, 'w', encoding='utf-8') as f:
-        f.write('\n'.join(robots_content))
+    with open(robots_file, 'w', encoding='utf-8', newline='\n') as f:
+        f.write('\n'.join(robots_content) + '\n')
 
     print(f"robots.txt successfully generated at {robots_file}")
 
