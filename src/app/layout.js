@@ -31,8 +31,7 @@ export const metadata = {
     }
   },
   other: {
-    "google-adsense-account": "ca-pub-3887993426553204",
-    "verification": "DaumWebMasterTool:31e1c1e9a77ec5eaba225de70a3afe1eb1ed94099e0576c16c85bb140568ac89:JbtVqj5ycYCrCKnoguOyqw=="
+    "google-adsense-account": "ca-pub-3887993426553204"
   }
 };
 

@@ -384,7 +384,8 @@ export default function Home() {
             <span className="text-xs font-bold text-gray-400 mr-1">⚡ 1초 퀵 검색:</span>
             <button
               onClick={() => setOnlyToday(!onlyToday)}
-              className={`text-xs px-3.5 py-2.5 rounded-xl font-bold transition-all cursor-pointer flex items-center gap-1 active:scale-95 ${
+              aria-pressed={onlyToday}
+              className={`text-xs px-4 py-3 min-h-[44px] rounded-xl font-bold transition-all cursor-pointer flex items-center gap-1 active:scale-95 ${
                 onlyToday 
                   ? 'bg-[#FF5A1F] text-white shadow-sm ring-2 ring-[#FF5A1F]/30'
                   : 'bg-white border border-gray-200 text-gray-700 hover:border-orange-300 hover:bg-orange-50/50'
@@ -394,7 +395,8 @@ export default function Home() {
             </button>
             <button
               onClick={() => setOnlyParking(!onlyParking)}
-              className={`text-xs px-3.5 py-2.5 rounded-xl font-bold transition-all cursor-pointer flex items-center gap-1 active:scale-95 ${
+              aria-pressed={onlyParking}
+              className={`text-xs px-4 py-3 min-h-[44px] rounded-xl font-bold transition-all cursor-pointer flex items-center gap-1 active:scale-95 ${
                 onlyParking 
                   ? 'bg-[#10B981] text-white shadow-sm ring-2 ring-[#10B981]/30'
                   : 'bg-white border border-gray-200 text-gray-700 hover:border-emerald-300 hover:bg-emerald-50/50'
@@ -404,7 +406,8 @@ export default function Home() {
             </button>
             <button
               onClick={() => setOnlyFavorites(!onlyFavorites)}
-              className={`text-xs px-3.5 py-2.5 rounded-xl font-bold transition-all cursor-pointer flex items-center gap-1 active:scale-95 ${
+              aria-pressed={onlyFavorites}
+              className={`text-xs px-4 py-3 min-h-[44px] rounded-xl font-bold transition-all cursor-pointer flex items-center gap-1 active:scale-95 ${
                 onlyFavorites 
                   ? 'bg-rose-500 text-white shadow-sm ring-2 ring-rose-500/30'
                   : 'bg-white border border-gray-200 text-gray-700 hover:border-rose-300 hover:bg-rose-50/50'
@@ -414,13 +417,13 @@ export default function Home() {
             </button>
             <button
               onClick={() => setSearchInput('모란시장')}
-              className="text-xs px-3.5 py-2.5 rounded-xl font-bold bg-white border border-gray-200 text-gray-700 hover:border-emerald-300 hover:bg-emerald-50/50 transition-all cursor-pointer flex items-center gap-1 active:scale-95"
+              className="text-xs px-4 py-3 min-h-[44px] rounded-xl font-bold bg-white border border-gray-200 text-gray-700 hover:border-emerald-300 hover:bg-emerald-50/50 transition-all cursor-pointer flex items-center gap-1 active:scale-95"
             >
               ⭐ 성남 모란장
             </button>
             <button
               onClick={() => setSearchInput('정선아리랑')}
-              className="text-xs px-3.5 py-2.5 rounded-xl font-bold bg-white border border-gray-200 text-gray-700 hover:border-emerald-300 hover:bg-emerald-50/50 transition-all cursor-pointer flex items-center gap-1 active:scale-95"
+              className="text-xs px-4 py-3 min-h-[44px] rounded-xl font-bold bg-white border border-gray-200 text-gray-700 hover:border-emerald-300 hover:bg-emerald-50/50 transition-all cursor-pointer flex items-center gap-1 active:scale-95"
             >
               ⭐ 정선 5일장
             </button>
@@ -436,7 +439,7 @@ export default function Home() {
                   setSelectedCycle('전체');
                   if (gpsSorting) clearGpsSearch();
                 }}
-                className="text-xs px-2.5 py-1.5 text-gray-400 hover:text-gray-600 underline font-semibold cursor-pointer ml-auto"
+                className="text-xs px-4 py-3 min-h-[44px] text-gray-500 hover:text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-xl font-bold cursor-pointer transition-colors flex items-center justify-center gap-1 ml-auto"
               >
                 필터 초기화 ↺
               </button>
@@ -471,10 +474,6 @@ export default function Home() {
                   <Link
                     key={region}
                     href={href}
-                    onClick={(e) => {
-                      e.preventDefault();
-                      setSelectedRegion(region);
-                    }}
                     className={`text-base sm:text-lg px-4 py-2 sm:px-5 sm:py-2.5 rounded-xl border transition-all duration-200 cursor-pointer ${
                       selectedRegion === region
                         ? 'bg-[#10B981] border-[#10B981] text-white shadow-[0_4px_14px_rgba(16,185,129,0.3)] font-bold'

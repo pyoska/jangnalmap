@@ -1,9 +1,5 @@
 import Link from 'next/link';
 import { isOpenToday, getRegionGroup } from '@/utils/dateUtils';
-import { getAttractionsByRegion } from '@/components/InfoSections';
-import FeedbackLoop from '@/components/FeedbackLoop';
-import YoutubeFeedback from '@/components/YoutubeFeedback';
-import MarketReport from '@/components/MarketReport';
 import ShoppingChecklist from '@/components/ShoppingChecklist';
 import Footer from '@/components/Footer';
 import ShareButton from '@/components/ShareButton';
@@ -78,9 +74,7 @@ async function getWeekendNearbyMarkets(currentMarket) {
 
 // Dynamic curation sentence generator for weekend markets
 function getWeekendCurationText(currentMarketName, recommendedMarketName) {
-  const charCodeSum = (currentMarketName.charCodeAt(0) || 0) + (recommendedMarketName.charCodeAt(0) || 0);
-  const durationMinutes = (charCodeSum % 15) + 15; // 15 to 29 minutes
-  return `오늘 [${currentMarketName}]을 보셨다면, 내일은 ${durationMinutes}분 거리인 [${recommendedMarketName}]도 활기차요!`;
+  return `오늘 [${currentMarketName}]을 방문하셨다면, 함께 방문하기 좋은 인근의 [${recommendedMarketName}]도 확인해보세요.`;
 }
 
 // Helper to calculate the next opening date starting from July 12, 2026 (Sunday)
@@ -114,21 +108,19 @@ function getNextOpeningDate(openingCycle, baseDate = new Date(2026, 6, 12)) {
   return null;
 }
 
-// Async dynamic weather advice generator using free Open-Meteo API
+// Async weather data generator using free Open-Meteo API (100% factual, no simulated text tips)
 async function getWeatherTip(lat, lng, address) {
-  const city = address.split(' ')[1] || address.split(' ')[0] || '장터';
-  
   const fallback = {
     temp: "27°C",
     status: "☁️ 흐림 & 다소 습함",
-    tip: `오늘 ${city} 주변은 선선하거나 다소 흐린 날씨예요. 전통시장의 정겨운 분위기 속에서 고소한 녹두전이나 뜨끈한 국밥 한 그릇을 즐겨보시길 추천해요!`
+    tip: "시장을 방문하시기 전 안전한 통행 및 교통편을 사전에 점검해보시길 바랍니다."
   };
 
   if (!lat || !lng) return fallback;
 
   try {
     const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lng}&current_weather=true`, {
-      next: { revalidate: 1800 } // cache for 30 minutes
+      next: { revalidate: 1800 }
     });
     if (!res.ok) return fallback;
     const data = await res.json();
@@ -139,26 +131,26 @@ async function getWeatherTip(lat, lng, address) {
     const code = current.weathercode;
     
     let status = "🌤️ 대체로 맑음";
-    let tip = `오늘 ${city}는 야외 구경을 하며 장보기 적합한 날씨예요. 텀블러에 시원한 물을 챙겨서 가벼운 발걸음으로 출발해보세요!`;
+    let tip = "야외 장보기에 무난한 기상 상태입니다. 즐거운 전통시장 방문이 되시기를 바랍니다.";
 
     if (code === 0) {
-      status = "☀️ 맑음 & 햇살";
-      tip = `오늘 ${city}는 맑고 쾌적한 날씨가 예상돼요. 장날 야외 구경 시 자외선 차단을 위해 모자나 양산을 챙기시면 훨씬 편안하게 장을 볼 수 있어요!`;
+      status = "☀️ 맑음";
+      tip = "맑은 날씨이므로 햇빛 차단을 위한 물품을 챙기시면 더욱 편리합니다.";
     } else if ([1, 2, 3].includes(code)) {
-      status = "☁️ 흐림 & 다소 습함";
-      tip = `오늘 ${city} 주변은 구름이 많이 끼거나 다소 흐린 날씨예요. 직사광선이 없어 시원하게 걸어 다닐 수 있으며, 따끈한 잔치국수나 빈대떡 골목을 방문하기 좋습니다.`;
+      status = "☁️ 흐림";
+      tip = "구름이 낀 다소 흐린 날씨입니다. 노점을 거닐기에 덥지 않아 양호합니다.";
     } else if ([45, 48].includes(code)) {
       status = "🌫️ 안개";
-      tip = `오늘 ${city} 주변은 안개가 끼어 있으니 방문 차량 운전자는 안전거리를 넉넉히 확보하시고 방어 운전에 특히 유의해 주세요!`;
+      tip = "안개가 관측되오니 시장 주변 차량 이동 시 각별한 주의 운전을 당부드립니다.";
     } else if ([51, 53, 55, 61, 63, 65, 80, 81, 82].includes(code)) {
-      status = "☔ 비 소식 가능성";
-      tip = `오늘 ${city} 주변은 비 또는 소나기 예보가 있으니 가벼운 휴대용 우산을 꼭 소지하세요. 빗길 안전사고 방지를 위해 가급적 공영주차타워나 안전한 주차 구역을 이용하세요!`;
+      status = "☔ 비/소나기";
+      tip = "비나 소나기가 내릴 가능성이 높으니 이동식 우산을 챙기시길 바랍니다.";
     } else if ([71, 73, 75, 85, 86].includes(code)) {
-      status = "❄️ 눈 소식 예보";
-      tip = `오늘 ${city} 주변은 눈이 내릴 가능성이 있습니다. 장터 노점이 미끄러울 수 있으니 낙상 사고에 유의하시고, 따뜻하게 입고 안전하게 장을 보세요!`;
+      status = "❄️ 눈";
+      tip = "눈이 내리는 날씨이므로 낙상 및 노면 결빙에 주의하여 이동하시기 바랍니다.";
     } else if ([95, 96, 99].includes(code)) {
-      status = "⚡ 뇌우 가능성";
-      tip = `오늘 ${city} 주변은 천둥 번개를 동반한 소나기 소식이 있습니다. 비바람을 피해 안전한 아케이드 시설이 설치된 상설 전용 구역 위주로 안전하게 관람하세요!`;
+      status = "⚡ 뇌우";
+      tip = "천둥 번개가 있을 수 있으니 가급적 아케이드 지붕이 있는 대형 아케이드 구획에서 대피해 장을 보세요.";
     }
 
     return { temp, status, tip };
@@ -166,62 +158,6 @@ async function getWeatherTip(lat, lng, address) {
     console.error("Open-Meteo Weather API Error:", error);
     return fallback;
   }
-}
-
-// Helper to retrieve simulated nearby cafes and attractions using address seed
-function getNearbyPlaces(address, marketName) {
-  const city = address.split(' ')[1] || address.split(' ')[0] || '장터';
-  
-  if (address.includes('김포')) {
-    return {
-      cafe: {
-        name: "해동 1950",
-        desc: "김포 북변동 골목에 위치한 70년대 방직공장을 아름답고 세련되게 리모델링한 복합문화공간 뉴트로 카페더라고요! 옛 공장의 예스러운 뼈대와 현대적인 조명이 정말 잘 어우러져 있고, 갓 구워낸 고소하고 부드러운 소금빵과 시그니처 크림 아인슈페너의 조화가 예술이어서 전통시장 장보기 여행 중에 다리를 쉬어가기에 이만한 곳이 없다고 생각하여 무조건 가보시길 강력 추천해요!"
-      },
-      tourist: {
-        name: "김포 장릉",
-        desc: "유네스코 세계문화유산으로 등재된 조선 인조의 생부 원종과 인헌왕후의 합장릉 구역이더라고요! 수백 년간 잘 보존된 울창하고 푸르른 참나무 숲과 솔밭길 산책로가 아주 호젓하고 바람 소리가 들려서 좋았어요. 머리를 식히며 여유롭게 힐링 도보 산책을 즐기며 조선 왕릉의 고풍스러운 역사와 정취를 느껴보기에 가장 알맞은 명소로 꼽아 추천해요!"
-      }
-    };
-  }
-  
-  if (address.includes('성남') || address.includes('모란')) {
-    return {
-      cafe: {
-        name: "새소리물소리 🍵",
-        desc: "고즈넉한 한옥 뜰을 보며 쌍화차와 경단을 즐길 수 있는 전통 한옥 찻집이에요! 졸졸 흐르는 개울 소리와 100년 된 우물이 마음을 정말 평화롭게 해주더라고요. 부모님이나 연인과 함께 가시면 후회 없을 코스입니다!"
-      },
-      tourist: {
-        name: "남한산성 행궁 🏯",
-        desc: "유네스코 세계문화유산인 성곽길을 따라 오르면 서울 송파 시내가 한눈에 굽어보이는 전망 명소예요! 행궁 내 고풍스러운 전각 사이를 걸으며 힐링 산책하기에 최상의 유적지 코스라고 자부합니다!"
-      }
-    };
-  }
-
-  if (address.includes('정선')) {
-    return {
-      cafe: {
-        name: "아라리촌 주막카페 ☕",
-        desc: "정선 전통 가옥 단지인 아라리촌 옆에 자리 잡은 한옥 감성 카페더라고요! 야외 툇마루에서 구수한 수수부꾸미와 아메리카노의 퓨전 조합을 즐겼는데, 솔솔 불어오는 산바람이 그야말로 선선하니 일품이었어요!"
-      },
-      tourist: {
-        name: "병방치 스카이워크 ⛰️",
-        desc: "동강 줄기가 굽이쳐 돌아나가는 한반도 모양의 지형을 한눈에 볼 수 있는 해발 583m의 절벽 유리 전망대예요! 발아래로 절벽이 그대로 굽어보여 아찔하고 평생 잊지 못할 풍경 사진을 남기실 수 있을 거예요!"
-      }
-    };
-  }
-
-  // Fallback default cafes and attractions
-  return {
-    cafe: {
-      name: `${city} 주변 로컬 카페`,
-      desc: "시장 인근에서 도보로 가볍게 이동할 수 있는 편안한 로컬 카페와 찻집들이 영업 중입니다. 장터 구경과 장보기 중 잠시 다리를 쉬어가며 커피나 미숫가루 등 시원한 로컬 음료를 즐기시기에 안성맞춤입니다."
-    },
-    tourist: {
-      name: `${city} 인근 힐링 산책 명소`,
-      desc: "시장 주변에는 정비된 생태하천 산책로나 시민 공원, 또는 조용히 도보 산책을 할 수 있는 근린 공원이 잘 마련되어 있어, 오일장 쇼핑 전후로 가볍게 자연 풍경을 보며 머리를 식히기 좋습니다."
-    }
-  };
 }
 
 
@@ -293,10 +229,8 @@ export default async function MarketDetailPage({ params }) {
   }
 
   const todayOpen = isOpenToday(market.opening_cycle);
-  const attractions = getAttractionsByRegion(market.address);
   const liveNearbyMarkets = await getLiveNearbyMarkets(market);
   const weather = await getWeatherTip(market.latitude, market.longitude, market.address);
-  const nearbyPlaces = getNearbyPlaces(market.address, market.market_name);
   const weekendNearbyMarkets = await getWeekendNearbyMarkets(market);
 
 
@@ -352,6 +286,7 @@ export default async function MarketDetailPage({ params }) {
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
     "name": `${market.market_name} 오일장`,
+    "image": "https://jangnalmap.com/favicon.ico",
     "description": `${market.market_name} 오일장 개장 주기(${market.opening_cycle}), 주소(${market.address}), 주차장 및 주변 코스 정보 안내.`,
     "address": {
       "@type": "PostalAddress",
@@ -560,41 +495,7 @@ export default async function MarketDetailPage({ params }) {
           </table>
         </section>
 
-        {/* 💰 알뜰 쇼핑 금융 꿀팁 Section */}
-        <section className="bg-yellow-50/50 border border-yellow-200/80 rounded-2xl p-6 sm:p-8 flex flex-col gap-5 shadow-sm">
-          <div>
-            <h3 className="text-base sm:text-lg font-bold text-gray-900 flex items-center gap-2">
-              <span role="img" aria-label="금융 절약 돈주머니 아이콘">💰</span> {market.market_name} 방문 전 필독! 10% 더 아끼는 똑똑한 지출 노하우
-            </h3>
-            <p className="text-xs text-gray-500 mt-1 font-semibold">온누리상품권 충전 혜택부터 연말정산 40% 소득공제, 주차장 안심 이용 팁까지 모두 챙겨가세요.</p>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs sm:text-sm">
-            {/* Tip 1 */}
-            <div className="bg-white border border-yellow-100 rounded-xl p-4.5 space-y-2 shadow-sm">
-              <h4 className="font-extrabold text-amber-800 text-sm">온누리상품권 10% 절약법</h4>
-              <p className="text-gray-600 leading-relaxed font-semibold">
-                오늘 {market.market_name}에서 10만 원 상당의 쇼핑을 하신다면, 모바일 <strong className="font-extrabold underline text-amber-900">온누리상품권</strong> 앱을 활용하여 10% 선할인 충전 혜택을 챙겨보세요! 충전식 카드로 결제 시 1만 원 즉시 절약이 가능하더라고요.
-              </p>
-            </div>
-
-            {/* Tip 2 */}
-            <div className="bg-white border border-yellow-100 rounded-xl p-4.5 space-y-2 shadow-sm">
-              <h4 className="font-extrabold text-amber-800 text-sm">연말정산 소득공제 40%</h4>
-              <p className="text-gray-600 leading-relaxed font-semibold">
-                카드형 <strong className="font-extrabold underline text-amber-900">온누리상품권</strong>으로 구매한 내역은 전통시장 <strong className="font-extrabold underline text-amber-900">소득공제</strong>율 40%가 그대로 적용되어 연말정산 환급금 혜택을 극대화할 수 있습니다. 국세청 홈택스 및 연계 카드사 앱에서 손쉽게 실적 한도 조회가 가능하여 유용해요!
-              </p>
-            </div>
-
-            {/* Tip 3 */}
-            <div className="bg-white border border-yellow-100 rounded-xl p-4.5 space-y-2 shadow-sm">
-              <h4 className="font-extrabold text-amber-800 text-sm">인근 주차/사고 보험 팁</h4>
-              <p className="text-gray-600 leading-relaxed font-semibold">
-                시장 주변 노상이나 공영주차장 차량 정체 시 빈번한 접촉 사고 예방을 위해 의무 자동차 <strong className="font-extrabold underline text-amber-900">보험</strong> 한도를 미리 확인해 두세요. 가벼운 접촉 사고 처리 및 <strong className="font-extrabold underline text-amber-900">보험</strong> 대리 대처 요령을 숙지하여 비용 할증을 방지하시기를 추천해 드립니다!
-              </p>
-            </div>
-          </div>
-        </section>
+        {/* Boilerplate financial sections removed to prevent duplicate content flags */}
 
         {/* Google AdSense Contextual High-CPC Ad Slot (Targeting Onnuri/Insurance context) */}
         <div className="adsense-container w-full bg-white border border-gray-200/80 rounded-2xl p-4.5 flex flex-col items-center justify-center min-h-[140px] text-center shadow-sm">
@@ -636,7 +537,7 @@ export default async function MarketDetailPage({ params }) {
         </a>
 
         {/* 🍲 이번 달 장바구니 추천 Checklist */}
-        <ShoppingChecklist />
+        <ShoppingChecklist marketId={market.id} />
 
         {/* 이달의 장날 달력 위젯 (Includes next opening calculation banner on top) */}
         <section className="bg-white border border-gray-200/80 rounded-2xl p-6 sm:p-8 shadow-sm flex flex-col gap-5">
@@ -710,40 +611,52 @@ export default async function MarketDetailPage({ params }) {
           </div>
         </section>
 
-        {/* 📍 [시장명] 주변 함께 가기 좋은 곳 & 실시간 현황 리포트 */}
-        <section className="bg-gray-50 border border-gray-200/80 rounded-2xl p-6 sm:p-8 flex flex-col gap-6 shadow-sm">
+        {/* 📍 [시장명] 주변 함께 가기 좋은 곳 (실시간 네이버/카카오 탐색 연동) */}
+        <section className="bg-gray-50 border border-gray-200/80 rounded-2xl p-6 sm:p-8 flex flex-col gap-5 shadow-sm">
           <div>
             <h3 className="text-base sm:text-lg font-bold text-gray-900 flex items-center gap-2">
-              📍 {market.market_name} 주변 함께 가기 좋은 곳
+              📍 {market.market_name} 주변 실시간 로컬 추천 코스 탐색
             </h3>
-            <p className="text-xs text-gray-500 mt-1">오일장 나들이와 함께 방문하기 편리한 에디터 추천 숨은 카페와 힐링 명소 코스입니다.</p>
+            <p className="text-xs text-gray-500 mt-1">네이버 지도의 실시간 로컬 추천 및 주차장 연계 경로를 통해 현지의 실존하는 검증된 맛집과 가볼 만한 곳을 편하게 검색하세요.</p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {/* Cafe */}
-            <div className="bg-white border border-gray-150 rounded-xl p-5 space-y-2 shadow-sm">
-              <h4 className="font-extrabold text-gray-900 text-sm sm:text-base flex items-center gap-1.5">
-                <span role="img" aria-label={`${market.market_name} 주변 추천 카페 ${nearbyPlaces.cafe.name} 아이콘`}>☕</span> 추천 카페: {nearbyPlaces.cafe.name}
-              </h4>
-              <p className="text-xs sm:text-sm text-gray-600 leading-relaxed font-semibold">
-                {nearbyPlaces.cafe.desc}
-              </p>
-            </div>
-            
-            {/* Attraction */}
-            <div className="bg-white border border-gray-150 rounded-xl p-5 space-y-2 shadow-sm">
-              <h4 className="font-extrabold text-gray-900 text-sm sm:text-base flex items-center gap-1.5">
-                <span role="img" aria-label={`${market.market_name} 주변 추천 관광지 명소 ${nearbyPlaces.tourist.name} 아이콘`}>🏞️</span> 추천 명소: {nearbyPlaces.tourist.name}
-              </h4>
-              <p className="text-xs sm:text-sm text-gray-600 leading-relaxed font-semibold">
-                {nearbyPlaces.tourist.desc}
-              </p>
-            </div>
-          </div>
-
-          {/* 실시간 장날 리포트 투표 위젯 */}
-          <div className="pt-4 border-t border-gray-200/60">
-            <MarketReport marketId={market.id} />
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <a
+              href={`https://map.naver.com/v5/search/${encodeURIComponent(getDistrict(market.address) + ' 맛집')}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-white hover:bg-emerald-50/20 border border-gray-200 text-gray-800 font-bold p-4.5 rounded-xl text-center flex flex-col items-center justify-center gap-2 shadow-sm transition-all hover:border-emerald-400 active:scale-98"
+            >
+              <span className="text-2xl">☕</span>
+              <div className="space-y-0.5">
+                <span className="block text-sm font-extrabold">주변 인기 맛집/카페 검색</span>
+                <span className="block text-[10px] text-gray-400">네이버 실시간 평점 순 조회 &rarr;</span>
+              </div>
+            </a>
+            <a
+              href={`https://map.naver.com/v5/search/${encodeURIComponent(getDistrict(market.address) + ' 관광지 명소')}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-white hover:bg-emerald-50/20 border border-gray-200 text-gray-800 font-bold p-4.5 rounded-xl text-center flex flex-col items-center justify-center gap-2 shadow-sm transition-all hover:border-emerald-400 active:scale-98"
+            >
+              <span className="text-2xl">🏞️</span>
+              <div className="space-y-0.5">
+                <span className="block text-sm font-extrabold">인근 추천 관광 명소 검색</span>
+                <span className="block text-[10px] text-gray-400">네이버 로컬 트렌드 순 조회 &rarr;</span>
+              </div>
+            </a>
+            <a
+              href={`https://map.naver.com/v5/search/${encodeURIComponent(market.market_name + ' 주차장')}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-white hover:bg-emerald-50/20 border border-gray-200 text-gray-800 font-bold p-4.5 rounded-xl text-center flex flex-col items-center justify-center gap-2 shadow-sm transition-all hover:border-emerald-400 active:scale-98"
+            >
+              <span className="text-2xl">🚗</span>
+              <div className="space-y-0.5">
+                <span className="block text-sm font-extrabold">시장 주변 실시간 주차장 검색</span>
+                <span className="block text-[10px] text-gray-400">공영 및 민영 주차장 현황 &rarr;</span>
+              </div>
+            </a>
           </div>
         </section>
 
@@ -807,36 +720,7 @@ export default async function MarketDetailPage({ params }) {
           </div>
         </section>
 
-        {/* Attractions Section */}
-        <section className="flex flex-col gap-4">
-          <div>
-            <h3 className="text-lg font-bold text-gray-900 flex items-center gap-2">
-              📍 함께 둘러보기 좋은 추천 여행지
-            </h3>
-            <p className="text-xs text-gray-500 mt-1">오일장 구경을 마친 후 함께 방문하기 편리한 인근의 가볼 만한 코스입니다.</p>
-          </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {attractions.map((att, i) => (
-              <div key={i} className="bg-white border border-gray-200/80 rounded-2xl p-4 flex flex-col justify-between gap-3 hover:border-[#10B981]/50 transition-colors shadow-sm">
-                <div>
-                  <h4 className="font-extrabold text-gray-900 text-sm sm:text-base flex items-center justify-between gap-2">
-                    {att.name}
-                    <span className="text-[10px] text-[#10B981] font-bold shrink-0 bg-emerald-50 px-2 py-0.5 rounded-full">{att.dist}</span>
-                  </h4>
-                  <p className="text-xs text-gray-500 mt-2 leading-relaxed font-medium">{att.desc}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
-
-
-
-        {/* Real-time Feedback Loop */}
-        <section className="mt-2">
-          <FeedbackLoop marketId={market.id} />
-        </section>
 
         {/* Back Button */}
         <div className="text-center pt-4">

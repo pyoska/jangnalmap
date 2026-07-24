@@ -17,7 +17,7 @@ def generate():
         markets = json.load(f)
 
     # 2. Build rss.xml
-    pub_date = datetime.datetime.now().strftime('%a, %d %b %Y %H:%M:%S +0900')
+    pub_date = datetime.datetime(2026, 7, 24, 9, 0).strftime('%a, %d %b %Y %H:%M:%S +0900')
     
     xml = []
     xml.append('<?xml version="1.0" encoding="UTF-8"?>')

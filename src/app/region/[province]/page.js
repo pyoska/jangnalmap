@@ -65,6 +65,9 @@ export async function generateMetadata({ params }) {
   return {
     title: `${region.name} 오일장 날짜표·일정표·주차 정보 | 오일장지도 : 장날맵`,
     description: `${region.name} 지역 오일장 개설 주기, 오늘 개장 여부, 상세 위치 및 주차 꿀팁 모음. ${region.desc.slice(0, 80)}...`,
+    alternates: {
+      canonical: `https://jangnalmap.com/region/${province}`,
+    }
   };
 }
 

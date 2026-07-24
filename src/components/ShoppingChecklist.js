@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 
-export default function ShoppingChecklist() {
+export default function ShoppingChecklist({ marketId }) {
   const [checkedItems, setCheckedItems] = useState({
     corn: false,
     watermelon: false,
@@ -11,9 +11,11 @@ export default function ShoppingChecklist() {
   });
   const [isMounted, setIsMounted] = useState(false);
 
+  const storageKey = marketId ? `shopping_checklist_${marketId}` : 'shopping_checklist_global';
+
   useEffect(() => {
     setIsMounted(true);
-    const saved = localStorage.getItem('shopping_checklist_items');
+    const saved = localStorage.getItem(storageKey);
     if (saved) {
       try {
         setCheckedItems(JSON.parse(saved));
@@ -21,7 +23,7 @@ export default function ShoppingChecklist() {
         console.error('Failed to parse checklist', e);
       }
     }
-  }, []);
+  }, [storageKey]);
 
   const toggleCheck = (item) => {
     setCheckedItems(prev => {
@@ -29,7 +31,7 @@ export default function ShoppingChecklist() {
         ...prev,
         [item]: !prev[item]
       };
-      localStorage.setItem('shopping_checklist_items', JSON.stringify(next));
+      localStorage.setItem(storageKey, JSON.stringify(next));
       return next;
     });
   };
