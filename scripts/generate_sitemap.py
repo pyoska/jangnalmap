@@ -115,12 +115,16 @@ def generate():
 
     # 3. Build robots.txt
     robots_content = [
+        "#DaumWebMasterTool:31e1c1e9a77ec5eaba225de70a3afe1eb1ed94099e0576c16c85bb140568ac89:JbtVqj5ycYCrCKnoguOyqw==",
+        "",
         "User-agent: *",
         "Allow: /",
         "",
-        "Sitemap: https://jangnalmap.com/sitemap.xml",
+        "User-agent: Daumoa",
+        "Allow: /",
         "",
-        "#DaumWebMasterTool:31e1c1e9a77ec5eaba225de70a3afe1eb1ed94099e0576c16c85bb140568ac89:JbtVqj5ycYCrCKnoguOyqw=="
+        "Sitemap: https://jangnalmap.com/sitemap.xml",
+        "Sitemap: https://www.jangnalmap.com/sitemap.xml"
     ]
 
     with open(robots_file, 'w', encoding='utf-8', newline='\n') as f:
