@@ -11,30 +11,30 @@ export default function GuideTabs({ transportTip, parkingTip, foodTip, tags }) {
       <div className="flex border-b border-gray-150 gap-2 overflow-x-auto pb-1">
         <button
           onClick={() => setActiveTab('transport')}
-          className={`px-4 py-2 text-xs sm:text-sm font-extrabold whitespace-nowrap cursor-pointer transition-all border-b-2 ${
+          className={`px-4 py-3 min-h-[44px] text-xs sm:text-sm font-extrabold whitespace-nowrap cursor-pointer transition-all border-b-2 ${
             activeTab === 'transport'
               ? 'border-[#10B981] text-[#10B981]'
-              : 'border-transparent text-gray-400 hover:text-gray-600'
+              : 'border-transparent text-gray-500 hover:text-gray-700'
           }`}
         >
           🚇 대중교통 길찾기
         </button>
         <button
           onClick={() => setActiveTab('parking')}
-          className={`px-4 py-2 text-xs sm:text-sm font-extrabold whitespace-nowrap cursor-pointer transition-all border-b-2 ${
+          className={`px-4 py-3 min-h-[44px] text-xs sm:text-sm font-extrabold whitespace-nowrap cursor-pointer transition-all border-b-2 ${
             activeTab === 'parking'
               ? 'border-[#10B981] text-[#10B981]'
-              : 'border-transparent text-gray-400 hover:text-gray-600'
+              : 'border-transparent text-gray-500 hover:text-gray-700'
           }`}
         >
           🚗 주차/사고 예방 팁
         </button>
         <button
           onClick={() => setActiveTab('food')}
-          className={`px-4 py-2 text-xs sm:text-sm font-extrabold whitespace-nowrap cursor-pointer transition-all border-b-2 ${
+          className={`px-4 py-3 min-h-[44px] text-xs sm:text-sm font-extrabold whitespace-nowrap cursor-pointer transition-all border-b-2 ${
             activeTab === 'food'
               ? 'border-[#10B981] text-[#10B981]'
-              : 'border-transparent text-gray-400 hover:text-gray-600'
+              : 'border-transparent text-gray-500 hover:text-gray-700'
           }`}
         >
           🍲 먹거리 및 별미 추천

@@ -94,13 +94,13 @@ export default function PwaInstallBanner() {
             <div className="mt-3.5 flex items-center gap-2">
               <button
                 onClick={handleInstallClick}
-                className="inline-flex items-center justify-center rounded-xl bg-gradient-to-r from-[#10B981] to-[#059669] px-4 py-2 text-xs font-bold text-white shadow-sm hover:from-emerald-400 hover:to-emerald-600 transition-all cursor-pointer active:scale-95 duration-150"
+                className="inline-flex items-center justify-center rounded-xl bg-gradient-to-r from-[#10B981] to-[#059669] px-4 py-2.5 min-h-[44px] text-xs font-bold text-white shadow-sm hover:from-emerald-400 hover:to-emerald-600 transition-all cursor-pointer active:scale-95 duration-150"
               >
                 홈 화면에 추가
               </button>
               <button
                 onClick={handleDismiss}
-                className="inline-flex items-center justify-center rounded-xl border border-gray-800 bg-[#0c1222] px-3.5 py-2 text-xs font-semibold text-gray-400 hover:text-gray-200 transition-colors cursor-pointer"
+                className="inline-flex items-center justify-center rounded-xl border border-gray-800 bg-[#0c1222] px-3.5 py-2.5 min-h-[44px] text-xs font-semibold text-gray-400 hover:text-gray-200 transition-colors cursor-pointer"
               >
                 나중에 하기
               </button>

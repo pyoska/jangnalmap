@@ -71,7 +71,7 @@ export const viewport = {
 export default function RootLayout({ children }) {
   return (
     <html lang="ko" className={`${outfit.variable} ${notoSansKr.variable} h-full antialiased scroll-smooth`}>
-      <body className="min-h-full flex flex-col bg-[#060913] text-[#F3F4F6]">
+      <body className="min-h-full flex flex-col bg-white text-[#1A1A1A] overflow-x-hidden font-sans">
         {/* Google AdSense Script */}
         <Script
           async

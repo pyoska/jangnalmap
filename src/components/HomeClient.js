@@ -347,7 +347,7 @@ export default function HomeClient({ initialMarkets = [] }) {
                   {searchInput && (
                     <button 
                       onClick={() => { setSearchInput(''); setSearchQuery(''); }}
-                      className="text-gray-400 hover:text-gray-600 text-xs sm:text-sm font-semibold cursor-pointer"
+                      className="text-gray-500 hover:text-gray-700 text-xs sm:text-sm font-semibold cursor-pointer p-2 min-h-[44px] min-w-[44px] inline-flex items-center justify-center"
                     >
                       지우기
                     </button>
@@ -715,8 +715,8 @@ export default function HomeClient({ initialMarkets = [] }) {
         <div className="lg:hidden fixed bottom-6 left-1/2 -translate-x-1/2 z-40 bg-white border border-gray-200/80 rounded-full px-5 py-2.5 shadow-xl flex items-center gap-3 backdrop-blur-md">
           <button
             onClick={() => setViewMode('list')}
-            className={`text-xs font-bold px-3 py-1 rounded-full transition-colors ${
-              viewMode === 'list' ? 'bg-[#10B981] text-white' : 'text-gray-400 hover:text-[#10B981]'
+            className={`text-xs font-bold px-4 py-2 min-h-[44px] flex items-center justify-center rounded-full transition-colors ${
+              viewMode === 'list' ? 'bg-[#10B981] text-white' : 'text-gray-500 hover:text-[#10B981]'
             }`}
           >
             목록 보기
@@ -724,8 +724,8 @@ export default function HomeClient({ initialMarkets = [] }) {
           <div className="w-[1px] h-3 bg-gray-200"></div>
           <button
             onClick={() => setViewMode('map')}
-            className={`text-xs font-bold px-3 py-1 rounded-full transition-colors ${
-              viewMode === 'map' ? 'bg-[#10B981] text-white' : 'text-gray-400 hover:text-[#10B981]'
+            className={`text-xs font-bold px-4 py-2 min-h-[44px] flex items-center justify-center rounded-full transition-colors ${
+              viewMode === 'map' ? 'bg-[#10B981] text-white' : 'text-gray-500 hover:text-[#10B981]'
             }`}
           >
             지도 보기
@@ -743,7 +743,7 @@ export default function HomeClient({ initialMarkets = [] }) {
               <div key={index} className="border-b border-gray-200 pb-4 last:border-b-0 last:pb-0">
                 <button
                   onClick={() => setExpandedFaq(expandedFaq === index ? null : index)}
-                  className="w-full flex items-center justify-between text-left text-sm sm:text-base font-bold text-gray-800 hover:text-[#10B981] transition-colors py-2 cursor-pointer"
+                  className="w-full flex items-center justify-between text-left text-sm sm:text-base font-bold text-gray-800 hover:text-[#10B981] transition-colors py-3 min-h-[44px] cursor-pointer"
                 >
                   <span>📌 {faq.q}</span>
                   <span className="text-[#10B981] text-xs font-semibold">{expandedFaq === index ? '▲ 접기' : '▼ 보기'}</span>

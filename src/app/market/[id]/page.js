@@ -328,7 +328,7 @@ export default async function MarketDetailPage({ params }) {
       "longitude": market.longitude
     },
     "url": `https://jangnalmap.com/market/${market.id}`,
-    ...(market.phone_num && market.phone_num !== 'N/A' ? { "telephone": market.phone_num } : {})
+    ...(market.phone && market.phone !== 'N/A' ? { "telephone": market.phone } : {})
   };
 
   const breadcrumbJsonLd = {
@@ -556,7 +556,7 @@ export default async function MarketDetailPage({ params }) {
         {/* Google AdSense Contextual Ad Slot */}
         <div className="adsense-container w-full bg-transparent p-2 flex flex-col items-center justify-center min-h-[120px] text-center">
           <AdSenseAd slot="4782019385" format="auto" responsive="true" />
-          <span className="text-[10px] text-gray-400 font-medium uppercase tracking-wider mt-1 block">Sponsored</span>
+          <span className="text-xs text-gray-500 font-medium uppercase tracking-wider mt-1 block">Sponsored</span>
         </div>
 
         {/* Brand Map Buttons */}
