@@ -31,6 +31,28 @@ export const metadata = {
       "naver-site-verification": "56f00ee05a771d2a8d5d35c4f0d9ba206ecfd7ab",
     }
   },
+  openGraph: {
+    title: "장날맵.com | 대한민국 전국 오일장 지도 - 오늘 개장 정보 & 주차 꿀팁",
+    description: "대한민국 전국 1,300여 개 전통 오일장(5일장)의 날짜 주기, 오늘 개장 여부, 위치 지도, 주차 정보 및 여행 블로거가 추천하는 먹거리 정보를 확인하세요.",
+    url: "https://jangnalmap.com",
+    siteName: "장날맵.com",
+    images: [
+      {
+        url: "/favicon.ico",
+        width: 512,
+        height: 512,
+        alt: "장날맵 - 전국 5일장 지도",
+      }
+    ],
+    locale: "ko_KR",
+    type: "website",
+  },
+  twitter: {
+    card: "summary",
+    title: "장날맵.com | 대한민국 전국 오일장 지도",
+    description: "대한민국 전국 1,300여 개 전통 오일장(5일장)의 날짜 주기, 오늘 개장 여부, 위치 지도 및 주차 정보",
+    images: ["/favicon.ico"],
+  },
   other: {
     "google-adsense-account": "ca-pub-3887993426553204"
   }

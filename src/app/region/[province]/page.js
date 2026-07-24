@@ -62,11 +62,35 @@ export async function generateMetadata({ params }) {
   const region = REGION_MAP[province];
   if (!region) return {};
 
+  const title = `${region.name} 오일장 날짜표·일정표·주차 정보 | 오일장지도 : 장날맵`;
+  const description = `${region.name} 지역 오일장 개설 주기, 오늘 개장 여부, 상세 위치 및 주차 꿀팁 모음. ${region.desc.slice(0, 80)}...`;
+
   return {
-    title: `${region.name} 오일장 날짜표·일정표·주차 정보 | 오일장지도 : 장날맵`,
-    description: `${region.name} 지역 오일장 개설 주기, 오늘 개장 여부, 상세 위치 및 주차 꿀팁 모음. ${region.desc.slice(0, 80)}...`,
+    title,
+    description,
     alternates: {
       canonical: `https://jangnalmap.com/region/${province}`,
+    },
+    openGraph: {
+      title,
+      description,
+      url: `https://jangnalmap.com/region/${province}`,
+      siteName: "장날맵.com",
+      images: [
+        {
+          url: "/favicon.ico",
+          width: 512,
+          height: 512,
+          alt: `${region.name} 오일장 지도`,
+        }
+      ],
+      type: 'website',
+    },
+    twitter: {
+      card: "summary",
+      title,
+      description,
+      images: ["/favicon.ico"],
     }
   };
 }

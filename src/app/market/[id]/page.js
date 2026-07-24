@@ -209,6 +209,21 @@ export async function generateMetadata({ params }) {
       description,
       type: 'article',
       url: `https://jangnalmap.com/market/${resolvedParams.id}`,
+      siteName: "장날맵.com",
+      images: [
+        {
+          url: "/favicon.ico",
+          width: 512,
+          height: 512,
+          alt: `${market.market_name} 정보`,
+        }
+      ],
+    },
+    twitter: {
+      card: "summary",
+      title,
+      description,
+      images: ["/favicon.ico"],
     }
   };
 }

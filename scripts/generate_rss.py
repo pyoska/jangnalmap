@@ -16,8 +16,14 @@ def generate():
     with open(markets_file, 'r', encoding='utf-8') as f:
         markets = json.load(f)
 
-    # 2. Build rss.xml
-    pub_date = datetime.datetime(2026, 7, 24, 9, 0).strftime('%a, %d %b %Y %H:%M:%S +0900')
+    def format_rfc822(dt):
+        days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
+        months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+        day_name = days[dt.weekday()]
+        month_name = months[dt.month - 1]
+        return f"{day_name}, {dt.day:02d} {month_name} {dt.year} {dt.hour:02d}:{dt.minute:02d}:{dt.second:02d} +0900"
+
+    pub_date = format_rfc822(datetime.datetime(2026, 7, 24, 9, 0))
     
     xml = []
     xml.append('<?xml version="1.0" encoding="UTF-8"?>')
@@ -27,7 +33,7 @@ def generate():
     xml.append('    <link>https://jangnalmap.com/</link>')
     xml.append('    <description>대한민국 전국 1,300여 개 전통 오일장(5일장)의 날짜 주기, 오늘 개장 여부, 위치 지도, 주차 정보 및 여행 블로거가 추천하는 먹거리 정보를 확인하세요.</description>')
     xml.append(f'    <pubDate>{pub_date}</pubDate>')
-    xml.append('    <lastBuildDate>{0}</lastBuildDate>'.format(datetime.datetime.now().strftime('%a, %d %b %Y %H:%M:%S +0900')))
+    xml.append('    <lastBuildDate>{0}</lastBuildDate>'.format(format_rfc822(datetime.datetime.now())))
 
     for m in markets:
         market_id = m.get("id")

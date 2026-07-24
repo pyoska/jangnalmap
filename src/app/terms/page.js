@@ -7,6 +7,12 @@ export const metadata = {
   alternates: {
     canonical: 'https://jangnalmap.com/terms',
   },
+  openGraph: {
+    title: '이용약관 | 장날맵',
+    description: '장날맵 서비스의 이용약관 안내 페이지입니다.',
+    url: 'https://jangnalmap.com/terms',
+    type: 'website',
+  },
 };
 
 export default function TermsPage() {

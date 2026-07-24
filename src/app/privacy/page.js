@@ -7,6 +7,12 @@ export const metadata = {
   alternates: {
     canonical: 'https://jangnalmap.com/privacy',
   },
+  openGraph: {
+    title: '개인정보처리방침 | 장날맵',
+    description: '장날맵 서비스의 개인정보처리방침 및 구글 애드센스 쿠키 정책 안내 페이지입니다.',
+    url: 'https://jangnalmap.com/privacy',
+    type: 'website',
+  },
 };
 
 export default function PrivacyPage() {
