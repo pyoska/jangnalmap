@@ -4,6 +4,7 @@ import sys
 import urllib.request
 import csv
 import io
+import datetime
 
 def get_markets():
     sheets_url = os.environ.get('GOOGLE_SHEETS_URL')
@@ -84,9 +85,12 @@ def generate():
         {"loc": "https://jangnalmap.com/region/jeju", "priority": "0.9", "changefreq": "weekly"}
     ]
 
+    today_iso = datetime.datetime.now().strftime('%Y-%m-%d')
+
     for item in base_urls:
         xml.append('  <url>')
         xml.append(f'    <loc>{item["loc"]}</loc>')
+        xml.append(f'    <lastmod>{today_iso}</lastmod>')
         xml.append(f'    <changefreq>{item["changefreq"]}</changefreq>')
         xml.append(f'    <priority>{item["priority"]}</priority>')
         xml.append('  </url>')
@@ -97,6 +101,7 @@ def generate():
         if market_id:
             xml.append('  <url>')
             xml.append(f'    <loc>https://jangnalmap.com/market/{market_id}</loc>')
+            xml.append(f'    <lastmod>{today_iso}</lastmod>')
             xml.append('    <changefreq>weekly</changefreq>')
             xml.append('    <priority>0.8</priority>')
             xml.append('  </url>')
