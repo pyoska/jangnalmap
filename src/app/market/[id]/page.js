@@ -9,6 +9,7 @@ import Footer from '@/components/Footer';
 import ShareButton from '@/components/ShareButton';
 import GuideTabs from '@/components/GuideTabs';
 import CalendarDownload from '@/components/CalendarDownload';
+import AdSenseAd from '@/components/AdSenseAd';
 import marketsData from '../../../../public/data/markets.json';
 
 // Helper to extract Si/Gun/Gu from address (e.g. "제주시" or "성남시" or "정선군")
@@ -113,30 +114,57 @@ function getNextOpeningDate(openingCycle, baseDate = new Date(2026, 6, 12)) {
   return null;
 }
 
-// Simulated dynamic weather advice generator
-function getWeatherTip(address) {
+// Async dynamic weather advice generator using free Open-Meteo API
+async function getWeatherTip(lat, lng, address) {
   const city = address.split(' ')[1] || address.split(' ')[0] || '장터';
-  const charCodeSum = city.split('').reduce((sum, char) => sum + char.charCodeAt(0), 0);
-  const weatherType = charCodeSum % 3; // 0: sunny, 1: cloudy, 2: rain
   
-  if (weatherType === 0) {
-    return {
-      temp: "29°C",
-      status: "☀️ 맑음 & 무더위",
-      tip: `오늘 ${city}는 무더운 여름 날씨가 예상돼요. 텀블러에 얼음 식혜나 물을 챙기시고, 장날 야외 구경 시 양산이나 모자를 준비해 쾌적하게 장을 보세요!`
-    };
-  } else if (weatherType === 1) {
-    return {
-      temp: "27°C",
-      status: "☁️ 흐림 & 다소 습함",
-      tip: `오늘 ${city}는 습도가 높고 후텁지근한 흐린 날씨예요. 시원한 옷차림으로 이동하시고, 전통시장의 고소한 메밀전이나 빈대떡 코너를 들러보시길 추천해요!`
-    };
-  } else {
-    return {
-      temp: "24°C",
-      status: "☔ 비 소식 가능성",
-      tip: `오늘 ${city}는 비 소식이 예보되어 있으니, 가벼운 우산을 소지하시고 빗길 접촉사고 예방을 위해 되도록 실내 공영주차타워나 안전한 실내 대안 주차장을 적극 이용하세요!`
-    };
+  const fallback = {
+    temp: "27°C",
+    status: "☁️ 흐림 & 다소 습함",
+    tip: `오늘 ${city} 주변은 선선하거나 다소 흐린 날씨예요. 전통시장의 정겨운 분위기 속에서 고소한 녹두전이나 뜨끈한 국밥 한 그릇을 즐겨보시길 추천해요!`
+  };
+
+  if (!lat || !lng) return fallback;
+
+  try {
+    const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lng}&current_weather=true`, {
+      next: { revalidate: 1800 } // cache for 30 minutes
+    });
+    if (!res.ok) return fallback;
+    const data = await res.json();
+    const current = data.current_weather;
+    if (!current) return fallback;
+
+    const temp = `${Math.round(current.temperature)}°C`;
+    const code = current.weathercode;
+    
+    let status = "🌤️ 대체로 맑음";
+    let tip = `오늘 ${city}는 야외 구경을 하며 장보기 적합한 날씨예요. 텀블러에 시원한 물을 챙겨서 가벼운 발걸음으로 출발해보세요!`;
+
+    if (code === 0) {
+      status = "☀️ 맑음 & 햇살";
+      tip = `오늘 ${city}는 맑고 쾌적한 날씨가 예상돼요. 장날 야외 구경 시 자외선 차단을 위해 모자나 양산을 챙기시면 훨씬 편안하게 장을 볼 수 있어요!`;
+    } else if ([1, 2, 3].includes(code)) {
+      status = "☁️ 흐림 & 다소 습함";
+      tip = `오늘 ${city} 주변은 구름이 많이 끼거나 다소 흐린 날씨예요. 직사광선이 없어 시원하게 걸어 다닐 수 있으며, 따끈한 잔치국수나 빈대떡 골목을 방문하기 좋습니다.`;
+    } else if ([45, 48].includes(code)) {
+      status = "🌫️ 안개";
+      tip = `오늘 ${city} 주변은 안개가 끼어 있으니 방문 차량 운전자는 안전거리를 넉넉히 확보하시고 방어 운전에 특히 유의해 주세요!`;
+    } else if ([51, 53, 55, 61, 63, 65, 80, 81, 82].includes(code)) {
+      status = "☔ 비 소식 가능성";
+      tip = `오늘 ${city} 주변은 비 또는 소나기 예보가 있으니 가벼운 휴대용 우산을 꼭 소지하세요. 빗길 안전사고 방지를 위해 가급적 공영주차타워나 안전한 주차 구역을 이용하세요!`;
+    } else if ([71, 73, 75, 85, 86].includes(code)) {
+      status = "❄️ 눈 소식 예보";
+      tip = `오늘 ${city} 주변은 눈이 내릴 가능성이 있습니다. 장터 노점이 미끄러울 수 있으니 낙상 사고에 유의하시고, 따뜻하게 입고 안전하게 장을 보세요!`;
+    } else if ([95, 96, 99].includes(code)) {
+      status = "⚡ 뇌우 가능성";
+      tip = `오늘 ${city} 주변은 천둥 번개를 동반한 소나기 소식이 있습니다. 비바람을 피해 안전한 아케이드 시설이 설치된 상설 전용 구역 위주로 안전하게 관람하세요!`;
+    }
+
+    return { temp, status, tip };
+  } catch (error) {
+    console.error("Open-Meteo Weather API Error:", error);
+    return fallback;
   }
 }
 
@@ -186,12 +214,12 @@ function getNearbyPlaces(address, marketName) {
   // Fallback default cafes and attractions
   return {
     cafe: {
-      name: "감성 레트로 카페 ☕",
-      desc: "장터 초입에 위치해 시원한 미숫가루와 달콤한 크림 빵이 시그니처인 전통 감성 카페더라고요! 레트로한 분위기가 고스란히 담겨 있어 시장에서 장을 보며 지친 다리를 쉬어가기에 최적의 공간이었어요."
+      name: `${city} 주변 로컬 카페`,
+      desc: "시장 인근에서 도보로 가볍게 이동할 수 있는 편안한 로컬 카페와 찻집들이 영업 중입니다. 장터 구경과 장보기 중 잠시 다리를 쉬어가며 커피나 미숫가루 등 시원한 로컬 음료를 즐기시기에 안성맞춤입니다."
     },
     tourist: {
-      name: "지역 생태 호수공원 🌲",
-      desc: "오일장에서 양손 두둑이 제철 먹거리를 쇼핑한 뒤, 선선한 그늘 아래에서 돗자리를 펴고 휴식을 취하기 가장 알맞은 명소예요! 호수를 바라보며 가볍게 도보 산책하기 훌륭하더라고요."
+      name: `${city} 인근 힐링 산책 명소`,
+      desc: "시장 주변에는 정비된 생태하천 산책로나 시민 공원, 또는 조용히 도보 산책을 할 수 있는 근린 공원이 잘 마련되어 있어, 오일장 쇼핑 전후로 가볍게 자연 풍경을 보며 머리를 식히기 좋습니다."
     }
   };
 }
@@ -267,7 +295,7 @@ export default async function MarketDetailPage({ params }) {
   const todayOpen = isOpenToday(market.opening_cycle);
   const attractions = getAttractionsByRegion(market.address);
   const liveNearbyMarkets = await getLiveNearbyMarkets(market);
-  const weather = getWeatherTip(market.address);
+  const weather = await getWeatherTip(market.latitude, market.longitude, market.address);
   const nearbyPlaces = getNearbyPlaces(market.address, market.market_name);
   const weekendNearbyMarkets = await getWeekendNearbyMarkets(market);
 
@@ -308,10 +336,9 @@ export default async function MarketDetailPage({ params }) {
     }
   }
 
-  // Augment Editor Tips to guarantee 500+ characters of content with high-value automotive/finance AdSense keywords
-  const augmentedParkingTip = `${market.parking_tip} 전용 공영주차장 이용 시 국가유공자, 저공해 차량, 다자녀 가구 및 경차 할인 혜택(최대 50% 감면)을 꼭 챙기세요. 시장에서 과일이나 물건을 대량 구입한 후 차량으로 운반할 때 좁은 시장 진입로에서 접촉 사고가 날 수 있으니 주차 차량 운전자는 안전 수칙을 준수하고 필수 자동차 보험 보장 한도를 확인해두시는 것이 현명합니다. 또한, 장터 먹거리 코너에서 시원한 막걸리나 반주를 한잔 드셨다면 음주운전은 절대 금물이며, 반드시 대리운전 서비스나 앱을 호출하여 안전하게 귀가하셔야 사고 처리에 따른 자동차 보험 할증이나 법적 불이익을 방지할 수 있더라고요. 주차가 혼잡할 땐 인근 사설 주차 타워나 유료 민영 주차장을 활용하고 당일 할인권이나 신용카드 무료 주차 혜택을 연계하는 편이 비용을 절약하는 또 다른 꿀팁입니다.`;
-  const augmentedTransportTip = `${market.transport_info} 오일장은 보통 버스 노선들이 집중적으로 환승되는 지역 읍내 오거리나 기차역 인근 공터에 자리를 잡기 때문에 대중교통 노선 연계가 아주 훌륭한 편이더라고요. 전철이나 기차가 닿는 지역의 경우 교통 체증과 주차 지옥을 피하기 위해 웬만하면 철도편을 이용하여 걷는 도보 여행 테마로 방문하시면 시장의 옛 정취와 걷는 재미를 곱절로 느껴볼 수 있어 훨씬 유용할 것입니다.`;
-  const augmentedFoodTip = `${market.food_recommend} 전통시장의 참맛은 역시 노점 상인분들이 갓 부쳐내어 연기가 모락모락 피어나는 야채 전이나 노릇한 호떡, 바로 짜낸 고소한 핫바 등 길거리 분식에서 나오더라고요. 특히 7월 여름철에는 얼음 동둥 띄운 시원한 미숫가루나 식혜를 플라스틱 컵에 사 들고 장 구경을 하면 무더운 날씨도 금방 잊히더라고요. 먹거리 코너 주변에 모여 앉아 모르는 사람들과 정겹게 식사하는 장터 특유의 낭만을 꼭 느껴보시길 추천해 드려요!`;
+  const augmentedParkingTip = market.parking_tip;
+  const augmentedTransportTip = market.transport_info;
+  const augmentedFoodTip = market.food_recommend;
 
   // Dynamic tags
   const tags = [
@@ -342,6 +369,20 @@ export default async function MarketDetailPage({ params }) {
     "telephone": market.phone_num || "N/A"
   };
 
+  const regionGroup = getRegionGroup(market.address);
+  const regionSlugs = {
+    '수도권': 'gyeonggi',
+    '강원': 'gangwon',
+    '충북': 'chungbuk',
+    '충남/대전/세종': 'chungnam',
+    '전북': 'jeonbuk',
+    '전남/광주': 'jeonnam',
+    '경북/대구': 'gyeongbuk',
+    '경남/부산/울산': 'gyeongnam',
+    '제주': 'jeju'
+  };
+  const regionSlug = regionSlugs[regionGroup];
+
   return (
     <div className="min-h-screen bg-white text-[#1A1A1A] flex flex-col antialiased">
       {/* JSON-LD Structured Data for LocalBusiness */}
@@ -370,7 +411,11 @@ export default async function MarketDetailPage({ params }) {
         <div className="text-xs text-gray-400 flex gap-2 font-medium">
           <Link href="/" className="hover:text-gray-600">홈</Link>
           <span>&gt;</span>
-          <span className="text-gray-500">{market.address.split(' ')[0]}</span>
+          {regionSlug ? (
+            <Link href={`/region/${regionSlug}`} className="hover:text-gray-600">{regionGroup}</Link>
+          ) : (
+            <span className="text-gray-500">{market.address.split(' ')[0]}</span>
+          )}
           <span>&gt;</span>
           <span className="text-gray-500">{getDistrict(market.address)}</span>
           <span>&gt;</span>
@@ -553,12 +598,7 @@ export default async function MarketDetailPage({ params }) {
 
         {/* Google AdSense Contextual High-CPC Ad Slot (Targeting Onnuri/Insurance context) */}
         <div className="adsense-container w-full bg-white border border-gray-200/80 rounded-2xl p-4.5 flex flex-col items-center justify-center min-h-[140px] text-center shadow-sm">
-          <ins className="adsbygoogle"
-               style={{ display: 'block', width: '100%' }}
-               data-ad-client="ca-pub-3887993426553204"
-               data-ad-slot="4782019385"
-               data-ad-format="auto"
-               data-full-width-responsive="true" />
+          <AdSenseAd slot="4782019385" format="auto" responsive="true" />
           <span className="text-[10px] text-gray-300 font-bold uppercase tracking-wider mt-1.5 block">Sponsored Advertisement</span>
         </div>
 
@@ -703,7 +743,7 @@ export default async function MarketDetailPage({ params }) {
 
           {/* 실시간 장날 리포트 투표 위젯 */}
           <div className="pt-4 border-t border-gray-200/60">
-            <MarketReport />
+            <MarketReport marketId={market.id} />
           </div>
         </section>
 
@@ -795,7 +835,7 @@ export default async function MarketDetailPage({ params }) {
 
         {/* Real-time Feedback Loop */}
         <section className="mt-2">
-          <FeedbackLoop />
+          <FeedbackLoop marketId={market.id} />
         </section>
 
         {/* Back Button */}

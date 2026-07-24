@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 export default function ShoppingChecklist() {
   const [checkedItems, setCheckedItems] = useState({
@@ -9,13 +9,32 @@ export default function ShoppingChecklist() {
     peach: false,
     plum: false
   });
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+    const saved = localStorage.getItem('shopping_checklist_items');
+    if (saved) {
+      try {
+        setCheckedItems(JSON.parse(saved));
+      } catch (e) {
+        console.error('Failed to parse checklist', e);
+      }
+    }
+  }, []);
 
   const toggleCheck = (item) => {
-    setCheckedItems(prev => ({
-      ...prev,
-      [item]: !prev[item]
-    }));
+    setCheckedItems(prev => {
+      const next = {
+        ...prev,
+        [item]: !prev[item]
+      };
+      localStorage.setItem('shopping_checklist_items', JSON.stringify(next));
+      return next;
+    });
   };
+
+  if (!isMounted) return null;
 
   return (
     <section className="bg-orange-50/40 border border-orange-100 rounded-2xl p-5 sm:p-6 shadow-sm flex flex-col gap-4">

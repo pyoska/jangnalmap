@@ -11,6 +11,7 @@ import {
   getRegionGroup 
 } from '@/utils/dateUtils';
 import { FAQ_DATA } from '@/components/InfoSections';
+import AdSenseAd from '@/components/AdSenseAd';
 
 // Dynamic import for Leaflet Map to avoid SSR 'window is not defined' errors
 const MarketMap = dynamic(() => import('@/components/Map'), {
@@ -28,6 +29,18 @@ const MarketMap = dynamic(() => import('@/components/Map'), {
 const REGIONS = [
   '전체', '수도권', '강원', '충북', '충남/대전/세종', '전북', '전남/광주', '경북/대구', '경남/부산/울산', '제주'
 ];
+
+const REGION_SLUGS = {
+  '수도권': 'gyeonggi',
+  '강원': 'gangwon',
+  '충북': 'chungbuk',
+  '충남/대전/세종': 'chungnam',
+  '전북': 'jeonbuk',
+  '전남/광주': 'jeonnam',
+  '경북/대구': 'gyeongbuk',
+  '경남/부산/울산': 'gyeongnam',
+  '제주': 'jeju'
+};
 
 const CYCLES = [
   { label: '전체', value: '전체' },
@@ -66,6 +79,7 @@ export default function Home() {
 
   // Retention: Favorites state
   const [favorites, setFavorites] = useState([]);
+  const [onlyFavorites, setOnlyFavorites] = useState(false);
 
   // GPS Sorting state
   const [userLocation, setUserLocation] = useState(null);
@@ -214,6 +228,9 @@ export default function Home() {
     if (onlyParking) {
       result = result.filter(m => m.parking_yn === 'Y');
     }
+    if (onlyFavorites) {
+      result = result.filter(m => favorites.includes(m.id));
+    }
 
     // GPS sorting priority
     if (gpsSorting && userLocation) {
@@ -247,7 +264,7 @@ export default function Home() {
 
       return a.market_name.localeCompare(b.market_name, 'ko');
     });
-  }, [marketsWithDDay, selectedRegion, selectedCycle, searchQuery, gpsSorting, userLocation, onlyToday, onlyParking]);
+  }, [marketsWithDDay, selectedRegion, selectedCycle, searchQuery, gpsSorting, userLocation, onlyToday, onlyParking, onlyFavorites, favorites]);
 
   const handleSelectMarket = (market) => {
     setActiveMarket(market);
@@ -262,8 +279,25 @@ export default function Home() {
     return CYCLES.find(c => c.value === selectedCycle)?.label || '';
   }, [selectedCycle]);
 
+  const faqJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": FAQ_DATA.map(faq => ({
+      "@type": "Question",
+      "name": faq.q,
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": faq.a
+      }
+    }))
+  };
+
   return (
     <div className="min-h-screen bg-white text-[#1A1A1A] flex flex-col antialiased">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+      />
       {/* Premium Glassmorphism Navbar */}
       <header className="sticky top-0 z-50 w-full border-b border-gray-100 bg-white/90 backdrop-blur-xl">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
@@ -350,7 +384,7 @@ export default function Home() {
             <span className="text-xs font-bold text-gray-400 mr-1">⚡ 1초 퀵 검색:</span>
             <button
               onClick={() => setOnlyToday(!onlyToday)}
-              className={`text-xs px-3.5 py-2 rounded-xl font-bold transition-all cursor-pointer flex items-center gap-1 active:scale-95 ${
+              className={`text-xs px-3.5 py-2.5 rounded-xl font-bold transition-all cursor-pointer flex items-center gap-1 active:scale-95 ${
                 onlyToday 
                   ? 'bg-[#FF5A1F] text-white shadow-sm ring-2 ring-[#FF5A1F]/30'
                   : 'bg-white border border-gray-200 text-gray-700 hover:border-orange-300 hover:bg-orange-50/50'
@@ -360,7 +394,7 @@ export default function Home() {
             </button>
             <button
               onClick={() => setOnlyParking(!onlyParking)}
-              className={`text-xs px-3.5 py-2 rounded-xl font-bold transition-all cursor-pointer flex items-center gap-1 active:scale-95 ${
+              className={`text-xs px-3.5 py-2.5 rounded-xl font-bold transition-all cursor-pointer flex items-center gap-1 active:scale-95 ${
                 onlyParking 
                   ? 'bg-[#10B981] text-white shadow-sm ring-2 ring-[#10B981]/30'
                   : 'bg-white border border-gray-200 text-gray-700 hover:border-emerald-300 hover:bg-emerald-50/50'
@@ -369,22 +403,33 @@ export default function Home() {
               🚗 무료/공영 주차장 완비
             </button>
             <button
+              onClick={() => setOnlyFavorites(!onlyFavorites)}
+              className={`text-xs px-3.5 py-2.5 rounded-xl font-bold transition-all cursor-pointer flex items-center gap-1 active:scale-95 ${
+                onlyFavorites 
+                  ? 'bg-rose-500 text-white shadow-sm ring-2 ring-rose-500/30'
+                  : 'bg-white border border-gray-200 text-gray-700 hover:border-rose-300 hover:bg-rose-50/50'
+              }`}
+            >
+              ❤️ 내 단골 시장만 ({favorites.length})
+            </button>
+            <button
               onClick={() => setSearchInput('모란시장')}
-              className="text-xs px-3.5 py-2 rounded-xl font-bold bg-white border border-gray-200 text-gray-700 hover:border-emerald-300 hover:bg-emerald-50/50 transition-all cursor-pointer flex items-center gap-1 active:scale-95"
+              className="text-xs px-3.5 py-2.5 rounded-xl font-bold bg-white border border-gray-200 text-gray-700 hover:border-emerald-300 hover:bg-emerald-50/50 transition-all cursor-pointer flex items-center gap-1 active:scale-95"
             >
               ⭐ 성남 모란장
             </button>
             <button
               onClick={() => setSearchInput('정선아리랑')}
-              className="text-xs px-3.5 py-2 rounded-xl font-bold bg-white border border-gray-200 text-gray-700 hover:border-emerald-300 hover:bg-emerald-50/50 transition-all cursor-pointer flex items-center gap-1 active:scale-95"
+              className="text-xs px-3.5 py-2.5 rounded-xl font-bold bg-white border border-gray-200 text-gray-700 hover:border-emerald-300 hover:bg-emerald-50/50 transition-all cursor-pointer flex items-center gap-1 active:scale-95"
             >
               ⭐ 정선 5일장
             </button>
-            {(onlyToday || onlyParking || searchQuery || selectedRegion !== '전체' || selectedCycle !== '전체') && (
+            {(onlyToday || onlyParking || onlyFavorites || searchQuery || selectedRegion !== '전체' || selectedCycle !== '전체') && (
               <button
                 onClick={() => {
                   setOnlyToday(false);
                   setOnlyParking(false);
+                  setOnlyFavorites(false);
                   setSearchInput('');
                   setSearchQuery('');
                   setSelectedRegion('전체');
@@ -419,19 +464,27 @@ export default function Home() {
           <div>
             <span className="text-sm font-extrabold text-[#10B981] block mb-3">지역 필터</span>
             <div className="flex flex-wrap gap-2.5">
-              {REGIONS.map((region) => (
-                <button
-                  key={region}
-                  onClick={() => setSelectedRegion(region)}
-                  className={`text-base sm:text-lg px-4 py-2 sm:px-5 sm:py-2.5 rounded-xl border transition-all duration-200 cursor-pointer ${
-                    selectedRegion === region
-                      ? 'bg-[#10B981] border-[#10B981] text-white shadow-[0_4px_14px_rgba(16,185,129,0.3)] font-bold'
-                      : 'bg-gray-50 border-gray-100 text-gray-600 hover:text-[#10B981] hover:bg-emerald-50 font-semibold'
-                  }`}
-                >
-                  {region}
-                </button>
-              ))}
+              {REGIONS.map((region) => {
+                const slug = REGION_SLUGS[region];
+                const href = slug ? `/region/${slug}` : '/';
+                return (
+                  <Link
+                    key={region}
+                    href={href}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setSelectedRegion(region);
+                    }}
+                    className={`text-base sm:text-lg px-4 py-2 sm:px-5 sm:py-2.5 rounded-xl border transition-all duration-200 cursor-pointer ${
+                      selectedRegion === region
+                        ? 'bg-[#10B981] border-[#10B981] text-white shadow-[0_4px_14px_rgba(16,185,129,0.3)] font-bold'
+                        : 'bg-gray-50 border-gray-100 text-gray-600 hover:text-[#10B981] hover:bg-emerald-50 font-semibold'
+                    }`}
+                  >
+                    {region}
+                  </Link>
+                );
+              })}
             </div>
           </div>
 
@@ -535,12 +588,7 @@ export default function Home() {
                   <Fragment key={market.id}>
                     {index > 0 && index % 8 === 0 && (
                       <div className="adsense-container bg-white/50 border border-dashed border-gray-200 rounded-2xl p-4.5 flex flex-col items-center justify-center min-h-[120px] text-center shadow-sm">
-                        <ins className="adsbygoogle"
-                             style={{ display: 'block', width: '100%' }}
-                             data-ad-format="fluid"
-                             data-ad-layout-key="-fb+5w+4e-db+86"
-                             data-ad-client="ca-pub-3887993426553204"
-                             data-ad-slot="9847192803" />
+                        <AdSenseAd slot="9847192803" format="fluid" layoutKey="-fb+5w+4e-db+86" />
                         <span className="text-[9px] text-gray-300 font-bold uppercase tracking-wider mt-1.5 block">Sponsored Advertisement</span>
                       </div>
                     )}
@@ -559,6 +607,7 @@ export default function Home() {
                           onClick={() => toggleFavorite(market.id)}
                           className="text-rose-500 hover:scale-115 active:scale-90 transition-transform cursor-pointer p-0.5 shrink-0"
                           title={favorites.includes(market.id) ? "단골 해제" : "단골 시장 찜하기"}
+                          aria-label={favorites.includes(market.id) ? "단골 해제" : "단골 시장 찜하기"}
                         >
                           {favorites.includes(market.id) ? (
                             <svg className="w-5.5 h-5.5 text-rose-500 fill-current" viewBox="0 0 24 24">

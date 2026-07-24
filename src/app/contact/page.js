@@ -14,7 +14,11 @@ export default function ContactPage() {
       alert('이메일과 문의 내용을 입력해 주세요!');
       return;
     }
-    // Simulate API request
+    
+    const subject = encodeURIComponent('[장날맵 제보/문의]');
+    const body = encodeURIComponent(`제보자 이메일: ${email}\n\n[제보/문의 내용]\n${message}`);
+    window.location.href = `mailto:support@jangnalmap.com?subject=${subject}&body=${body}`;
+    
     setSubmitted(true);
   };
 

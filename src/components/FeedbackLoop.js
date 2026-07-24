@@ -1,15 +1,32 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
-export default function FeedbackLoop() {
+export default function FeedbackLoop({ marketId }) {
   const [feedbackGiven, setFeedbackGiven] = useState(false);
   const [feedbackType, setFeedbackType] = useState('');
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+    if (marketId) {
+      const savedType = localStorage.getItem(`feedback_type_${marketId}`);
+      if (savedType) {
+        setFeedbackType(savedType);
+        setFeedbackGiven(true);
+      }
+    }
+  }, [marketId]);
 
   const handleFeedback = (type) => {
     setFeedbackType(type);
     setFeedbackGiven(true);
+    if (marketId) {
+      localStorage.setItem(`feedback_type_${marketId}`, type);
+    }
   };
+
+  if (!isMounted) return null;
 
   return (
     <div className="bg-gray-50 border border-gray-200/80 rounded-2xl p-5 sm:p-6 text-center shadow-sm">

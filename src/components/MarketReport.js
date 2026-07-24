@@ -1,15 +1,32 @@
 'use client';
 
-import { useState, memo } from 'react';
+import { useState, useEffect, memo } from 'react';
 
-const MarketReport = memo(function MarketReport() {
+const MarketReport = memo(function MarketReport({ marketId }) {
   const [reported, setReported] = useState(false);
   const [reportText, setReportText] = useState('');
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+    if (marketId) {
+      const savedReport = localStorage.getItem(`market_report_${marketId}`);
+      if (savedReport) {
+        setReportText(`🎉 이미 소중한 현장 상황 정보([${savedReport}])를 접수해 주셨습니다!`);
+        setReported(true);
+      }
+    }
+  }, [marketId]);
 
   const handleReport = (label) => {
     setReportText(`🎉 감사합니다! 소중한 현장 상황 정보([${label}])가 성공적으로 반영되었습니다.`);
     setReported(true);
+    if (marketId) {
+      localStorage.setItem(`market_report_${marketId}`, label);
+    }
   };
+
+  if (!isMounted) return null;
 
   return (
     <div className="bg-emerald-50/50 border border-emerald-100 rounded-2xl p-5 sm:p-6 text-center shadow-sm">

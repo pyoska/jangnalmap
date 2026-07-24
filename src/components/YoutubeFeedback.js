@@ -1,15 +1,32 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
-export default function YoutubeFeedback() {
+export default function YoutubeFeedback({ marketId }) {
   const [voted, setVoted] = useState(false);
   const [voteType, setVoteType] = useState('');
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+    if (marketId) {
+      const savedVote = localStorage.getItem(`youtube_vote_${marketId}`);
+      if (savedVote) {
+        setVoteType(savedVote);
+        setVoted(true);
+      }
+    }
+  }, [marketId]);
 
   const handleVote = (type) => {
     setVoteType(type);
     setVoted(true);
+    if (marketId) {
+      localStorage.setItem(`youtube_vote_${marketId}`, type);
+    }
   };
+
+  if (!isMounted) return null;
 
   return (
     <div className="bg-gray-50 border border-gray-150 rounded-xl p-4 flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left">
