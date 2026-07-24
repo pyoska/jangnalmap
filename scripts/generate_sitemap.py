@@ -116,7 +116,7 @@ def generate():
     # 3. Build robots.txt Route Handler
     robots_route_file = 'src/app/robots.txt/route.js'
     route_js_code = f"""export async function GET() {{
-  const content = `#DaumWebMasterTool:023c1289d870bf1ef220d312c4d43cf2afb61d34658beef7bd2649554e210e2e:JbtVqj5ycYCrCKnoguOyqw==
+  const content = `#DaumWebMasterTool:31e1c1e9a77ec5eaba225de70a3afe1eb1ed94099e0576c16c85bb140568ac89:JbtVqj5ycYCrCKnoguOyqw==
 
 User-agent: *
 Allow: /
