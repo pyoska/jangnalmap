@@ -85,11 +85,11 @@ async function getWeekendNearbyMarkets(currentMarket) {
 
 // Dynamic curation sentence generator for weekend markets
 function getWeekendCurationText(currentMarketName, recommendedMarketName) {
-  return `오늘 [${currentMarketName}]을 방문하셨다면, 함께 방문하기 좋은 인근의 [${recommendedMarketName}]도 확인해보세요.`;
+  return `${currentMarketName} 구경 마치고 가까운 ${recommendedMarketName}도 같이 들러보세요. 동선상 딱 좋습니다.`;
 }
 
-// Helper to calculate the next opening date starting from July 12, 2026 (Sunday)
-function getNextOpeningDate(openingCycle, baseDate = new Date(2026, 6, 12)) {
+// Helper to calculate the next opening date starting from today
+function getNextOpeningDate(openingCycle, baseDate = new Date()) {
   const year = baseDate.getFullYear();
   const month = baseDate.getMonth();
   const date = baseDate.getDate();
@@ -281,16 +281,18 @@ export default async function MarketDetailPage({ params }) {
     });
   };
 
-  // Calculate next opening date details starting from mock date July 12, 2026
+  // Calculate next opening date details starting from today
   const nextDate = getNextOpeningDate(market.opening_cycle);
   const daysOfWeek = ['일', '월', '화', '수', '목', '금', '토'];
   let nextOpeningText = "";
   if (nextDate) {
-    const diffTime = nextDate.getTime() - new Date(2026, 6, 12).getTime();
+    const today = new Date();
+    today.setHours(0,0,0,0);
+    const diffTime = nextDate.getTime() - today.getTime();
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
     const dateStr = `${nextDate.getMonth() + 1}월 ${nextDate.getDate()}일 (${daysOfWeek[nextDate.getDay()]}요일)`;
     
-    if (diffDays === 0) {
+    if (diffDays <= 0) {
       nextOpeningText = `🔥 가장 빨리 방문 가능한 장날은 바로 오늘인 ${dateStr}입니다!`;
     } else {
       nextOpeningText = `🗓️ 가장 빨리 방문 가능한 장날은 ${dateStr} (앞으로 ${diffDays}일 남음) 입니다.`;
@@ -742,7 +744,7 @@ export default async function MarketDetailPage({ params }) {
             href={`/?search=${encodeURIComponent('복숭아')}`}
             className="bg-gradient-to-r from-orange-500 to-[#FF5A1F] hover:from-orange-600 hover:to-orange-700 text-white font-extrabold p-4 rounded-2xl text-center shadow-md transition-all flex items-center justify-center gap-2 hover:-translate-y-0.5 text-xs sm:text-sm cursor-pointer"
           >
-            🍑 지금 이 시장에 가면 꼭 사야 할 [7월 제철 복숭아] 파는 곳 보기 &rarr;
+            🍑 지금 오일장에서 꼭 사야 할 7월 제철 복숭아 파는 곳 보기 &rarr;
           </Link>
 
           <div className="bg-orange-50/50 border border-orange-100/80 rounded-2xl p-6 sm:p-8 flex flex-col gap-4 shadow-sm">

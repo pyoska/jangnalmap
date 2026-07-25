@@ -8,7 +8,7 @@ export default function ShareButton({ marketName }) {
   const handleShare = async () => {
     const shareData = {
       title: `${marketName} 장날 정보 - 장날맵.com`,
-      text: `오늘 ${marketName} 장날 정보와 주차 꿀팁을 확인해보세요!`,
+      text: `${marketName} 실전 방문 가이드와 주차 꿀팁을 미리 알아보세요!`,
       url: window.location.href,
     };
 
