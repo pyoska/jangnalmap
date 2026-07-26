@@ -70,9 +70,9 @@ export default function AboutPage() {
 
           <h2 className="text-lg font-bold text-gray-900 pt-4">우리가 추구하는 가치</h2>
           <ul className="list-disc pl-5 space-y-2">
-            <li><strong>정보의 정확성:</strong> 전국 1,300여 개 시장의 5일 주기를 연동해 오늘 방문할 수 있는 시장인지 실시간으로 판별해 드립니다.</li>
-            <li><strong>지역 소상공인과의 상생:</strong> 대형 마트와 쇼핑몰에 밀려 잊혀가는 동네 재래시장과 인근의 아기자기한 카페들을 유저에게 소개하여 풀뿌리 지역 경제 활성화에 기여합니다.</li>
-            <li><strong>문화 보존 및 큐레이션:</strong> 제철 맞은 여름 특산물(초당옥수수, 수박, 자두 등)과 오일장에서 즐길 수 있는 특산 먹거리를 큐레이션하여 젊은 세대에게 전통시장의 낭만을 전합니다.</li>
+            <li><strong>진짜 열려? 맞춤 확인:</strong> 복잡한 5일장 주기, 저희가 다 계산해서 오늘 당장 갈 수 있는지 딱 알려드려요!</li>
+            <li><strong>동네 시장 살리기:</strong> 대형마트에 밀리는 우리 동네 시장들, 그리고 골목골목 숨은 매력적인 가게들을 팍팍 밀어줍니다.</li>
+            <li><strong>계절별 먹거리 추천:</strong> 제철 맞은 초당옥수수, 꿀수박부터 시장통 즉석 핫바까지! 젊은 분들도 푹 빠질 전통시장의 낭만을 쏙쏙 골라 전해드려요.</li>
           </ul>
 
           <p className="pt-4 border-t border-gray-150">

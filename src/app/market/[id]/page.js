@@ -143,26 +143,26 @@ async function getWeatherTip(lat, lng, address) {
     const code = current.weathercode;
     
     let status = "🌤️ 대체로 맑음";
-    let tip = "야외 장보기에 무난한 기상 상태입니다. 즐거운 전통시장 방문이 되시기를 바랍니다.";
+    let tip = "야외 장보기에 딱 좋은 날씨네요! 즐겁고 맛있는 장보기 되세요.";
 
     if (code === 0) {
       status = "☀️ 맑음";
-      tip = "맑은 날씨이므로 햇빛 차단을 위한 물품을 챙기시면 더욱 편리합니다.";
+      tip = "햇살이 쨍쨍해요! 모자나 선글라스 챙기시면 훨씬 편하게 구경하실 수 있어요.";
     } else if ([1, 2, 3].includes(code)) {
       status = "☁️ 흐림";
-      tip = "구름이 낀 다소 흐린 날씨입니다. 노점을 거닐기에 덥지 않아 양호합니다.";
+      tip = "햇빛이 없어 덥지 않네요. 천천히 시장 골목 구경하기 딱 좋은 날씨입니다!";
     } else if ([45, 48].includes(code)) {
       status = "🌫️ 안개";
-      tip = "안개가 관측되오니 시장 주변 차량 이동 시 각별한 주의 운전을 당부드립니다.";
+      tip = "안개가 꽤 짙어요. 시장 근처 골목길 운전하실 때 꼭 조심조심 조심하세요!";
     } else if ([51, 53, 55, 61, 63, 65, 80, 81, 82].includes(code)) {
       status = "☔ 비/소나기";
-      tip = "비나 소나기가 내릴 가능성이 높으니 이동식 우산을 챙기시길 바랍니다.";
+      tip = "비 소식이 있네요. 장바구니랑 같이 가벼운 우산 하나 챙겨가시면 든든해요.";
     } else if ([71, 73, 75, 85, 86].includes(code)) {
       status = "❄️ 눈";
-      tip = "눈이 내리는 날씨이므로 낙상 및 노면 결빙에 주의하여 이동하시기 바랍니다.";
+      tip = "길이 미끄러울 수 있으니 발밑 조심하시고 따뜻하게 챙겨 입고 다녀오세요!";
     } else if ([95, 96, 99].includes(code)) {
       status = "⚡ 뇌우";
-      tip = "천둥 번개가 있을 수 있으니 가급적 아케이드 지붕이 있는 대형 아케이드 구획에서 대피해 장을 보세요.";
+      tip = "천둥 번개가 칠 때는 아케이드 지붕이 있는 안전한 구획 안쪽에서 장을 보세요!";
     }
 
     return { temp, status, tip };
@@ -599,8 +599,7 @@ export default async function MarketDetailPage({ params }) {
         {/* Summary Card Intro */}
         <section className="bg-gray-50 border border-gray-200/60 rounded-2xl p-5 shadow-sm">
           <p className="text-xs sm:text-sm text-gray-600 leading-relaxed font-semibold">
-            📢 {market.market_name} 오일장은 오랜 역사와 지역 특유의 정겨운 분위기를 간직한 대표적인 장터입니다. 
-            주차 꿀팁부터 전철과 버스 등 대중교통 환승 루트, 그리고 이번 달 상세 개장 요일 정보를 가이드북 형태로 깔끔하게 정리했습니다.
+            📢 {market.market_name} 오일장에 직접 다녀와서 남기는 솔직 가이드! 좁은 골목 주차 팁부터 찾아가는 길, 이번 달 장날 달력까지 꼭 필요한 정보만 쏙쏙 뽑아 담아봤어요.
           </p>
         </section>
 
