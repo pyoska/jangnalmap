@@ -188,6 +188,39 @@ function getCalendarDays(year, month) {
   return days;
 }
 
+// 4-Pattern Dynamic Title & Description Permutation Generator
+function getSeoPermutation(market, regionName, parkingText) {
+  const hash = (!isNaN(market.id) ? Number(market.id) : 0) % 4;
+
+  switch (hash) {
+    case 0:
+      return {
+        title: `${regionName} ${market.market_name} 5일장 날짜표 & 주차 팁 | ${market.market_name} 장날`,
+        description: `${regionName} ${market.market_name} 5일장 날짜표 & 주차 팁 | ${market.market_name} 장날의 정확한 일정과 주차 정보, 주변 명소 가이드까지 장날맵에서 확인하세요.`
+      };
+    case 1:
+      return {
+        title: `${market.market_name} 장날(오일장) ${market.opening_cycle || '5일장'} 완벽 정리 | ${regionName} 가볼만한곳`,
+        description: `${regionName} 대표 시장인 ${market.market_name} 장날(오일장) 정보를 총정리했습니다. 개장주기(${market.opening_cycle || '5일장'}), 주차정보(${parkingText}), 교통편 등 방문 전 필수 꿀팁을 미리 확인하세요.`
+      };
+    case 2:
+      return {
+        title: `[${regionName}] ${market.market_name} 오일장 개장일과 현지인 추천 가이드`,
+        description: `${regionName} ${market.market_name} 오일장의 모든 것! 이번 달 장날짜, 공영주차장 현황(${parkingText}), 그리고 주변 현지인 추천 코스까지 장날맵에서 한눈에 파악해보세요.`
+      };
+    case 3:
+      return {
+        title: `${market.market_name} 가는법 & 장날 달력 (${market.opening_cycle || '5일장'}) | ${regionName} 전통시장 투어`,
+        description: `이번 주말 ${regionName} 전통시장 투어를 계획 중이신가요? ${market.market_name} 개장 주기(${market.opening_cycle || '5일장'}), 주차 꿀팁(${parkingText}), 인기 먹거리 정보를 제공합니다.`
+      };
+    default:
+      return {
+        title: `${regionName} ${market.market_name} 5일장 날짜표 & 주차 팁 | ${market.market_name} 장날`,
+        description: `${regionName} ${market.market_name} 5일장 날짜표 & 주차 팁 | ${market.market_name} 장날의 정확한 일정과 주차 정보, 주변 명소 가이드까지 장날맵에서 확인하세요.`
+      };
+  }
+}
+
 // Generate dynamic SEO Metadata
 export async function generateMetadata({ params }) {
   const resolvedParams = await params;
@@ -203,8 +236,7 @@ export async function generateMetadata({ params }) {
   const regionName = (market.address || '').split(' ')[0] || '전국';
   const parkingText = market.parking_yn === 'Y' ? '공영 주차장 완비' : '대중교통 이용 권장';
 
-  const title = `${regionName} ${market.market_name} 5일장 날짜표 & 주차 팁 | ${market.market_name} 장날`;
-  const description = `${regionName} ${market.market_name} 5일장 날짜표 & 주차 팁 | ${market.market_name} 장날의 정확한 일정과 주차 정보, 주변 명소 가이드까지 장날맵에서 확인하세요.`;
+  const { title, description } = getSeoPermutation(market, regionName, parkingText);
 
   return {
     title,
