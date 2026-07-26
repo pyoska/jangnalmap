@@ -300,66 +300,75 @@ function getSeoPermutation(market, regionName, parkingText) {
 
 // Generate dynamic SEO Metadata
 export async function generateMetadata({ params }) {
-  const resolvedParams = await params;
-  const market = await getMarketData(resolvedParams.id);
+  try {
+    const resolvedParams = await params;
+    const market = await getMarketData(resolvedParams?.id);
 
-  if (!market) {
+    if (!market) {
+      return {
+        title: '시장을 찾을 수 없습니다 | 전국 오일장 지도',
+        description: '존재하지 않는 오일장 정보입니다.'
+      };
+    }
+
+    const regionName = (market.address || '').split(' ')[0] || '전국';
+    const parkingText = market.parking_yn === 'Y' ? '공영 주차장 완비' : '대중교통 이용 권장';
+
+    const { title, description } = getSeoPermutation(market, regionName, parkingText);
+
     return {
-      title: '시장을 찾을 수 없습니다 | 전국 오일장 지도',
-      description: '존재하지 않는 오일장 정보입니다.'
+      title,
+      description,
+      keywords: `${regionName} ${market.market_name || '시장'} 5일장 날짜표, ${market.market_name || '시장'} 장날, ${market.market_name || '시장'} 오일장, ${regionName} 오일장, 주차 팁, 전통시장 지도`,
+      alternates: {
+        canonical: `https://jangnalmap.com/market/${resolvedParams?.id}`,
+      },
+      openGraph: {
+        title,
+        description,
+        type: 'article',
+        url: `https://jangnalmap.com/market/${resolvedParams?.id}`,
+        siteName: "장날맵.com",
+        images: [
+          {
+            url: "/favicon.ico",
+            width: 512,
+            height: 512,
+            alt: `${market.market_name || '시장'} 정보`,
+          }
+        ],
+      },
+      twitter: {
+        card: "summary",
+        title,
+        description,
+        images: ["/favicon.ico"],
+      }
+    };
+  } catch (error) {
+    console.error("generateMetadata error:", error);
+    return {
+      title: '전국 오일장 상세 정보 | 장날맵.com',
+      description: '대한민국 전국 전통시장 및 오일장 개장 날짜표와 방문 가이드'
     };
   }
-
-  const regionName = (market.address || '').split(' ')[0] || '전국';
-  const parkingText = market.parking_yn === 'Y' ? '공영 주차장 완비' : '대중교통 이용 권장';
-
-  const { title, description } = getSeoPermutation(market, regionName, parkingText);
-
-  return {
-    title,
-    description,
-    keywords: `${regionName} ${market.market_name} 5일장 날짜표, ${market.market_name} 장날, ${market.market_name} 오일장, ${regionName} 오일장, ${market.market_name} 주차 팁, 전통시장 지도`,
-    alternates: {
-      canonical: `https://jangnalmap.com/market/${resolvedParams.id}`,
-    },
-    openGraph: {
-      title,
-      description,
-      type: 'article',
-      url: `https://jangnalmap.com/market/${resolvedParams.id}`,
-      siteName: "장날맵.com",
-      images: [
-        {
-          url: "/favicon.ico",
-          width: 512,
-          height: 512,
-          alt: `${market.market_name} 정보`,
-        }
-      ],
-    },
-    twitter: {
-      card: "summary",
-      title,
-      description,
-      images: ["/favicon.ico"],
-    }
-  };
 }
 
 export default async function MarketDetailPage({ params }) {
-  const resolvedParams = await params;
-  const market = await getMarketData(resolvedParams.id);
+  try {
+    const resolvedParams = await params;
+    const market = await getMarketData(resolvedParams?.id);
 
-  if (!market) {
-    return (
-      <div className="min-h-screen bg-white flex flex-col items-center justify-center text-[#1A1A1A]">
-        <h2 className="text-xl font-bold mb-4">시장을 찾을 수 없습니다.</h2>
-        <Link href="/" className="bg-[#10B981] text-white px-4 py-2 rounded-xl text-sm font-semibold shadow-sm">
-          메인 페이지로 돌아가기
-        </Link>
-      </div>
-    );
-  }
+    if (!market) {
+      return (
+        <div className="min-h-screen bg-white flex flex-col items-center justify-center text-[#1A1A1A]">
+          <h2 className="text-xl font-bold mb-4">시장을 찾을 수 없습니다.</h2>
+          <Link href="/" className="bg-[#10B981] text-white px-4 py-2 rounded-xl text-sm font-semibold shadow-sm">
+            메인 페이지로 돌아가기
+          </Link>
+        </div>
+      );
+    }
 
   const openingCycle = market.opening_cycle || '5일장';
   const todayOpen = isOpenToday(openingCycle);
@@ -896,4 +905,16 @@ export default async function MarketDetailPage({ params }) {
       <Footer />
     </div>
   );
+  } catch (error) {
+    console.error("MarketDetailPage render error:", error);
+    return (
+      <div className="min-h-screen bg-white flex flex-col items-center justify-center text-[#1A1A1A] p-4 text-center">
+        <h2 className="text-xl font-bold mb-2">오일장 정보를 준비 중입니다.</h2>
+        <p className="text-sm text-gray-500 mb-6">잠시 후 다시 시도해 주시거나 메인 지도로 돌아가실 수 있습니다.</p>
+        <Link href="/" className="bg-[#10B981] text-white px-5 py-2.5 rounded-xl text-sm font-bold shadow-sm">
+          메인 페이지로 돌아가기
+        </Link>
+      </div>
+    );
+  }
 }
