@@ -320,7 +320,7 @@ export default function HomeClient({ initialMarkets = [] }) {
         {/* Massive Premium Search Container */}
         <section className="w-full py-8 sm:py-12 px-4 rounded-3xl bg-gradient-to-br from-emerald-50 via-white to-orange-50 border border-gray-100 flex flex-col items-center text-center gap-6 shadow-sm">
           <div className="flex flex-col gap-2">
-            <span className="text-xs font-bold tracking-wider text-[#10B981] uppercase">대한민국 오일장 완벽 검색 가이드</span>
+            <span className="text-xs font-bold tracking-wider text-[#10B981] uppercase">대한민국 오일장 맞춤 검색 가이드</span>
             <h1 className="text-2xl sm:text-4xl font-extrabold tracking-tight text-[#1A1A1A]">
               오늘 여는 오일장, <span className="text-[#FF5A1F]">여기서 바로</span> 확인해보세요!
             </h1>
