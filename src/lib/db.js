@@ -100,5 +100,5 @@ export async function getMarkets() {
 
 export async function getMarketById(id) {
   const markets = await getMarkets();
-  return markets.find(m => m.id === id) || null;
+  return markets.find(m => String(m.id) === String(id)) || null;
 }

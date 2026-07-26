@@ -13,8 +13,8 @@ export const revalidate = 600; // Revalidate cache every 10 minutes
 // 🟢 Pre-render all market pages into static HTML at build time for Citly, AI bots, and Search Engine Crawlers
 export async function generateStaticParams() {
   const markets = await getMarkets();
-  return markets.slice(0, 50).map((market) => ({
-    id: market.id.toString(),
+  return markets.map((market) => ({
+    id: String(market.id),
   }));
 }
 
