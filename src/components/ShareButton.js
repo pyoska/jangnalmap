@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import * as gtag from '@/lib/gtag';
 
 export default function ShareButton({ marketName }) {
   const [copied, setCopied] = useState(false);
@@ -15,6 +16,7 @@ export default function ShareButton({ marketName }) {
     if (navigator.share) {
       try {
         await navigator.share(shareData);
+        gtag.event({ action: 'share_kakao', category: 'Market', label: `Native Share: ${marketName}` });
       } catch (err) {
         // User canceled share
       }
@@ -22,6 +24,7 @@ export default function ShareButton({ marketName }) {
       try {
         await navigator.clipboard.writeText(window.location.href);
         setCopied(true);
+        gtag.event({ action: 'copy_link', category: 'Market', label: `Copy Link: ${marketName}` });
         setTimeout(() => setCopied(false), 3000);
       } catch (err) {
         // Fallback

@@ -68,10 +68,39 @@ export const viewport = {
   initialScale: 1.0,
 };
 
+import AnalyticsTracker from '@/components/AnalyticsTracker';
+import { GA_TRACKING_ID } from '@/lib/gtag';
+
 export default function RootLayout({ children }) {
   return (
     <html lang="ko" className={`${outfit.variable} ${notoSansKr.variable} h-full antialiased scroll-smooth`}>
       <body className="min-h-full flex flex-col bg-white text-[#1A1A1A] overflow-x-hidden font-sans">
+        <AnalyticsTracker />
+        
+        {/* Google Analytics GA4 Script */}
+        {GA_TRACKING_ID && (
+          <>
+            <Script
+              strategy="afterInteractive"
+              src={`https://www.googletagmanager.com/gtag/js?id=${GA_TRACKING_ID}`}
+            />
+            <Script
+              id="gtag-init"
+              strategy="afterInteractive"
+              dangerouslySetInnerHTML={{
+                __html: `
+                  window.dataLayer = window.dataLayer || [];
+                  function gtag(){dataLayer.push(arguments);}
+                  gtag('js', new Date());
+                  gtag('config', '${GA_TRACKING_ID}', {
+                    page_path: window.location.pathname,
+                  });
+                `,
+              }}
+            />
+          </>
+        )}
+
         {/* Google AdSense Script */}
         <Script
           async
