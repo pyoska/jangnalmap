@@ -131,7 +131,7 @@ export default function RootLayout({ children }) {
                   {
                     "@type": "SiteNavigationElement",
                     "position": 1,
-                    "name": "전국 오일장 검색",
+                    "name": "전국 오일장 지도",
                     "url": "https://jangnalmap.com/"
                   },
                   {
@@ -143,20 +143,38 @@ export default function RootLayout({ children }) {
                   {
                     "@type": "SiteNavigationElement",
                     "position": 3,
-                    "name": "온누리상품권 10% 가이드",
-                    "url": "https://jangnalmap.com/guide/onnuri"
+                    "name": "강원 오일장 날짜",
+                    "url": "https://jangnalmap.com/region/gangwon"
                   },
                   {
                     "@type": "SiteNavigationElement",
                     "position": 4,
-                    "name": "장날맵 브랜드 소개",
-                    "url": "https://jangnalmap.com/about"
+                    "name": "충청 오일장 날짜",
+                    "url": "https://jangnalmap.com/region/chungbuk"
                   },
                   {
                     "@type": "SiteNavigationElement",
                     "position": 5,
-                    "name": "편집국 문의하기",
-                    "url": "https://jangnalmap.com/contact"
+                    "name": "경상 오일장 날짜",
+                    "url": "https://jangnalmap.com/region/gyeongbuk"
+                  },
+                  {
+                    "@type": "SiteNavigationElement",
+                    "position": 6,
+                    "name": "전라 오일장 날짜",
+                    "url": "https://jangnalmap.com/region/jeonbuk"
+                  },
+                  {
+                    "@type": "SiteNavigationElement",
+                    "position": 7,
+                    "name": "온누리상품권 10% 혜택",
+                    "url": "https://jangnalmap.com/guide/onnuri"
+                  },
+                  {
+                    "@type": "SiteNavigationElement",
+                    "position": 8,
+                    "name": "장날맵 브랜드 소개",
+                    "url": "https://jangnalmap.com/about"
                   }
                 ]
               }
