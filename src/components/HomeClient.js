@@ -325,7 +325,7 @@ export default function HomeClient({ initialMarkets = [] }) {
               오늘 여는 오일장, <span className="text-[#FF5A1F]">여기서 바로</span> 확인해보세요!
             </h1>
             <p className="text-xs sm:text-sm text-gray-500 max-w-md mx-auto">
-              초성, 지역명, 특산 먹거리 등으로 빠르게 전국의 전통시장을 검색하세요.
+              성남 모란시장 5일장 날짜부터 경기도 5일장날 날짜표까지! 초성, 지역명, 특산 먹거리 등으로 빠르게 전국의 전통시장을 검색하세요.
             </p>
           </div>
 

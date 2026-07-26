@@ -64,12 +64,23 @@ export async function generateMetadata({ params }) {
   const region = REGION_MAP[province];
   if (!region) return {};
 
-  const title = `${region.name} 오일장 날짜표·일정표·주차 정보 | 오일장지도 : 장날맵`;
-  const description = `${region.name} 지역 오일장 개설 주기, 오늘 개장 여부, 상세 위치 및 주차 꿀팁 모음. ${region.desc.slice(0, 80)}...`;
+  const isGyeonggi = province === 'gyeonggi';
+  const title = isGyeonggi
+    ? `경기도 5일장날 날짜표 (성남 모란시장 5일장 날짜 포함) | 오일장지도 : 장날맵`
+    : `${region.name} 5일장날 날짜표·일정표·주차 정보 | 오일장지도 : 장날맵`;
+    
+  const description = isGyeonggi
+    ? `성남 모란시장 5일장 날짜와 경기도 5일장날 날짜표 등 ${region.name} 지역 오일장 개설 주기를 확인하세요. 무료 주차 꿀팁 모음.`
+    : `${region.name} 지역 오일장 개설 주기, 오늘 개장 여부, 상세 위치 및 주차 꿀팁 모음. ${region.desc.slice(0, 80)}...`;
+
+  const keywords = isGyeonggi 
+    ? '성남 모란시장 5일장 날짜, 모란시장 5일장 날짜, 경기도 5일장날 날짜표, 경기도 오일장 지도' 
+    : `${region.name} 오일장 날짜표, ${region.name} 5일장, 전통시장 지도`;
 
   return {
     title,
     description,
+    keywords,
     alternates: {
       canonical: `https://jangnalmap.com/region/${province}`,
     },
