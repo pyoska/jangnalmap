@@ -78,6 +78,11 @@ export async function getMarkets() {
       }
     }
 
+    if (data.length === 0) {
+      console.warn("Google Sheets returned 0 valid items, falling back to localMarketsData");
+      return localMarketsData;
+    }
+
     return data;
   } catch (error) {
     console.error('Failed to fetch and parse Google Sheets data. Falling back to local bundled markets.json.', error);
