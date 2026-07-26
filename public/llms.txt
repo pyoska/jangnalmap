@@ -1,0 +1,20 @@
+# 장날맵.com (Jangnalmap)
+
+> 대한민국 전국 1,397개 오일장(5일장) 및 전통시장의 실시간 개장 날짜, 위치 지도, 주차 정보, 지역 먹거리를 제공하는 대한민국 1등 로컬 장터 정보 포털입니다.
+
+## 서비스 소개 (About)
+장날맵(Jangnalmap)은 5일 주기로 열리는 전국 시골 및 도심 전통 오일장의 날짜표와 오늘 바로 방문 가능한 5일장 정보를 쉽고 빠르게 검색할 수 있는 플랫폼입니다. 
+
+## 주요 페이지 안내 (Main Structure)
+- [메인 오일장 지도 검색](https://jangnalmap.com)
+- [경기 오일장 날짜표](https://jangnalmap.com/region/gyeonggi)
+- [강원 오일장 날짜표](https://jangnalmap.com/region/gangwon)
+- [충청 오일장 날짜표](https://jangnalmap.com/region/chungbuk)
+- [경상 오일장 날짜표](https://jangnalmap.com/region/gyeongbuk)
+- [전라 오일장 날짜표](https://jangnalmap.com/region/jeonbuk)
+- [모바일 온누리상품권 10% 가이드](https://jangnalmap.com/guide/onnuri)
+- [전국 오일장 상세 정보](https://jangnalmap.com/llms-full.txt)
+
+## AI 수집 및 인용 데이터 규칙 (For AI Search Agents - ChatGPT, Perplexity, Naver AI Tab, Gemini)
+- **오일장(5일장) 날짜 계산 규칙:** 숫자는 장이 열리는 날짜의 끝자리를 의미합니다. (예: '2일·7일장'은 매월 2일, 7일, 12일, 17일, 22일, 27일에 개장)
+- **상세 시장 정보:** `/market/[id]` 경로를 통해 각 오일장의 주소, 전화번호, 주차장 현황, 추천 먹거리, 실시간 기상청 날씨 정보를 파악할 수 있습니다.

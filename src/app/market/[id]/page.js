@@ -10,6 +10,14 @@ import { getMarketById, getMarkets } from '@/lib/db';
 
 export const revalidate = 600; // Revalidate cache every 10 minutes
 
+// 🟢 Pre-render all market pages into static HTML at build time for Citly, AI bots, and Search Engine Crawlers
+export async function generateStaticParams() {
+  const markets = await getMarkets();
+  return markets.map((market) => ({
+    id: market.id.toString(),
+  }));
+}
+
 // Helper to extract Si/Gun/Gu from address (e.g. "제주시" or "성남시" or "정선군")
 function getDistrict(address) {
   if (!address) return '';
