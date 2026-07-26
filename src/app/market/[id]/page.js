@@ -91,16 +91,17 @@ function getWeekendCurationText(currentMarketName, recommendedMarketName) {
 }
 
 // Helper to calculate the next opening date starting from today
-function getNextOpeningDate(openingCycle, baseDate = new Date()) {
+function getNextOpeningDate(openingCycle = '', baseDate = new Date()) {
+  const safeCycle = openingCycle || '';
   const year = baseDate.getFullYear();
   const month = baseDate.getMonth();
   const date = baseDate.getDate();
   
-  if (openingCycle === '매일') {
+  if (safeCycle === '매일') {
     return baseDate;
   }
   
-  const cycleMatches = openingCycle.match(/\d+/g);
+  const cycleMatches = safeCycle.match(/\d+/g);
   const cycleNums = cycleMatches ? cycleMatches.map(Number) : [];
   
   if (cycleNums.length === 0) return null;
@@ -360,12 +361,11 @@ export default async function MarketDetailPage({ params }) {
     );
   }
 
-  const todayOpen = isOpenToday(market.opening_cycle);
+  const openingCycle = market.opening_cycle || '5일장';
+  const todayOpen = isOpenToday(openingCycle);
   const liveNearbyMarkets = await getLiveNearbyMarkets(market);
   const weather = await getWeatherTip(market.latitude, market.longitude, market.address);
   const weekendNearbyMarkets = await getWeekendNearbyMarkets(market);
-
-
 
   // Generate calendar days for July 2026
   const targetYear = 2026;
@@ -374,11 +374,11 @@ export default async function MarketDetailPage({ params }) {
   const weekDays = ['일', '월', '화', '수', '목', '금', '토'];
 
   // Check if calendar day is an opening day
-  const cycleMatches = market.opening_cycle.match(/\d+/g);
+  const cycleMatches = openingCycle.match(/\d+/g);
   const cycleNums = cycleMatches ? cycleMatches.map(Number) : [];
   const isMarketOpeningDay = (day) => {
     if (!day) return false;
-    if (market.opening_cycle === '매일') return true;
+    if (openingCycle === '매일') return true;
     const lastDigit = day % 10;
     return cycleNums.some(num => {
       if (num === 10) return lastDigit === 0;
@@ -387,7 +387,7 @@ export default async function MarketDetailPage({ params }) {
   };
 
   // Calculate next opening date details starting from today
-  const nextDate = getNextOpeningDate(market.opening_cycle);
+  const nextDate = getNextOpeningDate(openingCycle);
   const daysOfWeek = ['일', '월', '화', '수', '목', '금', '토'];
   let nextOpeningText = "";
   if (nextDate) {
