@@ -42,9 +42,9 @@ export const metadata = {
     siteName: "장날맵.com",
     images: [
       {
-        url: "/favicon.ico",
-        width: 512,
-        height: 512,
+        url: "https://jangnalmap.com/og-image.png",
+        width: 1200,
+        height: 630,
         alt: "장날맵 - 전국 5일장 지도",
       }
     ],
@@ -52,10 +52,10 @@ export const metadata = {
     type: "website",
   },
   twitter: {
-    card: "summary",
+    card: "summary_large_image",
     title: "장날맵.com | 대한민국 전국 오일장 지도",
     description: "대한민국 전국 1,300여 개 전통 오일장(5일장)의 날짜 주기, 오늘 개장 여부, 위치 지도 및 주차 정보",
-    images: ["/favicon.ico"],
+    images: ["https://jangnalmap.com/og-image.png"],
   },
   manifest: "/manifest.json",
   other: {
@@ -93,6 +93,75 @@ export default function RootLayout({ children }) {
               });
             }
           `}
+        </Script>
+
+        {/* Naver Search Advisor 3 Rich Exposure Elements (Associated Channels, Sublinks, WebSite) */}
+        <Script id="naver-seo-jsonld" type="application/ld+json" strategy="beforeInteractive">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@graph": [
+              {
+                "@type": "WebSite",
+                "@id": "https://jangnalmap.com/#website",
+                "url": "https://jangnalmap.com/",
+                "name": "장날맵.com",
+                "alternateName": "장날맵",
+                "description": "대한민국 전국 오일장 지도 - 오늘 개장 정보 & 주차 꿀팁",
+                "potentialAction": {
+                  "@type": "SearchAction",
+                  "target": "https://jangnalmap.com/?search={search_term_string}",
+                  "query-input": "required name=search_term_string"
+                }
+              },
+              {
+                "@type": "Organization",
+                "@id": "https://jangnalmap.com/#organization",
+                "name": "장날맵.com",
+                "url": "https://jangnalmap.com/",
+                "logo": "https://jangnalmap.com/og-image.png",
+                "sameAs": [
+                  "https://blog.naver.com/jangnalmap",
+                  "https://instagram.com/jangnalmap"
+                ]
+              },
+              {
+                "@type": "ItemList",
+                "name": "Sublinks",
+                "itemListElement": [
+                  {
+                    "@type": "SiteNavigationElement",
+                    "position": 1,
+                    "name": "전국 오일장 검색",
+                    "url": "https://jangnalmap.com/"
+                  },
+                  {
+                    "@type": "SiteNavigationElement",
+                    "position": 2,
+                    "name": "경기 오일장 날짜",
+                    "url": "https://jangnalmap.com/region/gyeonggi"
+                  },
+                  {
+                    "@type": "SiteNavigationElement",
+                    "position": 3,
+                    "name": "온누리상품권 10% 가이드",
+                    "url": "https://jangnalmap.com/guide/onnuri"
+                  },
+                  {
+                    "@type": "SiteNavigationElement",
+                    "position": 4,
+                    "name": "장날맵 브랜드 소개",
+                    "url": "https://jangnalmap.com/about"
+                  },
+                  {
+                    "@type": "SiteNavigationElement",
+                    "position": 5,
+                    "name": "편집국 문의하기",
+                    "url": "https://jangnalmap.com/contact"
+                  }
+                ]
+              }
+            ]
+          })}
         </Script>
 
         {children}
