@@ -203,16 +203,13 @@ export async function generateMetadata({ params }) {
   const regionName = (market.address || '').split(' ')[0] || '전국';
   const parkingText = market.parking_yn === 'Y' ? '공영 주차장 완비' : '대중교통 이용 권장';
 
-  const title = market.opening_cycle
-    ? `${market.market_name} (${market.opening_cycle}) 장날 일정표·날짜표·주차 정보 | 오일장지도 : 장날맵`
-    : `${market.market_name} 오일장 날짜표·일정표·주차 정보 | 오일장지도 : 장날맵`;
-
-  const description = `대한민국 1등 오일장지도 : 장날맵에서 제공하는 ${market.market_name}의 정확한 장날 날짜표와 일정표입니다. 무료 주차 팁과 주변 명소 가이드까지 지금 확인하세요.`;
+  const title = `${regionName} ${market.market_name} 5일장 날짜표 & 주차 팁 | ${market.market_name} 장날`;
+  const description = `${regionName} ${market.market_name} 5일장 날짜표 & 주차 팁 | ${market.market_name} 장날의 정확한 일정과 주차 정보, 주변 명소 가이드까지 장날맵에서 확인하세요.`;
 
   return {
     title,
     description,
-    keywords: `${market.market_name}, ${market.market_name} 오일장, ${regionName} 오일장, ${market.market_name} 장날, ${market.market_name} 주차, 전통시장 지도, ${parkingText}`,
+    keywords: `${regionName} ${market.market_name} 5일장 날짜표, ${market.market_name} 장날, ${market.market_name} 오일장, ${regionName} 오일장, ${market.market_name} 주차 팁, 전통시장 지도`,
     alternates: {
       canonical: `https://jangnalmap.com/market/${resolvedParams.id}`,
     },
@@ -471,7 +468,7 @@ export default async function MarketDetailPage({ params }) {
         {/* Hero Title Section */}
         <section className="flex flex-col gap-3 pb-4">
           <h1 className="text-xl sm:text-2xl font-extrabold text-gray-900 leading-snug">
-            {market.market_name} 오일장 장날 주기, 대체 주차장 꿀팁, 대중교통 정보!
+            {regionName} {market.market_name} 5일장 날짜표 & 주차 팁 | {market.market_name} 장날
           </h1>
           <div className="flex flex-wrap items-center gap-2">
             <div className="w-8 h-8 rounded-full bg-emerald-100 text-[#10B981] flex items-center justify-center font-bold text-xs">🗺️</div>
