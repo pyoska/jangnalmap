@@ -188,37 +188,84 @@ function getCalendarDays(year, month) {
   return days;
 }
 
-// 4-Pattern Dynamic Title & Description Permutation Generator
+// 4-Dimensional Infinite Multi-Combinatorial Dynamic SEO Engine (3,072+ Unique Combinations)
 function getSeoPermutation(market, regionName, parkingText) {
-  const hash = (!isNaN(market.id) ? Number(market.id) : 0) % 4;
-
-  switch (hash) {
-    case 0:
-      return {
-        title: `${regionName} ${market.market_name} 5일장 날짜표 & 주차 팁 | ${market.market_name} 장날`,
-        description: `${regionName} ${market.market_name} 5일장 날짜표 & 주차 팁 | ${market.market_name} 장날의 정확한 일정과 주차 정보, 주변 명소 가이드까지 장날맵에서 확인하세요.`
-      };
-    case 1:
-      return {
-        title: `${market.market_name} 장날(오일장) ${market.opening_cycle || '5일장'} 완벽 정리 | ${regionName} 가볼만한곳`,
-        description: `${regionName} 대표 시장인 ${market.market_name} 장날(오일장) 정보를 총정리했습니다. 개장주기(${market.opening_cycle || '5일장'}), 주차정보(${parkingText}), 교통편 등 방문 전 필수 꿀팁을 미리 확인하세요.`
-      };
-    case 2:
-      return {
-        title: `[${regionName}] ${market.market_name} 오일장 개장일과 현지인 추천 가이드`,
-        description: `${regionName} ${market.market_name} 오일장의 모든 것! 이번 달 장날짜, 공영주차장 현황(${parkingText}), 그리고 주변 현지인 추천 코스까지 장날맵에서 한눈에 파악해보세요.`
-      };
-    case 3:
-      return {
-        title: `${market.market_name} 가는법 & 장날 달력 (${market.opening_cycle || '5일장'}) | ${regionName} 전통시장 투어`,
-        description: `이번 주말 ${regionName} 전통시장 투어를 계획 중이신가요? ${market.market_name} 개장 주기(${market.opening_cycle || '5일장'}), 주차 꿀팁(${parkingText}), 인기 먹거리 정보를 제공합니다.`
-      };
-    default:
-      return {
-        title: `${regionName} ${market.market_name} 5일장 날짜표 & 주차 팁 | ${market.market_name} 장날`,
-        description: `${regionName} ${market.market_name} 5일장 날짜표 & 주차 팁 | ${market.market_name} 장날의 정확한 일정과 주차 정보, 주변 명소 가이드까지 장날맵에서 확인하세요.`
-      };
-  }
+  const hash = (!isNaN(market.id) ? Number(market.id) : 0);
+  
+  // 1. Prefix (Search Intent Context - 12 variations)
+  const prefixes = [
+    `[${regionName} 가볼만한곳]`, 
+    `주말 나들이 추천!`, 
+    `오늘 장서는 날?`, 
+    `현지인이 추천하는`, 
+    `전통시장 투어 코스:`, 
+    `가족과 함께 가는`, 
+    `먹거리 탐방 지도!`, 
+    `온누리상품권 쓰기 좋은`, 
+    `당일치기 로컬 여행,`, 
+    `주차장 걱정 없는`, 
+    `데이트 코스로 딱!`, 
+    `지역 명물 탐방:`
+  ];
+  
+  // 2. Core Keyword (Market + Date/Cycle - 8 variations)
+  const cores = [
+    `${market.market_name} 5일장 날짜표와`,
+    `${market.market_name} 장날(${market.opening_cycle || '5일장'}) 정보와`,
+    `${market.market_name} 오일장 개장일과`,
+    `${market.market_name} 가는법 및`,
+    `${regionName} ${market.market_name} 장터 일정과`,
+    `${market.market_name} 전통시장 방문 꿀팁과`,
+    `${market.market_name} 열리는 날(${market.opening_cycle || '5일장'}) 및`,
+    `${market.market_name} 상설·오일장 달력과`
+  ];
+  
+  // 3. Feature Value (Parking/Food/Course - 8 variations)
+  const features = [
+    `주차 팁(${parkingText})`,
+    `현지인 추천 맛집`,
+    `주변 관광 명소 코스`,
+    `대중교통 이용 안내`,
+    `제철 특산물 먹거리`,
+    `온누리 가맹점 정보`,
+    `공영 주차장 현황`,
+    `시장 맛집 지도`
+  ];
+  
+  // 4. Brand Suffix (CTA/Action - 4 variations)
+  const suffixes = [
+    `| 장날맵`,
+    `총정리 완료`,
+    `미리 확인하세요`,
+    `한눈에 보기`
+  ];
+  
+  // Distribute 3,072 combinations evenly using dimension steps
+  const pIdx = hash % 12;
+  const cIdx = Math.floor(hash / 12) % 8;
+  const fIdx = Math.floor(hash / 96) % 8;
+  const sIdx = Math.floor(hash / 768) % 4;
+  
+  const prefix = prefixes[pIdx];
+  const core = cores[cIdx];
+  const feature = features[fIdx];
+  const suffix = suffixes[sIdx];
+  
+  const title = `${prefix} ${core} ${feature} ${suffix}`.replace(/\s+/g, ' ').trim();
+  
+  // Description CTA variations
+  const descSuffixes = [
+    `장날맵에서 정확하고 빠르게 최신 정보를 확인해보세요.`,
+    `방문 전 필수 꿀팁을 미리 체크하여 알찬 시장 투어를 즐기세요.`,
+    `이번 주말 나들이로 완벽한 동선을 계획해보시길 바랍니다.`,
+    `현지인이 보증하는 리얼 로컬 가이드와 함께 즐거운 장보기를 경험하세요.`
+  ];
+  const dIdx = hash % descSuffixes.length;
+  
+  const baseTitle = `${prefix} ${core} ${feature}`.replace(/\s+/g, ' ').trim();
+  const description = `${regionName}의 대표 명소! ${baseTitle}에 대한 모든 것을 정리했습니다. ${descSuffixes[dIdx]}`;
+  
+  return { title, description };
 }
 
 // Generate dynamic SEO Metadata
