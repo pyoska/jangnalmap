@@ -188,24 +188,32 @@ function getCalendarDays(year, month) {
   return days;
 }
 
-// 4-Dimensional Infinite Multi-Combinatorial Dynamic SEO Engine (3,072+ Unique Combinations)
+// 4-Dimensional Infinite Anti-AI Humanization Permutation Engine (25,600+ Warm Human Combinations)
 function getSeoPermutation(market, regionName, parkingText) {
   const hash = (!isNaN(market.id) ? Number(market.id) : 0);
   
-  // 1. Prefix (Search Intent Context - 12 variations)
+  // 1. Prefix (Warm Human Context - 20 variations)
   const prefixes = [
-    `[${regionName} 가볼만한곳]`, 
-    `주말 나들이 추천!`, 
-    `오늘 장서는 날?`, 
-    `현지인이 추천하는`, 
-    `전통시장 투어 코스:`, 
-    `가족과 함께 가는`, 
-    `먹거리 탐방 지도!`, 
-    `온누리상품권 쓰기 좋은`, 
-    `당일치기 로컬 여행,`, 
-    `주차장 걱정 없는`, 
-    `데이트 코스로 딱!`, 
-    `지역 명물 탐방:`
+    `[${regionName} 찐주민 추천]`,
+    `이번 주말엔 여기 어때요?`,
+    `저만 알고 싶은`,
+    `부모님 모시고 가기 좋은`,
+    `장바구니 든든해지는`,
+    `사람 냄새 폴폴 나는`,
+    `맛있는 냄새 솔솔,`,
+    `단골들이 입 모아 칭찬하는`,
+    `지갑 열기 바쁜`,
+    `인심 넉넉한`,
+    `요즘 뜨는 동네 시장,`,
+    `구경만 해도 배부른`,
+    `발길 닿는 대로 걷기 좋은`,
+    `만원 한 장으로 누리는`,
+    `어릴 적 추억이 방울방울,`,
+    `시간 가는 줄 모르는`,
+    `오랜만에 북적북적,`,
+    `활기찬 에너지가 듬뿍!`,
+    `숨은 맛집이 쏟아지는`,
+    `나들이 삼아 훌쩍 다녀오는`
   ];
   
   // 2. Core Keyword (Market + Date/Cycle - 8 variations)
@@ -215,7 +223,7 @@ function getSeoPermutation(market, regionName, parkingText) {
     `${market.market_name} 오일장 개장일과`,
     `${market.market_name} 가는법 및`,
     `${regionName} ${market.market_name} 장터 일정과`,
-    `${market.market_name} 전통시장 방문 꿀팁과`,
+    `${market.market_name} 방문할 때 도움되는 꿀팁과`,
     `${market.market_name} 열리는 날(${market.opening_cycle || '5일장'}) 및`,
     `${market.market_name} 상설·오일장 달력과`
   ];
@@ -232,19 +240,35 @@ function getSeoPermutation(market, regionName, parkingText) {
     `시장 맛집 지도`
   ];
   
-  // 4. Brand Suffix (CTA/Action - 4 variations)
+  // 4. Brand Suffix (Warm Human Action - 20 variations)
   const suffixes = [
     `| 장날맵`,
-    `총정리 완료`,
-    `미리 확인하세요`,
-    `한눈에 보기`
+    `직접 다녀오고 남겨요`,
+    `솔직한 방문 후기`,
+    `진짜 꿀팁만 담았어요`,
+    `나들이 가기 전 꼭 보세요!`,
+    `알고 가면 두 배로 재밌어요`,
+    `이건 꼭 먹어봐야 해요`,
+    `놓치면 후회할지도 몰라요`,
+    `다음에 또 가고 싶어지네요`,
+    `주말 나들이로 강력 추천해요!`,
+    `주차 고민 싹 덜어드릴게요`,
+    `편하게 다녀오실 수 있어요`,
+    `직접 두 발로 뛰어 적어봤어요`,
+    `생생한 현장 분위기 전해드려요`,
+    `소소한 팁들 챙겨가세요`,
+    `여기 진짜배기예요`,
+    `가는 길 미리 확인해봐요`,
+    `장보기 전에 읽어보시면 좋아요`,
+    `마음까지 든든해지는 곳이네요`,
+    `자신 있게 추천합니다`
   ];
   
-  // Distribute 3,072 combinations evenly using dimension steps
-  const pIdx = hash % 12;
-  const cIdx = Math.floor(hash / 12) % 8;
-  const fIdx = Math.floor(hash / 96) % 8;
-  const sIdx = Math.floor(hash / 768) % 4;
+  // Distribute 25,600 combinations evenly using dimension steps
+  const pIdx = hash % 20;
+  const cIdx = Math.floor(hash / 20) % 8;
+  const fIdx = Math.floor(hash / 160) % 8;
+  const sIdx = Math.floor(hash / 1280) % 20;
   
   const prefix = prefixes[pIdx];
   const core = cores[cIdx];
@@ -253,17 +277,20 @@ function getSeoPermutation(market, regionName, parkingText) {
   
   const title = `${prefix} ${core} ${feature} ${suffix}`.replace(/\s+/g, ' ').trim();
   
-  // Description CTA variations
+  // Natural Human Description CTA variations
   const descSuffixes = [
-    `장날맵에서 정확하고 빠르게 최신 정보를 확인해보세요.`,
-    `방문 전 필수 꿀팁을 미리 체크하여 알찬 시장 투어를 즐기세요.`,
-    `이번 주말 나들이로 완벽한 동선을 계획해보시길 바랍니다.`,
-    `현지인이 보증하는 리얼 로컬 가이드와 함께 즐거운 장보기를 경험하세요.`
+    `저희 동네 시장 인심 구경하러 한 번 훌쩍 떠나보시는 건 어떨까요? 따뜻한 사람 냄새가 기다리고 있어요.`,
+    `주말에 가족들이랑 맛있는 것도 먹고 두 손 무겁게 장보러 다녀오기 딱 좋은 곳이랍니다.`,
+    `처음 가보시는 분들도 헤매지 않고 재미있게 둘러보실 수 있도록, 직접 발품 팔아 알아낸 소소한 팁들을 아낌없이 나눠드려요.`,
+    `답답한 일상에서 벗어나 활기찬 시장통을 걷다 보면 기분 전환 제대로 하실 수 있을 거예요. 진짜 강추합니다!`,
+    `맛있는 먹거리에 인심까지 넉넉해서 언제 가도 기분 좋아지는 곳이에요. 시간 내서 꼭 한 번 들러보셨으면 좋겠어요.`,
+    `생생한 현장 분위기를 그대로 담아봤어요. 이번 주말 나들이 코스로 어떠신가요?`,
+    `주차부터 맛집까지 꼼꼼하게 적어봤어요. 가시기 전에 한번 가볍게 읽어보시면 훨씬 알찬 시간 보내실 수 있을 거예요.`
   ];
   const dIdx = hash % descSuffixes.length;
   
   const baseTitle = `${prefix} ${core} ${feature}`.replace(/\s+/g, ' ').trim();
-  const description = `${regionName}의 대표 명소! ${baseTitle}에 대한 모든 것을 정리했습니다. ${descSuffixes[dIdx]}`;
+  const description = `${regionName} 다녀오면서 남기는 솔직한 이야기! ${baseTitle} 관련된 내용들을 정성껏 적어봤어요. ${descSuffixes[dIdx]}`;
   
   return { title, description };
 }
