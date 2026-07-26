@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+import localMarketsData from '../../public/data/markets.json';
 
 // Robust, zero-dependency CSV parser to handle quotes, newlines, and commas in cells
 function parseCSV(text) {
@@ -39,16 +40,9 @@ function parseCSV(text) {
 export async function getMarkets() {
   const sheetsUrl = process.env.GOOGLE_SHEETS_URL;
 
-  // Fallback to local file if environment variable is not defined
+  // Fallback to local bundled markets.json if environment variable is not defined
   if (!sheetsUrl) {
-    try {
-      const filePath = path.join(process.cwd(), 'public/data/markets.json');
-      const fileData = fs.readFileSync(filePath, 'utf8');
-      return JSON.parse(fileData);
-    } catch (error) {
-      console.error('Failed to read local markets.json fallback', error);
-      return [];
-    }
+    return localMarketsData;
   }
 
   try {
@@ -86,15 +80,8 @@ export async function getMarkets() {
 
     return data;
   } catch (error) {
-    console.error('Failed to fetch and parse Google Sheets data. Falling back to local file.', error);
-    try {
-      const filePath = path.join(process.cwd(), 'public/data/markets.json');
-      const fileData = fs.readFileSync(filePath, 'utf8');
-      return JSON.parse(fileData);
-    } catch (fallbackError) {
-      console.error('Fallback read failed', fallbackError);
-      return [];
-    }
+    console.error('Failed to fetch and parse Google Sheets data. Falling back to local bundled markets.json.', error);
+    return localMarketsData;
   }
 }
 
