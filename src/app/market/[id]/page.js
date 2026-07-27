@@ -425,53 +425,6 @@ export default async function MarketDetailPage({ params }) {
     `#7월제철먹거리`
   ];
 
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "LocalBusiness",
-    "name": `${market.market_name} 오일장`,
-    "image": "https://jangnalmap.com/favicon.ico",
-    "description": `${market.market_name} 오일장 개장 주기(${market.opening_cycle}), 주소(${market.address}), 주차장 및 주변 코스 정보 안내.`,
-    "address": {
-      "@type": "PostalAddress",
-      "streetAddress": market.address,
-      "addressLocality": getDistrict(market.address),
-      "addressRegion": (market.address || '').split(' ')[0],
-      "addressCountry": "KR"
-    },
-    "geo": {
-      "@type": "GeoCoordinates",
-      "latitude": market.latitude,
-      "longitude": market.longitude
-    },
-    "url": `https://jangnalmap.com/market/${market.id}`,
-    ...(market.phone && market.phone !== 'N/A' ? { "telephone": market.phone } : {})
-  };
-
-  const breadcrumbJsonLd = {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    "itemListElement": [
-      {
-        "@type": "ListItem",
-        "position": 1,
-        "name": "전국 오일장 지도",
-        "item": "https://jangnalmap.com"
-      },
-      {
-        "@type": "ListItem",
-        "position": 2,
-        "name": `${market.address.split(' ')[0]} 오일장`,
-        "item": `https://jangnalmap.com/region/${regionSlugs[getRegionGroup(market.address)] || 'gyeonggi'}`
-      },
-      {
-        "@type": "ListItem",
-        "position": 3,
-        "name": market.market_name,
-        "item": `https://jangnalmap.com/market/${market.id}`
-      }
-    ]
-  };
-
   const regionGroup = getRegionGroup(market.address);
   const regionSlugs = {
     '수도권': 'gyeonggi',
@@ -484,18 +437,86 @@ export default async function MarketDetailPage({ params }) {
     '경남/부산/울산': 'gyeongnam',
     '제주': 'jeju'
   };
-  const regionSlug = regionSlugs[regionGroup];
+
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "LocalBusiness",
+        "@id": `https://jangnalmap.com/market/${market.id}#business`,
+        "name": `${market.market_name} 오일장`,
+        "image": "https://jangnalmap.com/og-image.png",
+        "description": `${market.market_name} 오일장 개장 주기(${openingCycle}), 주소(${market.address}), 주차장 및 주변 코스 정보 안내.`,
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": market.address,
+          "addressLocality": getDistrict(market.address),
+          "addressRegion": (market.address || '').split(' ')[0],
+          "addressCountry": "KR"
+        },
+        "geo": {
+          "@type": "GeoCoordinates",
+          "latitude": market.latitude,
+          "longitude": market.longitude
+        },
+        "url": `https://jangnalmap.com/market/${market.id}`,
+        ...(market.phone && market.phone !== 'N/A' ? { "telephone": market.phone } : {}),
+        "speakable": {
+          "@type": "SpeakableSpecification",
+          "xpath": [
+            "/html/head/title",
+            "/html/head/meta[@name='description']/@content"
+          ]
+        }
+      },
+      {
+        "@type": "BreadcrumbList",
+        "@id": `https://jangnalmap.com/market/${market.id}#breadcrumb`,
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "전국 오일장 지도", "item": "https://jangnalmap.com" },
+          { "@type": "ListItem", "position": 2, "name": `${market.address.split(' ')[0]} 오일장`, "item": `https://jangnalmap.com/region/${regionSlugs[regionGroup] || 'gyeonggi'}` },
+          { "@type": "ListItem", "position": 3, "name": market.market_name, "item": `https://jangnalmap.com/market/${market.id}` }
+        ]
+      },
+      {
+        "@type": "FAQPage",
+        "@id": `https://jangnalmap.com/market/${market.id}#faq`,
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": `${market.market_name} 오일장 개장일은 언제인가요?`,
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": `${market.market_name} 오일장은 매월 ${openingCycle}에 개장합니다.`
+            }
+          },
+          {
+            "@type": "Question",
+            "name": `${market.market_name} 주차장은 편리한가요?`,
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": market.parking_yn === 'Y' ? "공영주차장이 완비되어 있어 주차가 비교적 편리합니다." : "주차 구역이 협소할 수 있으니 대중교통 이용 또는 주변 임시 주차 구역 이용을 권장합니다."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": `${market.market_name} 대표 먹거리는 무엇인가요?`,
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": `${market.food_recommend || '전통시장 현지 맛집과 제철 특산물'}을 오일장에서 맛보실 수 있습니다.`
+            }
+          }
+        ]
+      }
+    ]
+  };
 
   return (
     <div className="min-h-screen bg-white text-[#1A1A1A] flex flex-col antialiased">
-      {/* JSON-LD Structured Data for LocalBusiness and BreadcrumbList */}
+      {/* JSON-LD Structured Data for LocalBusiness, BreadcrumbList, and FAQPage */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
 
       {/* Navbar */}

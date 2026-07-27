@@ -141,35 +141,55 @@ export default async function RegionPage({ params }) {
       return daysA - daysB;
     });
 
-  // JSON-LD ItemList Schema for structured search listings
+  // JSON-LD @graph Schema combining CollectionPage, BreadcrumbList, and FAQPage
   const jsonLd = {
     "@context": "https://schema.org",
-    "@type": "ItemList",
-    "name": `${region.name} 전통 오일장 추천 리스트`,
-    "description": region.desc,
-    "itemListElement": regionMarkets.slice(0, 30).map((m, index) => ({
-      "@type": "ListItem",
-      "position": index + 1,
-      "url": `https://jangnalmap.com/market/${m.id}`,
-      "name": `${m.market_name} 오일장`
-    }))
-  };
-
-  const breadcrumbJsonLd = {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    "itemListElement": [
+    "@graph": [
       {
-        "@type": "ListItem",
-        "position": 1,
-        "name": "전국 오일장 지도",
-        "item": "https://jangnalmap.com"
+        "@type": "CollectionPage",
+        "@id": `https://jangnalmap.com/region/${province}#webpage`,
+        "url": `https://jangnalmap.com/region/${province}`,
+        "name": `${region.name} 전통 오일장 추천 리스트`,
+        "description": region.desc,
+        "mainEntity": {
+          "@type": "ItemList",
+          "itemListElement": regionMarkets.slice(0, 30).map((m, index) => ({
+            "@type": "ListItem",
+            "position": index + 1,
+            "url": `https://jangnalmap.com/market/${m.id}`,
+            "name": `${m.market_name} 오일장`
+          }))
+        }
       },
       {
-        "@type": "ListItem",
-        "position": 2,
-        "name": `${region.name} 오일장`,
-        "item": `https://jangnalmap.com/region/${province}`
+        "@type": "BreadcrumbList",
+        "@id": `https://jangnalmap.com/region/${province}#breadcrumb`,
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "전국 오일장 지도", "item": "https://jangnalmap.com" },
+          { "@type": "ListItem", "position": 2, "name": `${region.name} 오일장`, "item": `https://jangnalmap.com/region/${province}` }
+        ]
+      },
+      {
+        "@type": "FAQPage",
+        "@id": `https://jangnalmap.com/region/${province}#faq`,
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": `${region.name} 지역에서 가장 인기 있는 5일장은 어디인가요?`,
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": `현재 ${region.name} 지역에는 총 ${regionMarkets.length}개의 전통 오일장 정보가 등록되어 있으며, 대표적으로 ${regionMarkets[0]?.market_name || '대표'} 오일장 등이 인기가 많습니다.`
+            }
+          },
+          {
+            "@type": "Question",
+            "name": `${region.name} 5일장 장날 날짜는 어떻게 확인하나요?`,
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": `${region.name} 5일장 장날은 각 시장별로 5일 주기(예: 4일·9일장, 2일·7일장)로 열리며, 장날맵에서 오늘 개장 여부와 이번 달 전체 장날 달력을 확인하실 수 있습니다.`
+            }
+          }
+        ]
       }
     ]
   };
@@ -180,10 +200,6 @@ export default async function RegionPage({ params }) {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
 
       {/* Navbar */}

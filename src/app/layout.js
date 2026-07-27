@@ -27,6 +27,10 @@ export const metadata = {
     canonical: "/",
     types: {
       'application/rss+xml': '/rss.xml',
+      'text/markdown': [
+        { title: 'LLMs.txt Summary', url: '/llms.txt' },
+        { title: 'LLMs Full Context', url: '/llms-full.txt' }
+      ]
     },
   },
   verification: {

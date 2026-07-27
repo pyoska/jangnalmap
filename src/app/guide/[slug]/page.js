@@ -175,47 +175,50 @@ export default async function ArticleDetailPage({ params }) {
 
   const jsonLd = {
     "@context": "https://schema.org",
-    "@type": "Article",
-    "headline": article.title,
-    "description": article.description,
-    "image": "https://jangnalmap.com/favicon.ico",
-    "author": {
-      "@type": "Organization",
-      "name": "장날맵 가이드 편집국"
-    },
-    "publisher": {
-      "@type": "Organization",
-      "name": "장날맵.com",
-      "logo": {
-        "@type": "ImageObject",
-        "url": "https://jangnalmap.com/favicon.ico"
-      }
-    },
-    "datePublished": article.date ? article.date.replace(/\./g, '-') : "2026-07-24",
-    "mainEntityOfPage": `https://jangnalmap.com/guide/${slug}`
-  };
-
-  const breadcrumbJsonLd = {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    "itemListElement": [
+    "@graph": [
       {
-        "@type": "ListItem",
-        "position": 1,
-        "name": "전국 오일장 지도",
-        "item": "https://jangnalmap.com"
+        "@type": "Article",
+        "@id": `https://jangnalmap.com/guide/${slug}#article`,
+        "headline": article.title,
+        "description": article.description,
+        "image": "https://jangnalmap.com/og-image.png",
+        "author": {
+          "@type": "Organization",
+          "name": "장날맵 가이드 편집국"
+        },
+        "publisher": {
+          "@type": "Organization",
+          "name": "장날맵.com",
+          "logo": {
+            "@type": "ImageObject",
+            "url": "https://jangnalmap.com/favicon.ico"
+          }
+        },
+        "datePublished": article.date ? article.date.replace(/\./g, '-') : "2026-07-24",
+        "mainEntityOfPage": `https://jangnalmap.com/guide/${slug}`
       },
       {
-        "@type": "ListItem",
-        "position": 2,
-        "name": "오일장 가이드",
-        "item": "https://jangnalmap.com/guide"
+        "@type": "BreadcrumbList",
+        "@id": `https://jangnalmap.com/guide/${slug}#breadcrumb`,
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "전국 오일장 지도", "item": "https://jangnalmap.com" },
+          { "@type": "ListItem", "position": 2, "name": "오일장 가이드", "item": "https://jangnalmap.com/guide" },
+          { "@type": "ListItem", "position": 3, "name": article.title, "item": `https://jangnalmap.com/guide/${slug}` }
+        ]
       },
       {
-        "@type": "ListItem",
-        "position": 3,
-        "name": article.title,
-        "item": `https://jangnalmap.com/guide/${slug}`
+        "@type": "FAQPage",
+        "@id": `https://jangnalmap.com/guide/${slug}#faq`,
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": `이 가이드(${article.title})의 핵심 핵심 요약은 무엇인가요?`,
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": article.description
+            }
+          }
+        ]
       }
     ]
   };
@@ -226,10 +229,6 @@ export default async function ArticleDetailPage({ params }) {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
       {/* Navbar */}
       <header className="sticky top-0 z-50 w-full border-b border-gray-100 bg-white/90 backdrop-blur-xl">
