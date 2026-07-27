@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import * as gtag from '@/lib/gtag';
 
 export default function PwaInstallBanner() {
   const [deferredPrompt, setDeferredPrompt] = useState(null);
@@ -18,6 +19,7 @@ export default function PwaInstallBanner() {
       setDeferredPrompt(e);
       // Show our custom banner
       setIsVisible(true);
+      gtag.event({ action: 'pwa_banner_shown', category: 'PWA', label: 'Shown' });
     };
 
     window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
@@ -26,11 +28,10 @@ export default function PwaInstallBanner() {
     const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
     const isStandalone = window.navigator.standalone === true;
     if (isIOS && !isStandalone) {
-      // iOS doesn't support beforeinstallprompt, but we can show a guide banner
-      // We only show it if they haven't dismissed it
       const iosShown = localStorage.getItem('pwa_ios_guide_shown') === 'true';
       if (!iosShown) {
         setIsVisible(true);
+        gtag.event({ action: 'pwa_ios_banner_shown', category: 'PWA', label: 'iOS Shown' });
       }
     }
 
@@ -41,11 +42,11 @@ export default function PwaInstallBanner() {
 
   const handleInstallClick = async () => {
     if (!deferredPrompt) {
-      // iOS fallback or generic alert guide
       const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
       if (isIOS) {
         alert("📢 아이폰(Safari)에서 홈 화면에 추가하는 방법:\n\n1. 브라우저 하단의 [공유] 버튼을 누릅니다.\n2. 스크롤을 내려 [홈 화면에 추가]를 선택합니다.");
         localStorage.setItem('pwa_ios_guide_shown', 'true');
+        gtag.event({ action: 'pwa_install_ios_guide', category: 'PWA', label: 'iOS Guide Alert' });
         setIsVisible(false);
       }
       return;
@@ -56,7 +57,7 @@ export default function PwaInstallBanner() {
     
     // Wait for user outcome
     const { outcome } = await deferredPrompt.userChoice;
-    console.log(`User response to install prompt: ${outcome}`);
+    gtag.event({ action: 'pwa_install_outcome', category: 'PWA', label: outcome });
     
     // Clear deferred prompt
     setDeferredPrompt(null);
@@ -65,6 +66,7 @@ export default function PwaInstallBanner() {
 
   const handleDismiss = () => {
     localStorage.setItem('pwa_banner_dismissed', 'true');
+    gtag.event({ action: 'pwa_banner_dismiss', category: 'PWA', label: 'Dismissed' });
     setIsVisible(false);
   };
 
