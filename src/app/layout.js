@@ -155,7 +155,25 @@ export default function RootLayout({ children }) {
                 "sameAs": [
                   "https://blog.naver.com/jangnalmap",
                   "https://instagram.com/jangnalmap"
-                ]
+                ],
+                "founder": {
+                  "@type": "Person",
+                  "name": "장날맵 편집국"
+                },
+                "contactPoint": {
+                  "@type": "ContactPoint",
+                  "email": "support@jangnalmap.com",
+                  "contactType": "customer service"
+                },
+                "publishingPrinciples": "https://jangnalmap.com/about"
+              },
+              {
+                "@type": "Person",
+                "@id": "https://jangnalmap.com/#author",
+                "name": "장날맵 대표 에디터",
+                "jobTitle": "전통 오일장 전문 아카이비스트",
+                "url": "https://jangnalmap.com/about",
+                "knowsAbout": ["전통시장", "국내여행", "5일장", "지역경제"]
               },
               {
                 "@type": "ItemList",

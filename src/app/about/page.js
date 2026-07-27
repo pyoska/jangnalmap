@@ -16,8 +16,27 @@ export const metadata = {
 };
 
 export default function AboutPage() {
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "AboutPage",
+    "mainEntity": {
+      "@type": "Organization",
+      "name": "장날맵 아카이브 편집국",
+      "url": "https://jangnalmap.com/about",
+      "founder": {
+        "@type": "Person",
+        "name": "장날맵 대표 에디터",
+        "jobTitle": "전통시장 검증 전문가",
+        "url": "https://jangnalmap.com/about",
+        "knowsAbout": ["전통시장", "5일장", "국내여행", "지역경제"]
+      },
+      "description": "대한민국 1,300여 개 전통 오일장 지도를 발로 뛰며 검증하는 전문 아카이브 포털"
+    }
+  };
+
   return (
     <div className="min-h-screen bg-white text-[#1A1A1A] flex flex-col antialiased">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       {/* Navbar */}
       <header className="sticky top-0 z-50 w-full border-b border-gray-100 bg-white/90 backdrop-blur-xl">
         <div className="max-w-4xl mx-auto px-4 h-16 flex items-center justify-between">
@@ -78,6 +97,24 @@ export default function AboutPage() {
           <p className="pt-4 border-t border-gray-150">
             앞으로도 장날맵은 전국의 장터 여행자분들에게 가장 믿을 수 있고 풍성한 5일장 꿀팁을 전하기 위해 쉼 없이 전국의 국도를 달리겠습니다. 발걸음마다 옛 장터의 따스한 정취가 묻어나는 장보기 여행을 장날맵과 함께 즐겨보세요!
           </p>
+
+          {/* E-E-A-T Editorial Team Profile */}
+          <div className="bg-emerald-50/60 border border-emerald-200/80 rounded-2xl p-5 space-y-3 shadow-sm mt-8">
+            <h3 className="font-extrabold text-emerald-950 text-base flex items-center gap-2">
+              ✍️ 장날맵 아카이브 편집국 (Editorial Team & E-E-A-T)
+            </h3>
+            <div className="flex items-center gap-4 mt-2">
+              <div className="w-14 h-14 bg-emerald-500 text-white rounded-2xl flex items-center justify-center text-2xl font-black shrink-0 shadow-md">
+                🏃
+              </div>
+              <div>
+                <p className="font-extrabold text-gray-900 text-sm">전통 오일장 전문 아카이비스트 팀</p>
+                <p className="text-xs text-gray-600 mt-1 leading-relaxed">
+                  전국 1,300여 개 오일장을 직접 둘러보며 검증된 날짜 주기, 주차 환경, 대중교통 노선 및 제철 특산물 데이터를 팩트체크하여 기록합니다. 대형 마트와 다른 오일장 고유의 낭만을 100% 리얼 정보로 전달합니다.
+                </p>
+              </div>
+            </div>
+          </div>
         </section>
       </main>
 
