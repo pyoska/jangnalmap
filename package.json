@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "python scripts/generate_sitemap.py && python scripts/generate_rss.py && next build",
+    "build": "python scripts/generate_sitemap.py && python scripts/generate_rss.py && python scripts/verify_ecc_quality.py && next build",
     "start": "next start",
     "lint": "eslint"
   },
