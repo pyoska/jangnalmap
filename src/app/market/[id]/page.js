@@ -637,8 +637,8 @@ export default async function MarketDetailPage({ params }) {
           </p>
           <div className="mt-3 flex items-center gap-2 pt-3 border-t border-gray-200/50">
             <span className="w-5 h-5 bg-emerald-500 text-white rounded-full flex items-center justify-center text-[10px] font-bold">✓</span>
-            <span className="text-xs font-bold text-gray-800">장날맵 아카이브 편집국</span>
-            <span className="text-[10px] text-gray-400 font-medium">| 전통 오일장 현장 팩트체크 완료</span>
+            <span className="text-xs font-extrabold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200/60">작성자 : 장날맵</span>
+            <span className="text-[10px] text-gray-400 font-medium">| 전통 오일장 현장 팩트체크</span>
           </div>
         </section>
 

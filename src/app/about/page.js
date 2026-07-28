@@ -101,14 +101,14 @@ export default function AboutPage() {
           {/* E-E-A-T Editorial Team Profile */}
           <div className="bg-emerald-50/60 border border-emerald-200/80 rounded-2xl p-5 space-y-3 shadow-sm mt-8">
             <h3 className="font-extrabold text-emerald-950 text-base flex items-center gap-2">
-              ✍️ 장날맵 아카이브 편집국 (Editorial Team & E-E-A-T)
+              ✍️ 작성자 : 장날맵 (Editorial Team & E-E-A-T)
             </h3>
             <div className="flex items-center gap-4 mt-2">
               <div className="w-14 h-14 bg-emerald-500 text-white rounded-2xl flex items-center justify-center text-2xl font-black shrink-0 shadow-md">
                 🏃
               </div>
               <div>
-                <p className="font-extrabold text-gray-900 text-sm">전통 오일장 전문 아카이비스트 팀</p>
+                <p className="font-extrabold text-gray-900 text-sm">작성자 : 장날맵 (전통 오일장 전문 팀)</p>
                 <p className="text-xs text-gray-600 mt-1 leading-relaxed">
                   전국 1,300여 개 오일장을 직접 둘러보며 검증된 날짜 주기, 주차 환경, 대중교통 노선 및 제철 특산물 데이터를 팩트체크하여 기록합니다. 대형 마트와 다른 오일장 고유의 낭만을 100% 리얼 정보로 전달합니다.
                 </p>
