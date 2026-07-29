@@ -92,18 +92,21 @@ export async function generateMetadata({ params }) {
       images: [
         {
           url: "/favicon.ico",
-          width: 512,
-          height: 512,
+      images: [
+        {
+          url: "https://jangnalmap.com/og-image.png",
+          width: 1200,
+          height: 630,
           alt: `${region.name} 오일장 지도`,
         }
       ],
       type: 'website',
     },
     twitter: {
-      card: "summary",
+      card: "summary_large_image",
       title,
       description,
-      images: ["/favicon.ico"],
+      images: ["https://jangnalmap.com/og-image.png"],
     }
   };
 }

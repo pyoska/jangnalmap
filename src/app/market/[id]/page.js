@@ -351,18 +351,18 @@ export async function generateMetadata({ params }) {
         siteName: "장날맵.com",
         images: [
           {
-            url: "/favicon.ico",
-            width: 512,
-            height: 512,
+            url: "https://jangnalmap.com/og-image.png",
+            width: 1200,
+            height: 630,
             alt: `${market.market_name || '시장'} 정보`,
           }
         ],
       },
       twitter: {
-        card: "summary",
+        card: "summary_large_image",
         title,
         description,
-        images: ["/favicon.ico"],
+        images: ["https://jangnalmap.com/og-image.png"],
       }
     };
   } catch (error) {
