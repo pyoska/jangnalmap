@@ -91,9 +91,6 @@ export async function generateMetadata({ params }) {
       siteName: "장날맵.com",
       images: [
         {
-          url: "/favicon.ico",
-      images: [
-        {
           url: "https://jangnalmap.com/og-image.png",
           width: 1200,
           height: 630,
