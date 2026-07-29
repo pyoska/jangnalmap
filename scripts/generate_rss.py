@@ -103,11 +103,17 @@ def generate():
             f"</ul>"
         )
 
+        # Generate item-specific RFC 822 pubDate based on market ID hash
+        m_hash = int(market_id) if str(market_id).isdigit() else hash(str(market_id))
+        item_offset_minutes = (m_hash * 37) % (14 * 24 * 60) # Spread pubDates over past 14 days
+        item_dt = datetime.datetime.now() - datetime.timedelta(minutes=item_offset_minutes)
+        item_pub_date = format_rfc822(item_dt)
+
         xml.append('    <item>')
         xml.append(f'      <title>{escape(title)}</title>')
         xml.append(f'      <link>{link}</link>')
         xml.append(f'      <guid isPermaLink="true">{link}</guid>')
-        xml.append(f'      <pubDate>{pub_date}</pubDate>')
+        xml.append(f'      <pubDate>{item_pub_date}</pubDate>')
         xml.append(f'      <description><![CDATA[{description_html}]]></description>')
         xml.append('    </item>')
 

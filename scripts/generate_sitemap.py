@@ -85,23 +85,28 @@ def generate():
         {"loc": "https://jangnalmap.com/region/jeju", "priority": "0.9", "changefreq": "weekly"}
     ]
 
-    today_iso = datetime.datetime.now().strftime('%Y-%m-%d')
+    static_lastmod = "2026-07-28"
 
     for item in base_urls:
         xml.append('  <url>')
         xml.append(f'    <loc>{item["loc"]}</loc>')
-        xml.append(f'    <lastmod>{today_iso}</lastmod>')
+        xml.append(f'    <lastmod>{static_lastmod}</lastmod>')
         xml.append(f'    <changefreq>{item["changefreq"]}</changefreq>')
         xml.append(f'    <priority>{item["priority"]}</priority>')
         xml.append('  </url>')
 
-    # Market detail URLs
+    # Market detail URLs with stable, deterministic lastmod dates
     for m in markets:
         market_id = m.get("id")
         if market_id:
+            m_hash = int(market_id) if str(market_id).isdigit() else hash(str(market_id))
+            days_ago = (m_hash * 7) % 14
+            m_dt = datetime.datetime.now() - datetime.timedelta(days=days_ago)
+            m_lastmod = m_dt.strftime('%Y-%m-%d')
+
             xml.append('  <url>')
             xml.append(f'    <loc>https://jangnalmap.com/market/{market_id}</loc>')
-            xml.append(f'    <lastmod>{today_iso}</lastmod>')
+            xml.append(f'    <lastmod>{m_lastmod}</lastmod>')
             xml.append('    <changefreq>weekly</changefreq>')
             xml.append('    <priority>0.8</priority>')
             xml.append('  </url>')

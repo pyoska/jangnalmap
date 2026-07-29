@@ -335,6 +335,13 @@ export async function generateMetadata({ params }) {
       keywords: `${regionName} ${market.market_name || '시장'} 5일장 날짜표, ${market.market_name || '시장'} 장날, ${market.market_name || '시장'} 오일장, ${regionName} 오일장, 주차 팁, 전통시장 지도`,
       alternates: {
         canonical: `https://jangnalmap.com/market/${resolvedParams?.id}`,
+        types: {
+          'application/rss+xml': '/rss.xml',
+          'text/markdown': [
+            { title: 'LLMs.txt Summary', url: '/llms.txt' },
+            { title: 'LLMs Full Context', url: '/llms-full.txt' }
+          ]
+        }
       },
       openGraph: {
         title,
