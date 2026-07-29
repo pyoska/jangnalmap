@@ -47,7 +47,8 @@ def verify_ecc():
     if not os.path.exists(os.path.join('public', 'llms-full.txt')):
         errors.append("[FAIL] public/llms-full.txt missing")
 
-    # 4. Verify markets.json local data fallback
+    # 4. Verify markets.json local data fallback & 100% market property integrity
+    from verify_dynamic_routes import verify_all_markets
     markets_json = os.path.join('public', 'data', 'markets.json')
     if not os.path.exists(markets_json):
         errors.append("[FAIL] public/data/markets.json missing")
@@ -63,7 +64,8 @@ def verify_ecc():
         sys.exit(1)
     else:
         print("\n[PASS] ALL ECC AGENTSHIELD QUALITY & INTEGRITY CHECKS PASSED (100/100)!")
-        sys.exit(0)
+        print("\nRunning Layer-1 Dynamic Market Data Integrity Inspection...")
+        verify_all_markets()
 
 if __name__ == '__main__':
     verify_ecc()
