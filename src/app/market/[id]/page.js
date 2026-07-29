@@ -26,63 +26,76 @@ async function getMarketData(id) {
 
 // Fetch up to 3 LIVE nearby markets in the same province that are open today (fallback to any in same province)
 async function getLiveNearbyMarkets(currentMarket) {
-  const currentProvince = (currentMarket.address || '').split(' ')[0] || '';
-  const markets = await getMarkets();
-  
-  // Filter other markets in the same province that are open today
-  const today = new Date();
-  let list = markets.filter(
-    m => m.id !== currentMarket.id && 
-         (m.address || '').split(' ')[0] === currentProvince &&
-         isOpenToday(m.opening_cycle, today)
-  );
-  
-  // Fallback to general same-province markets if fewer than 3 open markets
-  if (list.length < 3) {
-    const fallbackList = markets.filter(
-      m => m.id !== currentMarket.id && 
+  try {
+    if (!currentMarket) return [];
+    const currentProvince = (currentMarket.address || '').split(' ')[0] || '';
+    const markets = await getMarkets();
+    if (!Array.isArray(markets)) return [];
+    
+    // Filter other markets in the same province that are open today
+    const today = new Date();
+    let list = markets.filter(
+      m => m && m.id !== currentMarket.id && 
            (m.address || '').split(' ')[0] === currentProvince &&
-           !list.some(added => added.id === m.id)
+           isOpenToday(m.opening_cycle || '', today)
     );
-    list = [...list, ...fallbackList];
+    
+    // Fallback to general same-province markets if fewer than 3 open markets
+    if (list.length < 3) {
+      const fallbackList = markets.filter(
+        m => m && m.id !== currentMarket.id && 
+             (m.address || '').split(' ')[0] === currentProvince &&
+             !list.some(added => added && added.id === m.id)
+      );
+      list = [...list, ...fallbackList];
+    }
+    
+    return list.slice(0, 3);
+  } catch (err) {
+    console.error("getLiveNearbyMarkets error:", err);
+    return [];
   }
-  
-  return list.slice(0, 3); // Suggest 3 markets
 }
 
 // Fetch up to 3 markets in the same province opening tomorrow or next weekend
 async function getWeekendNearbyMarkets(currentMarket) {
-  const currentProvince = (currentMarket.address || '').split(' ')[0] || '';
-  const markets = await getMarkets();
-  
-  const now = new Date();
-  const tomorrow = new Date(now);
-  tomorrow.setDate(now.getDate() + 1);
+  try {
+    if (!currentMarket) return [];
+    const currentProvince = (currentMarket.address || '').split(' ')[0] || '';
+    const markets = await getMarkets();
+    if (!Array.isArray(markets)) return [];
+    
+    const now = new Date();
+    const tomorrow = new Date(now);
+    tomorrow.setDate(now.getDate() + 1);
 
-  // Calculate upcoming Saturday and Sunday
-  const saturday = new Date(now);
-  saturday.setDate(now.getDate() + ((6 - now.getDay() + 7) % 7));
-  const sunday = new Date(now);
-  sunday.setDate(now.getDate() + ((7 - now.getDay() + 7) % 7));
-  
-  let list = markets.filter(
-    m => m.id !== currentMarket.id && 
-         (m.address || '').split(' ')[0] === currentProvince &&
-         (isOpenToday(m.opening_cycle, tomorrow) || 
-          isOpenToday(m.opening_cycle, saturday) || 
-          isOpenToday(m.opening_cycle, sunday))
-  );
-  
-  if (list.length < 3) {
-    const fallbackList = markets.filter(
-      m => m.id !== currentMarket.id && 
+    const saturday = new Date(now);
+    saturday.setDate(now.getDate() + ((6 - now.getDay() + 7) % 7));
+    const sunday = new Date(now);
+    sunday.setDate(now.getDate() + ((7 - now.getDay() + 7) % 7));
+    
+    let list = markets.filter(
+      m => m && m.id !== currentMarket.id && 
            (m.address || '').split(' ')[0] === currentProvince &&
-           !list.some(added => added.id === m.id)
+           (isOpenToday(m.opening_cycle || '', tomorrow) || 
+            isOpenToday(m.opening_cycle || '', saturday) || 
+            isOpenToday(m.opening_cycle || '', sunday))
     );
-    list = [...list, ...fallbackList];
+    
+    if (list.length < 3) {
+      const fallbackList = markets.filter(
+        m => m && m.id !== currentMarket.id && 
+             (m.address || '').split(' ')[0] === currentProvince &&
+             !list.some(added => added && added.id === m.id)
+      );
+      list = [...list, ...fallbackList];
+    }
+    
+    return list.slice(0, 3);
+  } catch (err) {
+    console.error("getWeekendNearbyMarkets error:", err);
+    return [];
   }
-  
-  return list.slice(0, 3);
 }
 
 // Dynamic curation sentence generator for weekend markets
@@ -418,14 +431,18 @@ export default async function MarketDetailPage({ params }) {
   const augmentedFoodTip = market.food_recommend;
 
   // Dynamic tags
+  const safeName = market.market_name || '전통시장';
+  const safeAddress = market.address || '전국';
+  const safeProvince = safeAddress.split(' ')[0] || '전국';
+
   const tags = [
-    `#${market.market_name.replace(/\s+/g, '')}`,
-    `#${market.address.split(' ')[0]}오일장`,
+    `#${safeName.replace(/\s+/g, '')}`,
+    `#${safeProvince}오일장`,
     `#전통시장맛집`,
     `#7월제철먹거리`
   ];
 
-  const regionGroup = getRegionGroup(market.address);
+  const regionGroup = getRegionGroup(safeAddress);
   const regionSlugs = {
     '수도권': 'gyeonggi',
     '강원': 'gangwon',
@@ -444,20 +461,20 @@ export default async function MarketDetailPage({ params }) {
       {
         "@type": "LocalBusiness",
         "@id": `https://jangnalmap.com/market/${market.id}#business`,
-        "name": `${market.market_name} 오일장`,
+        "name": `${safeName} 오일장`,
         "image": "https://jangnalmap.com/og-image.png",
-        "description": `${market.market_name} 오일장 개장 주기(${openingCycle}), 주소(${market.address}), 주차장 및 주변 코스 정보 안내.`,
+        "description": `${safeName} 오일장 개장 주기(${openingCycle}), 주소(${safeAddress}), 주차장 및 주변 코스 정보 안내.`,
         "address": {
           "@type": "PostalAddress",
-          "streetAddress": market.address,
-          "addressLocality": getDistrict(market.address),
-          "addressRegion": (market.address || '').split(' ')[0],
+          "streetAddress": safeAddress,
+          "addressLocality": getDistrict(safeAddress),
+          "addressRegion": safeProvince,
           "addressCountry": "KR"
         },
         "geo": {
           "@type": "GeoCoordinates",
-          "latitude": market.latitude,
-          "longitude": market.longitude
+          "latitude": market.latitude || 37.5665,
+          "longitude": market.longitude || 126.9780
         },
         "url": `https://jangnalmap.com/market/${market.id}`,
         ...(market.phone && market.phone !== 'N/A' ? { "telephone": market.phone } : {}),
@@ -474,8 +491,8 @@ export default async function MarketDetailPage({ params }) {
         "@id": `https://jangnalmap.com/market/${market.id}#breadcrumb`,
         "itemListElement": [
           { "@type": "ListItem", "position": 1, "name": "전국 오일장 지도", "item": "https://jangnalmap.com" },
-          { "@type": "ListItem", "position": 2, "name": `${market.address.split(' ')[0]} 오일장`, "item": `https://jangnalmap.com/region/${regionSlugs[regionGroup] || 'gyeonggi'}` },
-          { "@type": "ListItem", "position": 3, "name": market.market_name, "item": `https://jangnalmap.com/market/${market.id}` }
+          { "@type": "ListItem", "position": 2, "name": `${safeProvince} 오일장`, "item": `https://jangnalmap.com/region/${regionSlugs[regionGroup] || 'gyeonggi'}` },
+          { "@type": "ListItem", "position": 3, "name": safeName, "item": `https://jangnalmap.com/market/${market.id}` }
         ]
       },
       {
@@ -484,15 +501,15 @@ export default async function MarketDetailPage({ params }) {
         "mainEntity": [
           {
             "@type": "Question",
-            "name": `${market.market_name} 오일장 개장일은 언제인가요?`,
+            "name": `${safeName} 오일장 개장일은 언제인가요?`,
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": `${market.market_name} 오일장은 매월 ${openingCycle}에 개장합니다.`
+              "text": `${safeName} 오일장은 매월 ${openingCycle}에 개장합니다.`
             }
           },
           {
             "@type": "Question",
-            "name": `${market.market_name} 주차장은 편리한가요?`,
+            "name": `${safeName} 주차장은 편리한가요?`,
             "acceptedAnswer": {
               "@type": "Answer",
               "text": market.parking_yn === 'Y' ? "공영주차장이 완비되어 있어 주차가 비교적 편리합니다." : "주차 구역이 협소할 수 있으니 대중교통 이용 또는 주변 임시 주차 구역 이용을 권장합니다."
@@ -500,7 +517,7 @@ export default async function MarketDetailPage({ params }) {
           },
           {
             "@type": "Question",
-            "name": `${market.market_name} 대표 먹거리는 무엇인가요?`,
+            "name": `${safeName} 대표 먹거리는 무엇인가요?`,
             "acceptedAnswer": {
               "@type": "Answer",
               "text": `${market.food_recommend || '전통시장 현지 맛집과 제철 특산물'}을 오일장에서 맛보실 수 있습니다.`
@@ -936,12 +953,55 @@ export default async function MarketDetailPage({ params }) {
   } catch (error) {
     console.error("MarketDetailPage render error:", error);
     return (
-      <div className="min-h-screen bg-white flex flex-col items-center justify-center text-[#1A1A1A] p-4 text-center">
-        <h2 className="text-xl font-bold mb-2">오일장 정보를 준비 중입니다.</h2>
-        <p className="text-sm text-gray-500 mb-6">잠시 후 다시 시도해 주시거나 메인 지도로 돌아가실 수 있습니다.</p>
-        <Link href="/" className="bg-[#10B981] text-white px-5 py-2.5 rounded-xl text-sm font-bold shadow-sm">
-          메인 페이지로 돌아가기
-        </Link>
+      <div className="min-h-screen bg-white text-[#1A1A1A] flex flex-col antialiased">
+        <header className="sticky top-0 z-50 w-full border-b border-gray-100 bg-white/90 backdrop-blur-xl">
+          <div className="max-w-4xl mx-auto px-4 h-16 flex items-center justify-between">
+            <Link href="/" className="text-xl font-extrabold tracking-tight bg-gradient-to-r from-[#10B981] to-[#FF5A1F] bg-clip-text text-transparent">
+              장날맵.com
+            </Link>
+            <Link href="/" className="text-xs text-gray-500 hover:text-[#10B981] transition-colors bg-gray-50 px-3.5 py-2 rounded-xl border border-gray-200/60 font-semibold shadow-sm">
+              &larr; 전국 지도 보기
+            </Link>
+          </div>
+        </header>
+
+        <main className="flex-1 max-w-4xl mx-auto px-4 py-12 text-center space-y-6">
+          <div className="w-16 h-16 bg-emerald-50 text-[#10B981] rounded-2xl flex items-center justify-center text-3xl mx-auto font-black shadow-sm border border-emerald-100">
+            📍
+          </div>
+          <div className="space-y-2">
+            <h1 className="text-2xl font-black text-gray-900">오일장 정보를 준비 중입니다</h1>
+            <p className="text-sm text-gray-600 max-w-md mx-auto leading-relaxed">
+              요청하신 오일장 정보 데이터를 동기화하고 있습니다. 아래 전국 지역별 오일장 목록이나 지도 검색을 이용해 보세요!
+            </p>
+          </div>
+
+          <div className="pt-4 flex flex-wrap items-center justify-center gap-2 max-w-lg mx-auto">
+            <Link href="/region/gyeonggi" className="px-4 py-2 bg-gray-50 hover:bg-emerald-50 hover:text-emerald-700 text-gray-700 text-xs font-bold rounded-xl border border-gray-200 transition-all">
+              경기도 오일장
+            </Link>
+            <Link href="/region/gangwon" className="px-4 py-2 bg-gray-50 hover:bg-emerald-50 hover:text-emerald-700 text-gray-700 text-xs font-bold rounded-xl border border-gray-200 transition-all">
+              강원도 오일장
+            </Link>
+            <Link href="/region/chungnam" className="px-4 py-2 bg-gray-50 hover:bg-emerald-50 hover:text-emerald-700 text-gray-700 text-xs font-bold rounded-xl border border-gray-200 transition-all">
+              충청도 오일장
+            </Link>
+            <Link href="/region/gyeongbuk" className="px-4 py-2 bg-gray-50 hover:bg-emerald-50 hover:text-emerald-700 text-gray-700 text-xs font-bold rounded-xl border border-gray-200 transition-all">
+              경상도 오일장
+            </Link>
+            <Link href="/region/jeonnam" className="px-4 py-2 bg-gray-50 hover:bg-emerald-50 hover:text-emerald-700 text-gray-700 text-xs font-bold rounded-xl border border-gray-200 transition-all">
+              전라도 오일장
+            </Link>
+          </div>
+
+          <div className="pt-6">
+            <Link href="/" className="inline-flex bg-[#10B981] hover:bg-[#059669] text-white text-sm font-bold px-8 py-3.5 rounded-2xl transition-all shadow-md">
+              전국 오일장 메인 지도로 이동
+            </Link>
+          </div>
+        </main>
+
+        <Footer />
       </div>
     );
   }

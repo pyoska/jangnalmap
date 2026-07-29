@@ -91,6 +91,18 @@ export async function getMarkets() {
 }
 
 export async function getMarketById(id) {
-  const markets = await getMarkets();
-  return markets.find(m => String(m.id) === String(id)) || null;
+  try {
+    const markets = await getMarkets();
+    let found = markets.find(m => String(m.id) === String(id));
+    if (!found && Array.isArray(localMarketsData)) {
+      found = localMarketsData.find(m => String(m.id) === String(id));
+    }
+    return found || null;
+  } catch (err) {
+    console.error('getMarketById error, falling back to localMarketsData:', err);
+    if (Array.isArray(localMarketsData)) {
+      return localMarketsData.find(m => String(m.id) === String(id)) || null;
+    }
+    return null;
+  }
 }
