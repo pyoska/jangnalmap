@@ -265,17 +265,36 @@ export default async function ArticleDetailPage({ params }) {
             </div>
           </div>
 
+          {/* 📌 에디터의 1초 핵심 요약 상자 (5060 시니어 & 2030 유저 가독성 극상화) */}
+          <div className="bg-gradient-to-r from-emerald-50 to-teal-50 border border-emerald-200/80 rounded-2xl p-5 sm:p-6 shadow-sm my-6">
+            <h4 className="text-sm sm:text-base font-black text-emerald-950 flex items-center gap-2 mb-2">
+              📌 에디터의 1초 핵심 요약 노하우
+            </h4>
+            <p className="text-xs sm:text-sm text-emerald-900 font-extrabold leading-relaxed">
+              {article.description}
+            </p>
+          </div>
+
           {/* Clean AdSense Ad Slot */}
-          <div className="adsense-container w-full bg-transparent p-2 flex flex-col items-center justify-center min-h-[120px] text-center my-6">
+          <div className="w-full my-4">
             <AdSenseAd slot="9847192803" format="fluid" layoutKey="-in-article" />
-            <span className="text-[10px] text-gray-400 font-medium uppercase tracking-wider mt-1 block">Sponsored</span>
           </div>
 
           {/* Article HTML Content */}
           <div 
-            className="prose max-w-none text-gray-700 font-medium leading-relaxed"
+            className="prose max-w-none text-gray-800 font-medium leading-relaxed space-y-4"
             dangerouslySetInnerHTML={{ __html: article.contentHtml }}
           />
+
+          {/* 💳 1-클릭 다이렉트 지도 검색 전환 바 */}
+          <div className="pt-6 pb-2">
+            <Link
+              href="/"
+              className="w-full bg-gradient-to-r from-[#10B981] to-[#059669] hover:from-[#059669] hover:to-emerald-700 text-white font-black py-4 px-6 rounded-2xl text-sm sm:text-base text-center flex items-center justify-center gap-2 shadow-md transition-all active:scale-98 cursor-pointer"
+            >
+              🗺️ 혜택 적용 가능한 전국 전통 오일장 지도 바로 검색하기 &rarr;
+            </Link>
+          </div>
 
           {/* Internal Traffic Recirculation */}
           <div className="border border-emerald-100 bg-emerald-50/30 rounded-2xl p-5 sm:p-6 mt-12 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-sm">
