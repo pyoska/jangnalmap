@@ -317,37 +317,113 @@ export default function HomeClient({ initialMarkets = [] }) {
       {/* Main Content Area */}
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col gap-6">
         
-        {/* Massive Premium Search Container */}
-        <section className="w-full py-8 sm:py-12 px-4 rounded-3xl bg-gradient-to-br from-emerald-50 via-white to-orange-50 border border-gray-100 flex flex-col items-center text-center gap-6 shadow-sm">
-          <div className="flex flex-col gap-2">
-            <span className="text-xs font-bold tracking-wider text-[#10B981] uppercase">대한민국 오일장 맞춤 검색 가이드</span>
-            <h1 className="text-2xl sm:text-4xl font-extrabold tracking-tight text-[#1A1A1A]">
-              오늘 여는 오일장, <span className="text-[#FF5A1F]">여기서 바로</span> 확인해보세요!
+        {/* Massive Premium Search Container - Ultra-Intuitive 2060 Hero Redesign */}
+        <section className="w-full py-6 sm:py-10 px-4 sm:px-6 rounded-3xl bg-gradient-to-br from-emerald-50/80 via-white to-orange-50/80 border border-gray-150 flex flex-col items-center text-center gap-6 shadow-sm">
+          <div className="flex flex-col gap-2 max-w-xl">
+            <span className="inline-block bg-emerald-100 text-[#10B981] font-black text-xs px-3 py-1 rounded-full w-fit mx-auto">
+              📍 전국 1,378개 전통 오일장 통합 지도
+            </span>
+            <h1 className="text-2xl sm:text-4xl font-black tracking-tight text-[#1A1A1A] leading-snug">
+              찾으시는 장터나 지역을 <br className="sm:hidden" />
+              <span className="text-[#10B981]">1초 만에 선택</span>해 보세요!
             </h1>
-            <p className="text-xs sm:text-sm text-gray-500 max-w-md mx-auto">
-              성남 모란시장 5일장 날짜부터 경기도 5일장날 날짜표까지! 초성, 지역명, 특산 먹거리 등으로 빠르게 전국의 전통시장을 검색하세요.
+            <p className="text-xs sm:text-sm text-gray-500 font-semibold">
+              어르신도 한눈에 알기 쉬운 대형 1-클릭 버튼으로 오늘 개장 여부와 주차장을 찾아드립니다.
             </p>
           </div>
 
-          {/* Search Bar & GPS Button */}
-          <div className="w-full max-w-2xl flex flex-col sm:flex-row gap-3">
+          {/* 🎯 첫 화면 3대 대형 직관 액션 카드 (2060세대 맞춤) */}
+          <div className="w-full max-w-2xl grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <button
+              onClick={() => {
+                setOnlyToday(!onlyToday);
+                document.getElementById('map-section')?.scrollIntoView({ behavior: 'smooth' });
+              }}
+              className={`p-4 rounded-2xl border text-left transition-all cursor-pointer flex flex-col justify-between gap-3 shadow-sm active:scale-95 ${
+                onlyToday 
+                  ? 'bg-[#FF5A1F] border-[#FF5A1F] text-white ring-4 ring-[#FF5A1F]/20'
+                  : 'bg-white hover:bg-orange-50/50 border-orange-200/80 text-gray-900 hover:border-orange-400'
+              }`}
+            >
+              <div className="flex items-center justify-between">
+                <span className="text-2xl">🔥</span>
+                <span className={`text-[10px] font-extrabold px-2 py-0.5 rounded-full ${onlyToday ? 'bg-white text-[#FF5A1F]' : 'bg-orange-100 text-orange-800'}`}>
+                  오늘 바로 방문
+                </span>
+              </div>
+              <div>
+                <span className="block text-sm sm:text-base font-black">오늘 장열리는 곳</span>
+                <span className={`block text-[11px] font-semibold mt-0.5 ${onlyToday ? 'text-white/90' : 'text-gray-500'}`}>
+                  실시간 개장 장터 스크리닝 &rarr;
+                </span>
+              </div>
+            </button>
+
+            <button
+              onClick={() => {
+                document.getElementById('region-filter-section')?.scrollIntoView({ behavior: 'smooth' });
+              }}
+              className="p-4 rounded-2xl border text-left transition-all cursor-pointer flex flex-col justify-between gap-3 shadow-sm active:scale-95 bg-white hover:bg-emerald-50/50 border-emerald-200/80 text-gray-900 hover:border-emerald-400"
+            >
+              <div className="flex items-center justify-between">
+                <span className="text-2xl">🗺️</span>
+                <span className="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-emerald-100 text-[#10B981]">
+                  전국 9개 도
+                </span>
+              </div>
+              <div>
+                <span className="block text-sm sm:text-base font-black">내 지역 장터 선택</span>
+                <span className="block text-[11px] text-gray-500 font-semibold mt-0.5">
+                  수도권·강원·경북/대구... &rarr;
+                </span>
+              </div>
+            </button>
+
+            <button
+              onClick={() => {
+                setOnlyParking(!onlyParking);
+                document.getElementById('map-section')?.scrollIntoView({ behavior: 'smooth' });
+              }}
+              className={`p-4 rounded-2xl border text-left transition-all cursor-pointer flex flex-col justify-between gap-3 shadow-sm active:scale-95 ${
+                onlyParking 
+                  ? 'bg-[#10B981] border-[#10B981] text-white ring-4 ring-[#10B981]/20'
+                  : 'bg-white hover:bg-emerald-50/50 border-emerald-200/80 text-gray-900 hover:border-emerald-400'
+              }`}
+            >
+              <div className="flex items-center justify-between">
+                <span className="text-2xl">🚗</span>
+                <span className={`text-[10px] font-extrabold px-2 py-0.5 rounded-full ${onlyParking ? 'bg-white text-[#10B981]' : 'bg-emerald-100 text-[#10B981]'}`}>
+                  초보운전 완비
+                </span>
+              </div>
+              <div>
+                <span className="block text-sm sm:text-base font-black">주차장 보유 오일장</span>
+                <span className={`block text-[11px] font-semibold mt-0.5 ${onlyParking ? 'text-white/90' : 'text-gray-500'}`}>
+                  공영/임시 주차장 탐색 &rarr;
+                </span>
+              </div>
+            </button>
+          </div>
+
+          {/* Search Bar Container */}
+          <div className="w-full max-w-2xl flex flex-col sm:flex-row gap-3 pt-1">
             <div className="flex-1 relative shadow-md rounded-2xl overflow-hidden border border-gray-200/80 bg-white focus-within:ring-2 focus-within:ring-[#10B981]/40 focus-within:border-[#10B981] transition-all duration-300">
-              <div className="flex items-center px-4 py-3 sm:py-4">
+              <div className="flex items-center px-4 py-3.5 sm:py-4">
                 <svg className="w-5 sm:w-6 h-5 sm:h-6 text-gray-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                 </svg>
                 <input
                   type="text"
-                  placeholder="시장명, 특산물, 주소 검색..."
+                  placeholder="시장 이름이나 지역을 입력하세요 (예: 불로5일장, 대구, 모란장)"
                   value={searchInput}
                   onChange={(e) => setSearchInput(e.target.value)}
-                  className="w-full bg-transparent border-none text-[#1A1A1A] placeholder-gray-400 font-semibold px-3 focus:outline-none text-sm sm:text-base"
+                  className="w-full bg-transparent border-none text-[#1A1A1A] placeholder-gray-400 font-semibold px-3 focus:outline-none text-xs sm:text-base"
                 />
                 <div className="flex items-center gap-3 shrink-0">
                   {searchInput && (
                     <button 
                       onClick={() => { setSearchInput(''); setSearchQuery(''); }}
-                      className="text-gray-500 hover:text-gray-700 text-xs sm:text-sm font-semibold cursor-pointer p-2 min-h-[44px] min-w-[44px] inline-flex items-center justify-center"
+                      className="text-gray-500 hover:text-gray-700 text-xs sm:text-sm font-bold cursor-pointer p-2 min-h-[44px] min-w-[44px] inline-flex items-center justify-center"
                     >
                       지우기
                     </button>
@@ -357,7 +433,10 @@ export default function HomeClient({ initialMarkets = [] }) {
             </div>
 
             <button
-              onClick={() => setSearchQuery(searchInput)}
+              onClick={() => {
+                setSearchQuery(searchInput);
+                document.getElementById('map-section')?.scrollIntoView({ behavior: 'smooth' });
+              }}
               className="bg-[#10B981] hover:bg-[#059669] text-white font-extrabold px-8 py-3.5 sm:py-4 rounded-2xl flex items-center justify-center gap-2 shadow-md transition-all text-sm sm:text-base cursor-pointer whitespace-nowrap active:scale-95 shrink-0"
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
@@ -442,7 +521,7 @@ export default function HomeClient({ initialMarkets = [] }) {
         </section>
 
         {/* Filter Controls */}
-        <section className="glass-effect rounded-2xl p-4 sm:p-6 flex flex-col gap-5 border border-gray-100">
+        <section id="region-filter-section" className="glass-effect rounded-2xl p-4 sm:p-6 flex flex-col gap-5 border border-gray-100">
           {/* Region Tabs */}
           <div>
             <span className="text-sm font-extrabold text-[#10B981] block mb-3">지역 필터</span>
