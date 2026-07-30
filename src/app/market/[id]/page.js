@@ -461,6 +461,7 @@ export default async function MarketDetailPage({ params }) {
     '경남/부산/울산': 'gyeongnam',
     '제주': 'jeju'
   };
+  const regionSlug = regionSlugs[regionGroup] || 'gyeonggi';
 
   const jsonLd = {
     "@context": "https://schema.org",
