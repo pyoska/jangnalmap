@@ -533,6 +533,29 @@ export default async function MarketDetailPage({ params }) {
             }
           }
         ]
+      },
+      {
+        "@type": "Review",
+        "@id": `https://jangnalmap.com/market/${market.id}#review`,
+        "itemReviewed": {
+          "@type": "LocalBusiness",
+          "name": `${safeName} 오일장`
+        },
+        "author": {
+          "@type": "Person",
+          "name": "작성자 : 장날맵"
+        },
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5",
+          "bestRating": "5"
+        },
+        "reviewBody": `${safeName} 오일장 개장 주기(${openingCycle}) 및 현장 가이드 팩트체크.`
+      },
+      {
+        "@type": "SpeakableSpecification",
+        "@id": `https://jangnalmap.com/market/${market.id}#speakable`,
+        "cssSelector": ["h1", "p"]
       }
     ]
   };
