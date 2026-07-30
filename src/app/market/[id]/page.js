@@ -8,7 +8,7 @@ import CalendarDownload from '@/components/CalendarDownload';
 import AdSenseAd from '@/components/AdSenseAd';
 import { getMarketById, getMarkets } from '@/lib/db';
 
-export const revalidate = 600; // Revalidate cache every 10 minutes
+export const revalidate = 0; // Fresh SSR rendering on demand to prevent stale error cache lockouts
 
 
 
