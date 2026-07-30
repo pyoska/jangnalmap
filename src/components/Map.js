@@ -234,31 +234,31 @@ export default function Map({ markets, activeMarket, onSelectMarket }) {
                 }}
               >
                 <Popup className="custom-popup">
-                  <div className="p-1 font-sans text-left">
-                    <div className="flex items-center gap-1.5 mb-1.5">
-                      <span className="font-bold text-sm text-gray-900">{market.market_name}</span>
+                  <div className="p-2 font-sans text-left space-y-2 max-w-[220px]">
+                    <div className="flex items-center justify-between gap-1.5 border-b border-gray-100 pb-1.5">
+                      <span className="font-black text-sm sm:text-base text-gray-900 leading-tight">{market.market_name}</span>
                       {todayOpen ? (
-                        <span className="bg-[#FF5A1F]/10 text-[#FF5A1F] border border-[#FF5A1F]/20 text-[10px] px-1.5 py-0.5 rounded font-semibold">
-                          오늘 개장
+                        <span className="bg-[#FF5A1F] text-white text-[10px] px-2 py-0.5 rounded-full font-extrabold shrink-0">
+                          🔥 오늘 개장
                         </span>
                       ) : (
-                        <span className="bg-gray-100 text-gray-500 border border-gray-200 text-[10px] px-1.5 py-0.5 rounded font-medium">
+                        <span className="bg-gray-100 text-gray-700 text-[10px] px-2 py-0.5 rounded-full font-bold shrink-0">
                           {market.opening_cycle}
                         </span>
                       )}
                     </div>
-                    <p className="text-xs text-gray-500 mb-2">{market.address}</p>
-                    <div className="flex items-center justify-between border-t border-gray-100 pt-2 mt-2">
-                      {market.parking_yn === 'Y' && (
-                        <span className="text-[10px] text-[#10B981] font-semibold flex items-center gap-0.5">
-                          🚗 주차장 있음
-                        </span>
-                      )}
+                    <p className="text-xs text-gray-600 font-medium leading-normal">{market.address}</p>
+                    {market.parking_yn === 'Y' && (
+                      <span className="inline-block text-[11px] text-[#10B981] font-bold bg-emerald-50 px-2 py-0.5 rounded">
+                        🚗 공영 주차장 완비
+                      </span>
+                    )}
+                    <div className="pt-1">
                       <Link
                         href={`/market/${market.id}`}
-                        className="text-[10px] font-semibold text-[#FF5A1F] hover:underline"
+                        className="block w-full bg-[#10B981] hover:bg-[#059669] text-white text-xs font-extrabold py-2.5 px-3 rounded-xl text-center shadow-sm transition-all active:scale-95 cursor-pointer"
                       >
-                        상세 정보 보기 &rarr;
+                        📍 상세 정보 & 장날 달력 보기 &rarr;
                       </Link>
                     </div>
                   </div>
