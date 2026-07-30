@@ -2,6 +2,7 @@ import "./globals.css";
 import Script from 'next/script';
 import { Outfit, Noto_Sans_KR } from 'next/font/google';
 import PwaInstallBanner from '@/components/PwaInstallBanner';
+import ScrollToTopButton from '@/components/ScrollToTopButton';
 
 const outfit = Outfit({
   subsets: ['latin'],
@@ -235,6 +236,7 @@ export default function RootLayout({ children }) {
 
         {children}
         <PwaInstallBanner />
+        <ScrollToTopButton />
       </body>
     </html>
   );

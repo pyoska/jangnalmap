@@ -6,6 +6,7 @@ import ShareButton from '@/components/ShareButton';
 import GuideTabs from '@/components/GuideTabs';
 import CalendarDownload from '@/components/CalendarDownload';
 import AdSenseAd from '@/components/AdSenseAd';
+import CopyAddressButton from '@/components/CopyAddressButton';
 import { getMarketById, getMarkets } from '@/lib/db';
 
 export const revalidate = 0; // Fresh SSR rendering on demand to prevent stale error cache lockouts
@@ -699,8 +700,8 @@ export default async function MarketDetailPage({ params }) {
                 <td className="w-28 sm:w-36 px-4 py-3.5 bg-gray-50/80 text-gray-600 font-extrabold whitespace-nowrap align-middle">
                   📍 주소
                 </td>
-                <td className="px-4 py-3.5 text-gray-900 font-extrabold leading-relaxed align-middle">
-                  {market.address}
+                <td className="px-4 py-3.5 text-gray-900 align-middle">
+                  <CopyAddressButton address={market.address} />
                 </td>
               </tr>
               <tr>
