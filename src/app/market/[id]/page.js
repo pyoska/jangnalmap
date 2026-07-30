@@ -441,6 +441,7 @@ export default async function MarketDetailPage({ params }) {
   const safeName = market.market_name || '전통시장';
   const safeAddress = market.address || '전국';
   const safeProvince = safeAddress.split(' ')[0] || '전국';
+  const regionName = safeProvince;
 
   const tags = [
     `#${safeName.replace(/\s+/g, '')}`,
@@ -979,7 +980,6 @@ export default async function MarketDetailPage({ params }) {
           </div>
           <div className="space-y-2">
             <h1 className="text-2xl font-black text-gray-900">오일장 정보를 준비 중입니다</h1>
-            <p className="text-xs text-red-500 font-mono">[{error?.message || String(error)}]</p>
             <p className="text-sm text-gray-600 max-w-md mx-auto leading-relaxed">
               요청하신 오일장 정보 데이터를 동기화하고 있습니다. 아래 전국 지역별 오일장 목록이나 지도 검색을 이용해 보세요!
             </p>
