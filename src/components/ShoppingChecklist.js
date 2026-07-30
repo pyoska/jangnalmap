@@ -36,15 +36,57 @@ export default function ShoppingChecklist({ marketId }) {
     });
   };
 
+  const checkedCount = Object.values(checkedItems).filter(Boolean).length;
+
+  const itemNames = {
+    corn: '🌽 초당옥수수',
+    watermelon: '🍉 꿀수박/참외',
+    peach: '🍑 복숭아',
+    plum: '🍒 대석 자두'
+  };
+
+  const copyShoppingList = async () => {
+    const selected = Object.keys(checkedItems)
+      .filter(k => checkedItems[k])
+      .map(k => itemNames[k]);
+
+    if (selected.length === 0) {
+      alert('장바구니 항목을 먼저 체크해 보세요!');
+      return;
+    }
+
+    const text = `🛒 [장날맵] 이달의 장보기 목록:\n- ${selected.join('\n- ')}\nhttps://jangnalmap.com`;
+    try {
+      if (navigator.clipboard) {
+        await navigator.clipboard.writeText(text);
+      } else {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+      }
+      alert('📋 체크하신 장보기 목록이 복사되었습니다! 카톡이나 문자메시지에 붙여넣어 공유해 보세요!');
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
   if (!isMounted) return null;
 
   return (
     <section className="bg-orange-50/40 border border-orange-100 rounded-2xl p-5 sm:p-6 shadow-sm flex flex-col gap-4">
-      <div>
-        <h4 className="text-sm sm:text-base font-extrabold text-orange-900 flex items-center gap-1.5">
-          🍲 이번 달 장바구니 추천 Checklist
-        </h4>
-        <p className="text-xs text-orange-700/80 mt-0.5 font-semibold">7월 여름 장날에 들르면 꼭 카트에 담아야 할 제철 특산품 추천 리스트입니다. 직접 체크하며 장을 보세요!</p>
+      <div className="flex items-start justify-between gap-2 border-b border-orange-100/60 pb-3">
+        <div>
+          <h4 className="text-sm sm:text-base font-extrabold text-orange-900 flex items-center gap-1.5">
+            🍲 이번 달 장바구니 추천 Checklist
+          </h4>
+          <p className="text-xs text-orange-700/80 mt-0.5 font-semibold">7월 여름 장날에 들르면 꼭 카트에 담아야 할 제철 특산품 추천 리스트입니다. 직접 체크하며 장을 보세요!</p>
+        </div>
+        <span className="bg-orange-100 text-orange-800 text-xs px-2.5 py-1 rounded-full font-bold whitespace-nowrap shrink-0">
+          🛒 {checkedCount}개 선택됨
+        </span>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -116,6 +158,15 @@ export default function ShoppingChecklist({ marketId }) {
           <span className="text-xs sm:text-sm flex items-center gap-1">🍒 대석 자두 <span className="text-[10px] text-orange-700 bg-orange-100/80 px-1.5 py-0.5 rounded font-bold shrink-0">새콤달콤 비타민</span></span>
         </label>
       </div>
+
+      {checkedCount > 0 && (
+        <button
+          onClick={copyShoppingList}
+          className="w-full bg-orange-500 hover:bg-orange-600 text-white font-extrabold py-2.5 px-4 rounded-xl text-xs sm:text-sm text-center flex items-center justify-center gap-1.5 shadow-sm transition-all active:scale-95 cursor-pointer mt-1"
+        >
+          📋 체크한 {checkedCount}개 목록 카톡/문자 복사하기 &rarr;
+        </button>
+      )}
     </section>
   );
 }
