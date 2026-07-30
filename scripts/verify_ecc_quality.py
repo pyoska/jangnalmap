@@ -66,6 +66,10 @@ def verify_ecc():
         print("\n[PASS] ALL ECC AGENTSHIELD QUALITY & INTEGRITY CHECKS PASSED (100/100)!")
         print("\nRunning Layer-1 Dynamic Market Data Integrity Inspection...")
         verify_all_markets()
+        
+        from verify_live_rendering import verify_rendering
+        print("\nRunning Proactive Live & Dynamic Route Crawler...")
+        verify_rendering()
 
 if __name__ == '__main__':
     verify_ecc()
