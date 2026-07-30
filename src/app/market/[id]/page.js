@@ -654,27 +654,47 @@ export default async function MarketDetailPage({ params }) {
         </section>
 
         {/* Hero Title Section */}
-        <section className="flex flex-col gap-3 pb-4">
-          <h1 className="text-xl sm:text-2xl font-extrabold text-gray-900 leading-snug">
-            {regionName} {market.market_name} 5일장 날짜표 & 주차 팁 | {market.market_name} 장날
-          </h1>
+        <section className="flex flex-col gap-3 pb-2 text-left">
           <div className="flex flex-wrap items-center gap-2">
-            <div className="w-8 h-8 rounded-full bg-emerald-100 text-[#10B981] flex items-center justify-center font-bold text-xs">🗺️</div>
-            <div className="text-xs text-gray-400">
-              <span className="font-bold text-gray-600">장날맵 가이드</span> | 전국 오일장 이용 상세 안내
-            </div>
+            <span className="bg-emerald-100 text-[#10B981] font-extrabold text-xs px-3 py-1 rounded-full">
+              📍 {safeProvince} {getDistrict(safeAddress)}
+            </span>
             {todayOpen ? (
               <span className="relative flex h-fit w-fit shrink-0">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#FF5A1F] opacity-75"></span>
-                <span className="relative inline-flex rounded-full bg-[#FF5A1F] text-white text-xs sm:text-sm px-3.5 py-1.5 font-bold shadow-[0_4px_14px_rgba(255,90,31,0.4)]">
+                <span className="relative inline-flex rounded-full bg-[#FF5A1F] text-white text-xs sm:text-sm px-3.5 py-1 font-bold shadow-[0_4px_14px_rgba(255,90,31,0.4)]">
                   🔥 오늘 개장! 🎉
                 </span>
               </span>
             ) : (
-              <span className="bg-emerald-50 border border-emerald-100 text-[#10B981] text-[10px] sm:text-xs px-3.5 py-1.5 rounded-full font-extrabold">
+              <span className="bg-gray-100 text-gray-600 text-xs px-3 py-1 rounded-full font-bold">
                 오일장일정: {market.opening_cycle}
               </span>
             )}
+          </div>
+
+          <h1 className="text-2xl sm:text-3xl font-black text-gray-900 leading-snug tracking-tight">
+            {market.market_name}
+          </h1>
+          
+          <p className="text-xs sm:text-sm text-gray-500 font-medium">
+            {market.market_name} 개장일 정보 · 위치 주차장 · 7월 장날 달력 · 실시간 주변 맛집 안내
+          </p>
+        </section>
+
+        {/* ⚡ 1초 핵심 요약 카드 (Quick Key Takeaways Summary Card) */}
+        <section className="grid grid-cols-3 gap-2.5 sm:gap-4 my-2">
+          <div className="bg-emerald-50/80 border border-emerald-200/60 rounded-2xl p-3 sm:p-4 text-center flex flex-col items-center justify-center gap-1 shadow-sm transition-transform hover:-translate-y-0.5">
+            <span className="text-[11px] sm:text-xs text-emerald-700 font-extrabold">🗓️ 개장 주기</span>
+            <span className="text-xs sm:text-sm font-black text-emerald-950">매월 {market.opening_cycle}</span>
+          </div>
+          <div className="bg-blue-50/80 border border-blue-200/60 rounded-2xl p-3 sm:p-4 text-center flex flex-col items-center justify-center gap-1 shadow-sm transition-transform hover:-translate-y-0.5">
+            <span className="text-[11px] sm:text-xs text-blue-700 font-extrabold">🚗 주차 시설</span>
+            <span className="text-xs sm:text-sm font-black text-blue-950">{market.parking_yn === 'Y' ? '공영주차장 완비' : '인근 임시 주차'}</span>
+          </div>
+          <div className="bg-orange-50/80 border border-orange-200/60 rounded-2xl p-3 sm:p-4 text-center flex flex-col items-center justify-center gap-1 shadow-sm transition-transform hover:-translate-y-0.5">
+            <span className="text-[11px] sm:text-xs text-orange-700 font-extrabold">🌦️ 현지 날씨</span>
+            <span className="text-xs sm:text-sm font-black text-orange-950">{weather.status} ({weather.temp})</span>
           </div>
         </section>
 
