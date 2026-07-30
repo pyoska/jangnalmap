@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { isOpenToday, getDaysUntilOpening, getDDayText, getRegionGroup } from '@/utils/dateUtils';
 import Footer from '@/components/Footer';
+import RegionMarketList from '@/components/RegionMarketList';
 import { getMarkets } from '@/lib/db';
 
 export const revalidate = 600; // Revalidate cache every 10 minutes
@@ -233,61 +234,8 @@ export default async function RegionPage({ params }) {
           </p>
         </section>
 
-        {/* Markets Count Overview */}
-        <div className="flex items-center justify-between border-b border-gray-100 pb-3 text-xs sm:text-sm text-gray-500 font-bold">
-          <span>등록된 오일장 목록</span>
-          <span className="text-[#10B981]">총 {regionMarkets.length}개 검색됨</span>
-        </div>
-
-        {/* Markets Grid List */}
-        <section className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {regionMarkets.map((market) => (
-            <div
-              key={market.id}
-              className="bg-white p-5 rounded-2xl border border-gray-200/80 hover:border-[#10B981]/50 hover:shadow-md transition-all duration-200 flex flex-col justify-between gap-4 shadow-sm"
-            >
-              <div className="space-y-2">
-                <div className="flex justify-between items-start gap-2">
-                  <h3 className="font-extrabold text-gray-900 text-base sm:text-lg hover:text-[#10B981] transition-colors">
-                    <Link href={`/market/${market.id}`}>
-                      {market.market_name}
-                    </Link>
-                  </h3>
-                  {market.isToday ? (
-                    <span className="bg-[#FF5A1F] text-white text-[10px] sm:text-xs px-2.5 py-1 rounded-full font-bold shadow-sm animate-pulse whitespace-nowrap">
-                      🔥 오늘 개장!
-                    </span>
-                  ) : (
-                    <span className="bg-emerald-50 border border-emerald-100 text-[#10B981] text-[10px] sm:text-xs px-2.5 py-1 rounded-full font-bold whitespace-nowrap">
-                      {getDDayText(market.daysUntil)}
-                    </span>
-                  )}
-                </div>
-                <p className="text-xs text-gray-500 font-medium leading-relaxed">{market.address}</p>
-                
-                {/* Meta details */}
-                <div className="bg-gray-50 rounded-xl p-3 text-xs space-y-1.5 border border-gray-150 shadow-sm font-semibold text-gray-700">
-                  <div className="flex justify-between">
-                    <span>개설 주기</span>
-                    <span className="text-gray-900 font-bold">{market.opening_cycle}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span>주차장 보유</span>
-                    <span className="text-gray-900 font-bold">{market.parking_yn === 'Y' ? 'Y (공영주차장 있음)' : 'N (주변 골목 협소)'}</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Action Link */}
-              <Link
-                href={`/market/${market.id}`}
-                className="w-full bg-[#10B981] hover:bg-[#059669] text-white font-extrabold py-2.5 rounded-xl text-xs sm:text-sm text-center flex items-center justify-center gap-1 transition-all shadow-sm active:scale-95 cursor-pointer"
-              >
-                상세 일정 및 주차 꿀팁 보기 &rarr;
-              </Link>
-            </div>
-          ))}
-        </section>
+        {/* Region Market List with Sub-Region Filters & Today Priority */}
+        <RegionMarketList markets={regionMarkets} regionName={region.name} />
       </main>
 
       {/* Footer */}
