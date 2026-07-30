@@ -600,60 +600,7 @@ export default async function MarketDetailPage({ params }) {
           <span className="text-[#10B981] font-bold">{market.market_name}</span>
         </div>
 
-        {/* 🛍️ [시장명]과 함께 가면 좋은 오늘/내일 장터 Section (연쇄 방문 추천 - 최상단 배치) */}
-        {weekendNearbyMarkets.length > 0 && (
-          <section className="flex flex-col gap-4 p-5 bg-gray-50/50 border border-gray-200/60 rounded-2xl shadow-sm">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-gray-200/40 pb-2.5">
-              <div>
-                <h3 className="text-sm sm:text-base font-extrabold text-gray-900 flex items-center gap-2">
-                  🛍️ {market.market_name}과 함께 가면 좋은 오늘/내일 장터
-                </h3>
-                <p className="text-[11px] text-gray-500 mt-0.5 font-semibold">내일 또는 이번 주말에 개장하여 묶어 가기 좋은 동일 광역 지자체 내 추천 장터 리스트입니다.</p>
-              </div>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-3.5">
-              {weekendNearbyMarkets.map((nearby) => {
-                return (
-                  <Link
-                    key={nearby.id}
-                    href={`/market/${nearby.id}`}
-                    className="bg-white hover:bg-emerald-50/30 border border-gray-150 rounded-xl p-4 transition-all hover:border-[#10B981]/40 shadow-sm flex flex-col justify-between gap-3"
-                  >
-                    <div className="space-y-1.5">
-                      <div className="flex justify-between items-start gap-1">
-                        <h4 className="font-extrabold text-gray-900 text-xs sm:text-sm line-clamp-1">{nearby.market_name}</h4>
-                        <span className="bg-[#FF5A1F]/10 text-[#FF5A1F] text-[9px] px-2 py-0.5 rounded-full font-bold shrink-0">
-                          {nearby.opening_cycle}
-                        </span>
-                      </div>
-                      
-                      <p className="text-[11px] text-gray-500 line-clamp-2 leading-relaxed font-semibold">
-                        {getWeekendCurationText(market.market_name, nearby.market_name)}
-                      </p>
-                    </div>
-
-                    <span className="text-[10px] font-bold text-[#10B981] text-right hover:underline block mt-1">
-                      다음 시장 상세 보기 &rarr;
-                    </span>
-                  </Link>
-                );
-              })}
-            </div>
-          </section>
-        )}
-
-        {/* Real-time Weather Warning Banner (Interactive weather simulation banner) */}
-        <section className="bg-amber-50 border border-amber-200 rounded-2xl p-4 sm:p-5 flex flex-col gap-2.5 shadow-sm">
-          <span className="text-xs font-bold text-amber-700 uppercase tracking-wider block">🌦️ 오늘의 {getDistrict(market.address)} 실시간 날씨보기</span>
-          <p className="text-sm font-extrabold text-gray-800 leading-relaxed">
-            오늘 날씨 상황: <span className="text-[#FF5A1F]">{weather.status} ({weather.temp})</span>
-          </p>
-          <p className="text-xs sm:text-sm text-gray-600 leading-relaxed font-semibold">
-            {weather.tip}
-          </p>
-        </section>
-
-        {/* Hero Title Section */}
+        {/* Hero Title Section - FIRST AT TOP */}
         <section className="flex flex-col gap-3 pb-2 text-left">
           <div className="flex flex-wrap items-center gap-2">
             <span className="bg-emerald-100 text-[#10B981] font-extrabold text-xs px-3 py-1 rounded-full">
@@ -771,38 +718,37 @@ export default async function MarketDetailPage({ params }) {
           <AdSenseAd slot="4782019385" format="auto" responsive="true" />
         </div>
 
-        {/* Brand Map Buttons */}
-        <section className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+        {/* Brand Map & Quick Action 2x2 Grid */}
+        <section className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <a
             href={`https://map.naver.com/v5/search/${encodeURIComponent(market.market_name + ' ' + market.address)}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="bg-[#03C75A] text-white font-extrabold py-3.5 px-4 rounded-xl hover:bg-[#02B34F] text-sm text-center flex items-center justify-center gap-1.5 shadow-sm transition-transform duration-150 hover:-translate-y-0.5 active:translate-y-0"
+            className="bg-white hover:bg-emerald-50/40 border border-emerald-200 text-emerald-900 font-extrabold p-3.5 rounded-xl text-xs sm:text-sm text-center flex items-center justify-center gap-2 shadow-sm transition-all hover:border-emerald-400 active:scale-98 cursor-pointer"
           >
-            네이버지도에서 보기 ↗
+            🗺️ 네이버 지도로 길찾기 &rarr;
           </a>
+
           <a
             href={`https://map.kakao.com/link/search/${encodeURIComponent(market.market_name + ' ' + market.address)}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="bg-[#FEE500] text-[#191919] font-extrabold py-3.5 px-4 rounded-xl hover:bg-[#FDD835] text-sm text-center flex items-center justify-center gap-1.5 shadow-sm transition-transform duration-150 hover:-translate-y-0.5 active:translate-y-0"
+            className="bg-white hover:bg-amber-50/40 border border-amber-200 text-amber-900 font-extrabold p-3.5 rounded-xl text-xs sm:text-sm text-center flex items-center justify-center gap-2 shadow-sm transition-all hover:border-amber-400 active:scale-98 cursor-pointer"
           >
-            카카오맵으로 가기 ↗
+            📍 카카오맵으로 길찾기 &rarr;
           </a>
+
+          <a
+            href={`https://www.youtube.com/results?search_query=${encodeURIComponent(market.market_name + ' 오일장')}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="bg-white hover:bg-rose-50/40 border border-rose-200 text-rose-900 font-extrabold p-3.5 rounded-xl text-xs sm:text-sm text-center flex items-center justify-center gap-2 shadow-sm transition-all hover:border-rose-400 active:scale-98 cursor-pointer"
+          >
+            🎬 유튜브 현장 영상 보기 ↗
+          </a>
+
+          <ShareButton marketName={market.market_name} />
         </section>
-
-        {/* 카카오톡 / 지인 1-클릭 바이럴 공유 버튼 */}
-        <ShareButton marketName={market.market_name} />
-
-        {/* 유튜브 외부 연결 단독 버튼 */}
-        <a
-          href={`https://www.youtube.com/results?search_query=${encodeURIComponent(market.market_name + ' 오일장')}`}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="w-full bg-[#FF0000] text-white font-extrabold py-3.5 px-4 rounded-xl hover:bg-[#CC0000] text-xs sm:text-sm text-center flex items-center justify-center gap-1.5 shadow-sm transition-transform duration-150 hover:-translate-y-0.5 active:translate-y-0 cursor-pointer"
-        >
-          유튜브에서 {market.market_name} 현장 상황 더 찾아보기 ↗
-        </a>
 
         {/* 🍲 이번 달 장바구니 추천 Checklist */}
         <ShoppingChecklist marketId={market.id} />
