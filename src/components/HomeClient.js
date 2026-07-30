@@ -368,53 +368,59 @@ export default function HomeClient({ initialMarkets = [] }) {
             </button>
           </div>
 
-          {/* Quick Filter Chips */}
-          <div className="flex flex-wrap items-center gap-2 pt-1">
-            <span className="text-xs font-bold text-gray-400 mr-1">⚡ 1초 퀵 검색:</span>
+          {/* Quick Filter Chips & Dynamic Search Suggestions */}
+          <div className="flex flex-wrap items-center justify-center gap-2 pt-1 max-w-2xl mx-auto">
+            <span className="text-xs font-extrabold text-gray-500 mr-1">⚡ 추천 검색어:</span>
             <button
-              onClick={() => setOnlyToday(!onlyToday)}
-              aria-pressed={onlyToday}
-              className={`text-xs px-4 py-3 min-h-[44px] rounded-xl font-bold transition-all cursor-pointer flex items-center gap-1 active:scale-95 ${
-                onlyToday 
-                  ? 'bg-[#FF5A1F] text-white shadow-sm ring-2 ring-[#FF5A1F]/30'
-                  : 'bg-white border border-gray-200 text-gray-700 hover:border-orange-300 hover:bg-orange-50/50'
-              }`}
+              onClick={() => { setSearchInput('대구'); setSearchQuery('대구'); }}
+              className="text-xs px-3 py-2 min-h-[44px] rounded-xl font-extrabold bg-white border border-gray-200 text-gray-700 hover:border-emerald-400 hover:bg-emerald-50 transition-all cursor-pointer flex items-center gap-1 active:scale-95 shadow-sm"
             >
-              🔥 오늘 열리는 장터만
+              📍 대구 오일장
             </button>
             <button
-              onClick={() => setOnlyParking(!onlyParking)}
-              aria-pressed={onlyParking}
-              className={`text-xs px-4 py-3 min-h-[44px] rounded-xl font-bold transition-all cursor-pointer flex items-center gap-1 active:scale-95 ${
-                onlyParking 
-                  ? 'bg-[#10B981] text-white shadow-sm ring-2 ring-[#10B981]/30'
-                  : 'bg-white border border-gray-200 text-gray-700 hover:border-emerald-300 hover:bg-emerald-50/50'
-              }`}
-            >
-              🚗 무료/공영 주차장 완비
-            </button>
-            <button
-              onClick={() => setOnlyFavorites(!onlyFavorites)}
-              aria-pressed={onlyFavorites}
-              className={`text-xs px-4 py-3 min-h-[44px] rounded-xl font-bold transition-all cursor-pointer flex items-center gap-1 active:scale-95 ${
-                onlyFavorites 
-                  ? 'bg-rose-500 text-white shadow-sm ring-2 ring-rose-500/30'
-                  : 'bg-white border border-gray-200 text-gray-700 hover:border-rose-300 hover:bg-rose-50/50'
-              }`}
-            >
-              ❤️ 내 단골 시장만 ({favorites.length})
-            </button>
-            <button
-              onClick={() => setSearchInput('모란시장')}
-              className="text-xs px-4 py-3 min-h-[44px] rounded-xl font-bold bg-white border border-gray-200 text-gray-700 hover:border-emerald-300 hover:bg-emerald-50/50 transition-all cursor-pointer flex items-center gap-1 active:scale-95"
+              onClick={() => { setSearchInput('모란시장'); setSearchQuery('모란시장'); }}
+              className="text-xs px-3 py-2 min-h-[44px] rounded-xl font-extrabold bg-white border border-gray-200 text-gray-700 hover:border-emerald-400 hover:bg-emerald-50 transition-all cursor-pointer flex items-center gap-1 active:scale-95 shadow-sm"
             >
               ⭐ 성남 모란장
             </button>
             <button
-              onClick={() => setSearchInput('정선아리랑')}
-              className="text-xs px-4 py-3 min-h-[44px] rounded-xl font-bold bg-white border border-gray-200 text-gray-700 hover:border-emerald-300 hover:bg-emerald-50/50 transition-all cursor-pointer flex items-center gap-1 active:scale-95"
+              onClick={() => { setSearchInput('정선아리랑'); setSearchQuery('정선아리랑'); }}
+              className="text-xs px-3 py-2 min-h-[44px] rounded-xl font-extrabold bg-white border border-gray-200 text-gray-700 hover:border-emerald-400 hover:bg-emerald-50 transition-all cursor-pointer flex items-center gap-1 active:scale-95 shadow-sm"
             >
               ⭐ 정선 5일장
+            </button>
+            <button
+              onClick={() => setOnlyToday(!onlyToday)}
+              aria-pressed={onlyToday}
+              className={`text-xs px-3 py-2 min-h-[44px] rounded-xl font-extrabold transition-all cursor-pointer flex items-center gap-1 active:scale-95 shadow-sm ${
+                onlyToday 
+                  ? 'bg-[#FF5A1F] text-white ring-2 ring-[#FF5A1F]/30'
+                  : 'bg-white border border-gray-200 text-gray-700 hover:border-orange-300 hover:bg-orange-50/50'
+              }`}
+            >
+              🔥 오늘 개장
+            </button>
+            <button
+              onClick={() => setOnlyParking(!onlyParking)}
+              aria-pressed={onlyParking}
+              className={`text-xs px-3 py-2 min-h-[44px] rounded-xl font-extrabold transition-all cursor-pointer flex items-center gap-1 active:scale-95 shadow-sm ${
+                onlyParking 
+                  ? 'bg-[#10B981] text-white ring-2 ring-[#10B981]/30'
+                  : 'bg-white border border-gray-200 text-gray-700 hover:border-emerald-300 hover:bg-emerald-50/50'
+              }`}
+            >
+              🚗 주차장 완비
+            </button>
+            <button
+              onClick={() => setOnlyFavorites(!onlyFavorites)}
+              aria-pressed={onlyFavorites}
+              className={`text-xs px-3 py-2 min-h-[44px] rounded-xl font-extrabold transition-all cursor-pointer flex items-center gap-1 active:scale-95 shadow-sm ${
+                onlyFavorites 
+                  ? 'bg-rose-500 text-white ring-2 ring-rose-500/30'
+                  : 'bg-white border border-gray-200 text-gray-700 hover:border-rose-300 hover:bg-rose-50/50'
+              }`}
+            >
+              ❤️ 내 단골만 ({favorites.length})
             </button>
             {(onlyToday || onlyParking || onlyFavorites || searchQuery || selectedRegion !== '전체' || selectedCycle !== '전체') && (
               <button
