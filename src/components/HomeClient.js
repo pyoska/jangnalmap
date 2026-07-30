@@ -574,9 +574,8 @@ export default function HomeClient({ initialMarkets = [] }) {
                 filteredMarkets.slice(0, visibleCount).map((market, index) => (
                   <Fragment key={market.id}>
                     {index > 0 && index % 8 === 0 && (
-                      <div className="adsense-container bg-transparent p-2 flex flex-col items-center justify-center min-h-[120px] text-center">
+                      <div className="w-full my-2">
                         <AdSenseAd slot="9847192803" format="fluid" layoutKey="-fb+5w+4e-db+86" />
-                        <span className="text-[9px] text-gray-400 font-medium uppercase tracking-wider mt-1 block">Sponsored</span>
                       </div>
                     )}
                     

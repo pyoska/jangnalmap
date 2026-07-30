@@ -20,8 +20,7 @@ export default function AdSenseAd({ client = 'ca-pub-3887993426553204', slot, fo
   }, []);
 
   return (
-    <div className="adsense-container w-full flex flex-col items-center justify-center my-4 min-h-[120px]">
-      <span className="text-[10px] text-gray-400 font-medium mb-1 tracking-widest uppercase">SPONSORED</span>
+    <div className="adsense-container w-full flex flex-col items-center justify-center my-2 overflow-hidden">
       <ins
         className="adsbygoogle"
         style={{ display: 'block', width: '100%' }}

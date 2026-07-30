@@ -670,29 +670,29 @@ export default async function MarketDetailPage({ params }) {
 
         {/* Info Table */}
         <section className="bg-white border border-gray-200/80 rounded-2xl overflow-hidden shadow-sm">
-          <table className="min-w-full divide-y divide-gray-150 text-xs sm:text-sm">
+          <table className="w-full divide-y divide-gray-150 text-xs sm:text-sm">
             <tbody className="divide-y divide-gray-150">
               <tr>
-                <td className="w-1/3 px-4 py-3.5 bg-gray-50 text-gray-500 font-bold flex items-center gap-1.5">
+                <td className="w-28 sm:w-36 px-4 py-3.5 bg-gray-50/80 text-gray-600 font-extrabold whitespace-nowrap align-middle">
                   📍 주소
                 </td>
-                <td className="px-4 py-3.5 text-gray-700 font-extrabold leading-relaxed">
+                <td className="px-4 py-3.5 text-gray-900 font-extrabold leading-relaxed align-middle">
                   {market.address}
                 </td>
               </tr>
               <tr>
-                <td className="px-4 py-3.5 bg-gray-50 text-gray-500 font-bold flex items-center gap-1.5">
+                <td className="w-28 sm:w-36 px-4 py-3.5 bg-gray-50/80 text-gray-600 font-extrabold whitespace-nowrap align-middle">
                   🗓️ 오일장일정
                 </td>
-                <td className="px-4 py-3.5 text-[#FF5A1F] font-black text-base sm:text-lg">
+                <td className="px-4 py-3.5 text-[#FF5A1F] font-black text-base sm:text-lg align-middle">
                   매월 {market.opening_cycle}
                 </td>
               </tr>
               <tr>
-                <td className="px-4 py-3.5 bg-gray-50 text-gray-500 font-bold flex items-center gap-1.5">
+                <td className="w-28 sm:w-36 px-4 py-3.5 bg-gray-50/80 text-gray-600 font-extrabold whitespace-nowrap align-middle">
                   📞 시장 연락처
                 </td>
-                <td className="px-4 py-3.5 text-gray-700 font-medium">
+                <td className="px-4 py-3.5 text-gray-700 font-medium align-middle">
                   {market.phone ? (
                     <a
                       href={`tel:${market.phone}`}
@@ -707,10 +707,10 @@ export default async function MarketDetailPage({ params }) {
                 </td>
               </tr>
               <tr>
-                <td className="px-4 py-3.5 bg-gray-50 text-gray-500 font-bold flex items-center gap-1.5">
+                <td className="w-28 sm:w-36 px-4 py-3.5 bg-gray-50/80 text-gray-600 font-extrabold whitespace-nowrap align-middle">
                   🚗 주차/시설
                 </td>
-                <td className="px-4 py-3.5 text-gray-700 font-medium">
+                <td className="px-4 py-3.5 text-gray-700 font-medium align-middle">
                   {market.parking_yn === 'Y' 
                     ? "주차장 보유 여부: Y (공영주차장 이용이 편리하더라고요)" 
                     : "주차장 보유 여부: N (주차 시설이 협소하니 대중교통이나 인근 임시 주차를 추천해요)"}
@@ -723,9 +723,8 @@ export default async function MarketDetailPage({ params }) {
         {/* Boilerplate financial sections removed to prevent duplicate content flags */}
 
         {/* Google AdSense Contextual Ad Slot */}
-        <div className="adsense-container w-full bg-transparent p-2 flex flex-col items-center justify-center min-h-[120px] text-center">
+        <div className="w-full my-2">
           <AdSenseAd slot="4782019385" format="auto" responsive="true" />
-          <span className="text-xs text-gray-500 font-medium uppercase tracking-wider mt-1 block">Sponsored</span>
         </div>
 
         {/* Brand Map Buttons */}
