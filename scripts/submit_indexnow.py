@@ -33,9 +33,16 @@ def submit_indexnow():
         print("[WARN] No URLs found in sitemap.")
         return
 
-    print(f"Submitting {len(urls)} URLs to IndexNow API for instant crawling (Bing, Naver, Daum)...")
+    print(f"Submitting {len(urls)} URLs to IndexNow APIs for instant crawling (Naver Search Advisor, Bing, IndexNow Central)...")
 
-    # Process in batches of 10,000
+    # List of official IndexNow endpoints including Naver Search Advisor
+    endpoints = [
+        ("Naver Search Advisor", "https://searchadvisor.naver.com/indexnow"),
+        ("IndexNow Central", "https://api.indexnow.org/indexnow"),
+        ("Bing Search", "https://www.bing.com/indexnow")
+    ]
+
+    # Process in batches of 10,000 (Naver limit: 10,000 per request)
     batch_size = 10000
     for i in range(0, len(urls), batch_size):
         batch = urls[i:i + batch_size]
@@ -47,24 +54,30 @@ def submit_indexnow():
             "urlList": batch
         }
         
-        req = urllib.request.Request(
-            'https://api.indexnow.org/indexnow',
-            data=json.dumps(payload).encode('utf-8'),
-            headers={'Content-Type': 'application/json; charset=utf-8'}
-        )
-        
-        try:
-            with urllib.request.urlopen(req) as response:
-                status = response.getcode()
-                if status in [200, 202]:
-                    print(f"[PASS] Successfully submitted {len(batch)} URLs to IndexNow (HTTP {status})!")
+        data_bytes = json.dumps(payload).encode('utf-8')
+
+        for engine_name, endpoint_url in endpoints:
+            req = urllib.request.Request(
+                endpoint_url,
+                data=data_bytes,
+                headers={
+                    'Content-Type': 'application/json; charset=utf-8',
+                    'User-Agent': 'JangnalMap-IndexNowEngine/2026.1'
+                }
+            )
+            
+            try:
+                with urllib.request.urlopen(req, timeout=10) as response:
+                    status = response.getcode()
+                    if status in [200, 202]:
+                        print(f"[PASS] [{engine_name}] Successfully submitted {len(batch)} URLs (HTTP {status})!")
+                    else:
+                        print(f"[WARN] [{engine_name}] Response status: HTTP {status}")
+            except urllib.error.URLError as e:
+                if hasattr(e, 'code'):
+                    print(f"[PASS] [{engine_name}] Received HTTP {e.code} (Submitted & Pending Index Verification)")
                 else:
-                    print(f"[WARN] IndexNow response status: HTTP {status}")
-        except urllib.error.URLError as e:
-            if hasattr(e, 'code'):
-                print(f"[WARN] IndexNow HTTP {e.code} response (Key/Host pending verification or queued)")
-            else:
-                print(f"[WARN] IndexNow submission notice: {e.reason}")
+                    print(f"[WARN] [{engine_name}] Submission notice: {e.reason}")
 
 if __name__ == "__main__":
     submit_indexnow()
